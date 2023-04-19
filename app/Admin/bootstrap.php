@@ -36,12 +36,12 @@ Admin::navbar(function (\Encore\Admin\Widgets\Navbar $navbar) {
     ]));
 
     $navbar->left(Shortcut::make([
-        'Candidate' => 'candidates/create',
-        'News post' => 'news-posts/create',
+        'Invoice' => 'invoices/create',
+        'News product' => 'products/create',
         /*  'Products or Services' => 'products/create',
         'Jobs and Opportunities' => 'jobs/create',
         'Event' => 'events/create', */
-    ], 'fa-plus')->title('ADD NEW'));
+    ], 'fa-plus')->title('CREATE NEW'));
     /*     $navbar->left(Shortcut::make([
         'Candidate' => 'people/create', 
     ], 'fa-wpforms')->title('Register new')); */
