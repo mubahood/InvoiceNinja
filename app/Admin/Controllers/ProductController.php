@@ -18,7 +18,7 @@ class ProductController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Product';
+    protected $title = 'Products';
 
     /**
      * Make a grid builder.
@@ -29,20 +29,30 @@ class ProductController extends AdminController
     {
         $grid = new Grid(new Product());
 
-        $grid->column('id', __('Id'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
-        $grid->column('administrator_id', __('Administrator id'));
-        $grid->column('name', __('Name'));
-        $grid->column('type', __('Type'));
-        $grid->column('photo', __('Photo'));
-        $grid->column('details', __('Details'));
-        $grid->column('price', __('Price'));
+        $grid->disableBatchActions();
+        $grid->model()->orderBy('id', 'desc');
+        $grid->column('id', __('ID'))->sortable();
+        $grid->column('created_at', __('Created at'))->hide();
+        $grid->column('photo', __('Photo'))
+            ->display(function ($avatar) {
+                $img = url("storage/" . $avatar);
+                $link = admin_url('members/' . $this->id);
+                $link = 'javascript:;';
+                return '<a href=' . $link . ' title="View profile"><img class="img-fluid " style="border-radius: 10px;"  src="' . $img . '" ></a>';
+            })
+            ->width(80)
+            ->sortable();
+        $grid->column('name', __('Product Name'))->sortable();
+        $grid->column('details', __('Details'))->hide();
+        $grid->column('price', __('Price'))->sortable();
+        $grid->column('sales', __('sales'));
+        $grid->column('amount', __('Amount'));
+        /* 
         $grid->column('offer_type', __('Offer type'));
         $grid->column('state', __('State'));
         $grid->column('category', __('Category'));
         $grid->column('subcounty_id', __('Subcounty id'));
-        $grid->column('district_id', __('District id'));
+        $grid->column('district_id', __('District id')); */
 
         return $grid;
     }
@@ -86,55 +96,33 @@ class ProductController extends AdminController
 
 
 
-        if (
-            (Auth::user()->isRole('staff')) ||
-            (Auth::user()->isRole('admin'))
-        ) {
+        $form->hidden('administrator_id', __('Product provider'))->default(Auth::user()->id)->readOnly()->rules('required');
 
-            $ajax_url = url(
-                '/api/ajax?'
-                    . "search_by_1=name"
-                    . "&search_by_2=id"
-                    . "&model=User"
-            );
-            $form->select('administrator_id', "Product provider")
-                ->options(function ($id) {
-                    $a = Administrator::find($id);
-                    if ($a) {
-                        return [$a->id => "#" . $a->id . " - " . $a->name];
-                    }
-                })
-                ->ajax($ajax_url)->rules('required');
-        } else {
-            $form->select('administrator_id', __('Product provider'))
-                ->options(Administrator::where('id', Auth::user()->id)->get()->pluck('name', 'id'))->default(Auth::user()->id)->readOnly()->rules('required');
-        }
-
-
-        $form->radio('type', __('Item type'))->options([
+        /*         $form->radio('type', __('Item type'))->options([
             'Product' => 'Product',
             'Service' => 'Service',
-        ])->rules('required');
+        ])->rules('required'); */
 
-        $form->text('name', __('Item name'))->rules('required');
+        $form->text('name', __('Product name'))->rules('required');
         $form->image('photo', __('Photo'))->rules('required');
-
+        /* 
         $form->radio('state', __('Item State'))->options([
             'New' => 'New',
             'Used but like new' => 'Used but like new',
             'Used' => 'Used',
-        ])->rules('required');
+        ])->rules('required'); 
 
         $form->radio('offer_type', __('Offer type'))->options([
             'For sale' => 'For sale',
             'For hire' => 'For hire/Rent',
         ])->rules('required');
-
-        $form->decimal('price', __('Price (in UGX)'))->rules('required');
-
-        $form->select('subcounty_id', __('Item location'))
+                $form->select('subcounty_id', __('Item location'))
             ->rules('required')
             ->options(Location::get_sub_counties_array());
+*/
+        $form->decimal('price', __('Price (in UGX)'))->rules('required');
+
+
 
 
         $form->quill('details', __('Details'))->rules('required');

@@ -7,17 +7,28 @@ use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
-Route::get('generate-class', [MainController::class, 'generate_class']); 
+Route::get('generate-class', [MainController::class, 'generate_class']);
 
 Route::get('cv', function () {
     //return view('print/print-admission-letter');
     $pdf = App::make('dompdf.wrapper');
     //$pdf->setOption(['DOMPDF_ENABLE_REMOTE' => false]);
-  
+
     //$pdf->loadHTML(view('print/print-admission-letter'));
     $pdf->loadHTML(view('print/cv'));
     return $pdf->stream();
-  });
+});
+
+
+Route::get('invoice', function () {
+    //return view('print/print-admission-letter');
+    $pdf = App::make('dompdf.wrapper');
+    //$pdf->setOption(['DOMPDF_ENABLE_REMOTE' => false]);
+
+    //$pdf->loadHTML(view('print/print-admission-letter'));
+    $pdf->loadHTML(view('print/invoice'));
+    return $pdf->stream();
+});
 
 
 /*

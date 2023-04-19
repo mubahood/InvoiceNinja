@@ -13,6 +13,9 @@ Route::group([
 
     $router->get('/', 'HomeController@index')->name('home');
 
+    $router->resource('invoices', InvoiceController::class); 
+    $router->resource('invoice-items', InvoiceItemController::class); 
+    
 
     /* ========================START OF NEW THINGS===========================*/
     $router->resource('candidates', CandidateController::class);

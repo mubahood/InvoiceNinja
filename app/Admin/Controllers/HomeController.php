@@ -30,7 +30,7 @@ class HomeController extends Controller
 
         $u = Auth::user();
         $content
-            ->title('JobFlow - Dashboard')
+            ->title('Invoice Ninja - Dashboard')
             ->description('Hello ' . $u->name . "!");
 
 

@@ -11,7 +11,7 @@ return [
     | login page.
     |
     */
-    'name' => 'JobFlow - Admin',
+    'name' => 'Invoice Ninja - Admin',
 
     /*
     |--------------------------------------------------------------------------
@@ -22,7 +22,7 @@ return [
     | `img` tag, eg '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo' => '<b>JobFlow</b> admin',
+    'logo' => '<b>Invoice Ninja</b> admin',
 
     /*
     |--------------------------------------------------------------------------
@@ -34,7 +34,7 @@ return [
     | '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo-mini' => '<b>JobFlow</b>',
+    'logo-mini' => '<b>Invoice Ninja</b>',
 
     /*
     |--------------------------------------------------------------------------

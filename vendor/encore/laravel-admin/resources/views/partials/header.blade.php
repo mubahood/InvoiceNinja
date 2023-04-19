@@ -8,9 +8,9 @@ use App\Models\Utils;
     <!-- Logo -->
     <a href="{{ admin_url('/') }}" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini">{!! 'JobFlow' !!}</span>
+        <span class="logo-mini">{!! 'Invoice Ninja' !!}</span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg">{!! 'JobFlow' !!}</span>
+        <span class="logo-lg">{!! 'Invoice Ninja' !!}</span>
     </a>
 
     <!-- Header Navbar -->
