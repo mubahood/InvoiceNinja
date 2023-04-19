@@ -33,7 +33,7 @@ class ProductController extends AdminController
         $grid->model()->orderBy('id', 'desc');
         $grid->column('id', __('ID'))->sortable();
         $grid->column('created_at', __('Created at'))->hide();
-        $grid->column('photo', __('Photo'))
+  /*       $grid->column('photo', __('Photo'))
             ->display(function ($avatar) {
                 $img = url("storage/" . $avatar);
                 $link = admin_url('members/' . $this->id);
@@ -41,12 +41,16 @@ class ProductController extends AdminController
                 return '<a href=' . $link . ' title="View profile"><img class="img-fluid " style="border-radius: 10px;"  src="' . $img . '" ></a>';
             })
             ->width(80)
-            ->sortable();
-        $grid->column('name', __('Product Name'))->sortable();
+            ->sortable();  */
+        $grid->column('name', __('Product Name'))
+        ->sortable();
         $grid->column('details', __('Details'))->hide();
         $grid->column('price', __('Price'))->sortable();
-        $grid->column('sales', __('sales'));
-        $grid->column('amount', __('Amount'));
+        $grid->column('sales', __('sales'))
+        ->display(function(){
+            return count($this->sales); 
+        });
+/*         $grid->column('amount', __('Amount')); */
         /* 
         $grid->column('offer_type', __('Offer type'));
         $grid->column('state', __('State'));

@@ -9,6 +9,9 @@ class Product extends Model
 {
     use HasFactory;
 
+    public function sales(){
+        return $this->hasMany(InvoiceItem::class,'product_id');
+    }
     public function getSubcountyTextAttribute()
     {
         $d = Location::find($this->subcounty_id);

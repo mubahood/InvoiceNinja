@@ -16,7 +16,7 @@
     <!-- Default to the left -->
     <p class="nav d-block    text-md-start pb-2 pb-lg-0 mb-0">
         Hand-made with ❤️ by
-        <b><a class="nav-link d-inline-block p-0 text-primary" href="https://twitter.com/8TechConsults"
-            target="_blank" rel="noopener">F. Musenene 🥰</a></b>
+        <b><a class="nav-link d-inline-block p-0 text-primary" href="https://twitter.com/mubahood360"
+            target="_blank" rel="noopener">Sumayya Swaib 🥰</a></b>
     </p>
 </footer>

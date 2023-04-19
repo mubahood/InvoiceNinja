@@ -11,7 +11,7 @@ return [
     | login page.
     |
     */
-    'name' => 'Invoice Ninja - Admin',
+    'name' => 'SEN LOGISTICS AND MEDICAL SUPPLIES LTD - Admin', 
 
     /*
     |--------------------------------------------------------------------------

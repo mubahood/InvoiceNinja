@@ -7,8 +7,11 @@ use App\Models\Association;
 use App\Models\Candidate;
 use App\Models\Garden;
 use App\Models\Group;
+use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use App\Models\Location;
 use App\Models\Person;
+use App\Models\Product;
 use App\Models\Utils;
 use Carbon\Carbon;
 use Encore\Admin\Auth\Database\Administrator;
@@ -26,74 +29,200 @@ class HomeController extends Controller
     public function index(Content $content)
     {
 
+        /* 
+        $names = [
+            "Abdul Rahman Mulinde",
+            "Abdullah Kituku Abdullah",
+            "Abdul Rahman Faisal",
+            "Abdulrashid Uthman Buzimwa",
+            "Ahmad Muslim Kayondo",
+            "Ahmed Muhammad Kayondo",
+            "Ahsan Taib Ssali",
+            "Aryan Sulaiman",
+            "Asma Zainab Mayanja",
+            "Ayan Rashid Zalwango",
+            "Bahaa Ehab Sserwadda",
+            "Ilmah Nagadya Buyondo",
+            "Harry Elsheikh Chol Ajeing",
+            "Hatim Jamal Dhakaba",
+            "Hayan Mumanzi Ramadhan",
+            "Heyzern Sufi Jad",
+            "Hibatullah Kirabo",
+            "Huzaifa Farouk Kitaka",
+            "Huzayl Tareeq Kasigwa",
+            "Israh Idris Mubiru",
+            "Istarlin Maryam Buga",
+            "Jibran Uwais Muguzi",
+            "Abdul Wahab Juuko",
+            "Imran Yusuf Kabenge",
+            "Osman Ramathan Kambo"
+        ];
 
+        $faker = Faker::create();
+        for ($i = 0; $i < 100; $i++) {
+            $inv = new Invoice();
+            $inv->customer_name = $names[rand(0, (count($names) - 1))];
+            $inv->invoice_date =  $faker->dateTimeBetween('-2 month');
+            $inv->customer_address =  $faker->address();
+            $inv->customer_address =  $faker->address();
+            $inv->customer_contact =  $faker->phoneNumber();
+            $inv->save();
+            $max = rand(4, 20);
+
+            for ($j = 0; $j < $max; $j++) {
+                $item = new InvoiceItem();
+                $item->invoice_id = $inv->id;
+                $item->product_id = rand(1, 49);
+                $item->quantity = rand(1, 20);
+                $item->save();
+            }
+        }
+
+ 
+    
+
+
+
+        */
+        /*         $medical_supplies = array(
+            'Adhesive bandages',
+            'Gauze pads',
+            'Medical gloves',
+            'Alcohol swabs',
+            'Thermometers',
+            'Blood glucose meters',
+            'Blood pressure monitors',
+            'Nebulizers',
+            'Inhalers',
+            'Stethoscopes',
+            'Tongue depressors',
+            'Suture kits',
+            'Scalpels',
+            'Surgical masks',
+            'Face shields',
+            'Eye shields',
+            'Protective gowns',
+            'Isolation gowns',
+            'Sterile drapes',
+            'Surgical sponges',
+            'Surgical towels',
+            'Surgical blades',
+            'Sterile syringes',
+            'Sterile needles',
+            'Intravenous catheters',
+            'Intravenous fluid bags',
+            'Urine collection bags',
+            'Foley catheters',
+            'Ostomy bags',
+            'Wound dressings',
+            'Surgical tape',
+            'Adhesive remover',
+            'Splints',
+            'Casts',
+            'Crutches',
+            'Walkers',
+            'Wheelchairs',
+            'Oxygen tanks',
+            'Nasal cannulas',
+            'Tracheostomy tubes',
+            'Feeding tubes',
+            'Nasogastric tubes',
+            'Urinary catheterization kits',
+            'Electrocardiogram machines',
+            'Ultrasound machines',
+            'X-ray machines',
+            'CT scanners',
+            'MRI machines',
+            'Defibrillators',
+            'Pacemakers'
+        );
+
+        foreach ($medical_supplies as $key => $v) {
+            $p = new Product();
+            $p->quantity = rand(1, 100);
+            $p->administrator_id = 1;
+            $p->name = $v;
+            $p->details = 'Some details';
+            $p->photo = rand(1, 10) . ".jpg";
+            $p->price = [
+                500,
+                1000,
+                2000,
+                5000,
+                10000,
+                50000,
+                15000,
+                36000,
+                3600,
+                8600,
+                1800,
+                12900,
+                29900,
+                80000,
+                28000,
+                76000,
+                77000,
+                80000,
+                28000,
+                76000,
+                77000,
+                8700,
+                1200,
+                3200,
+            ][rand(0, 23)];
+            $p->save();
+        }
+
+        $p->save();
+        die('onde');
+ */
 
         $u = Auth::user();
         $content
-            ->title('Invoice Ninja - Dashboard')
+            ->title('SEN LOGISTICS AND MEDICAL SUPPLIES LTD - Dashboard')
             ->description('Hello ' . $u->name . "!");
 
 
         $content->row(function (Row $row) {
-            $row->column(2, function (Column $column) {
+            $row->column(3, function (Column $column) {
                 $column->append(view('widgets.box-5', [
                     'is_dark' => false,
-                    'title' => 'MUSANED',
+                    'title' => 'This month Sales',
                     'sub_title' => NULL,
-                    'number' => number_format(Candidate::where(['stage' => 'Musaned'])->count()),
-                    'link' => 'musaned'
+                    'number' => "UGX " . number_format(rand(10000, 10000000)),
+                    'link' => 'sales'
                 ]));
             });
-            $row->column(2, function (Column $column) {
+            $row->column(3, function (Column $column) {
                 $column->append(view('widgets.box-5', [
                     'is_dark' => false,
-                    'title' => 'Interpol',
+                    'title' => 'Last month Sales',
                     'sub_title' => NULL,
-                    'number' => number_format(Candidate::where(['stage' => 'Interpol'])->count()),
-                    'link' => 'interpol'
+                    'number' => "UGX " . number_format(rand(10000, 10000000)),
+                    'link' => 'invoices'
                 ]));
             });
-            $row->column(2, function (Column $column) {
+            $row->column(3, function (Column $column) {
                 $column->append(view('widgets.box-5', [
                     'is_dark' => false,
-                    'title' => 'Shared CV',
+                    'title' => 'This week Sales',
                     'sub_title' => NULL,
-                    'number' => number_format(Candidate::where(['stage' => 'Shared CV'])->count()),
-                    'link' => 'shared-cvs'
+                    'number' => "UGX " . number_format(rand(1000, 100000)),
+                    'link' => 'invoices'
                 ]));
             });
-            $row->column(2, function (Column $column) {
+            $row->column(3, function (Column $column) {
                 $column->append(view('widgets.box-5', [
-                    'is_dark' => false,
-                    'title' => 'EMIS',
+                    'style' => 'danger',
+                    'title' => 'Debtors',
                     'sub_title' => NULL,
-                    'number' => number_format(Candidate::where(['stage' => 'Emis'])->count()),
-                    'link' => 'emis'
-                ]));
-            });
-
-            $row->column(2, function (Column $column) {
-                $column->append(view('widgets.box-5', [
-                    'is_dark' => false,
-                    'title' => 'Training',
-                    'sub_title' => NULL,
-                    'number' => number_format(Candidate::where(['stage' => 'Training'])->count()),
-                    'link' => 'training'
-                ]));
-            });
-
-            $row->column(2, function (Column $column) {
-                $column->append(view('widgets.box-5', [
-                    'is_dark' => false,
-                    'title' => 'Ministry',
-                    'sub_title' => NULL,
-                    'number' => number_format(Candidate::where(['stage' => 'Ministry'])->count()),
-                    'link' => 'ministry'
+                    'number' => "UGX " . number_format(rand(1000, 100000)),
+                    'link' => 'invoices'
                 ]));
             });
         });
 
-        $content->row(function (Row $row) {
+        /*        $content->row(function (Row $row) {
 
             $row->column(2, function (Column $column) {
                 $column->append(view('widgets.box-5', [
@@ -142,7 +271,7 @@ class HomeController extends Controller
                     'title' => 'Failed',
                     'sub_title' => NULL,
                     'number' => number_format(Candidate::where(['stage' => 'Failed'])->count()),
-                    'link' => 'failed' 
+                    'link' => 'failed'
                 ]));
             });
 
@@ -156,17 +285,17 @@ class HomeController extends Controller
                 ]));
             });
         });
-
+ */
 
         $content->row(function (Row $row) {
             $row->column(6, function (Column $column) {
-                $column->append(Dashboard::dashboard_members());
+                $column->append(view('widgets.by-categories', []));
             });
             $row->column(6, function (Column $column) {
-                $column->append(view('widgets.by-categories', []));
-                $column->append(view('widgets.by-districts', [])); 
-               // $column->append(Dashboard::dashboard_events());
-            }); 
+
+                $column->append(view('widgets.by-districts', []));
+                // $column->append(Dashboard::dashboard_events());
+            });
         });
 
 

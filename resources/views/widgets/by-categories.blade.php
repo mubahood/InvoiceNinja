@@ -1,14 +1,14 @@
 <?php
 use App\Models\Utils;
 ?>
-<div class="card  mb-4 mb-md-5 border-0">
+<div class="card  mb-0 mb-md-0  border-0">
     <!--begin::Header-->
     <div class="d-flex justify-content-between px-3 pt-2 px-md-4 border-bottom">
         <h4 style="line-height: 1; margrin: 0; " class="fs-22 fw-800">
-            Candidates by Stage
+            Products in stock
         </h4>
     </div>
-    <div class="card-body py-3 py-md-5">
+    <div class="card-body py-0 py-md-4">
         <canvas id="graph_animals" style="width: 100%;"></canvas>
     </div>
 </div>
@@ -36,17 +36,19 @@ use App\Models\Utils;
                     label: 'Dataset 1'
                 }],
                 labels: [
-                    'Musaned',
-                    'Interpol',
-                    'Shared CV',
-                    'EMIS',
-                    'Training',
-                    'Ministry',
-                    'Enjaz',
-                    'Embasy',
-                    'Departure',
-                    'Traveled',
-                    'Failed',
+                    'Stethoscopes',
+                    'Tongue depressors',
+                    'Suture kits',
+                    'Scalpels',
+                    'Surgical masks',
+                    'Face shields',
+                    'Surgical blades',
+                    'Sterile syringes',
+                    'Eye shields',
+                    'Protective gowns',
+                    'Isolation gowns',
+                    'Surgical sponges',
+                    'Surgical towels',
                 ],
             },
             options: {

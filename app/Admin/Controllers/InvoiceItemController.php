@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\InvoiceItem;
+use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -15,7 +16,7 @@ class InvoiceItemController extends AdminController
      *
      * @var string
      */
-    protected $title = 'InvoiceItem';
+    protected $title = 'Sales';
 
     /**
      * Make a grid builder.
@@ -26,15 +27,23 @@ class InvoiceItemController extends AdminController
     {
         $grid = new Grid(new InvoiceItem());
 
-        $grid->column('id', __('Id'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
-        $grid->column('invoice_id', __('Invoice id'));
-        $grid->column('product_id', __('Product id'));
-        $grid->column('name', __('Name'));
+        $grid->model()->orderBy('id', 'desc');
+        $grid->disableBatchActions();
+        $grid->column('id', __('No.'))->sortable();
+        $grid->column('created_at', __('Date'))->display(function ($x) {
+            return Utils::my_date($x);
+        })->sortable();
+        $grid->column('invoice_id', __('Invoice'))
+            ->display(function () {
+                $link = url('invoice?id=' . $this->invoice_id);
+                return '<b><a target="_blank" href="' . $link . '">INVOICE #' . $this->invoice_id . '</a></b>';
+            });
+
+        $grid->column('product_id', __('Product id'))->hide();
+        $grid->column('name', __('Product'));
         $grid->column('price', __('Price'));
-        $grid->column('quantity', __('Quantity'));
-        $grid->column('total', __('Total'));
+        $grid->column('quantity', __('Quantity'))->sortable();
+        $grid->column('total', __('Total'))->sortable();
 
         return $grid;
     }

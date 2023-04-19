@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\Invoice;
 use App\Models\Product;
+use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -26,19 +27,27 @@ class InvoiceController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Invoice());
+        $grid->model()->orderBy('id', 'desc');
+        $grid->disableBatchActions();
+        $grid->column('id', __('No.'))->sortable();
+        $grid->column('created_at', __('Date'))->display(function ($x) {
+            return Utils::my_date_time($x);
+        })->sortable();
+        $grid->column('customer_name', __('Customer'))->sortable();
+        /*         $grid->column('invoice_date', __('Invoice date')); */
+        /*         $grid->column('invoice_no', __('Invoice no')); */
+        $grid->column('total', __('Total'))->display(function ($x) {
+            return '<b class="p-0 m-0 text-right">' . 'UGX ' . number_format($x) . '</b>';
+        })->sortable();
+        $grid->column('paid', __('Paid'))->display(function ($x) {
+            return '<b class="p-0 m-0 text-right">' . 'UGX ' . number_format($x) . '</b>';
+        })->sortable();
+        $grid->column('balance', __('Balance'))->display(function ($x) {
+            return '<b class="p-0 m-0 text-right text-red">' . 'UGX ' . number_format($x) . '</b>';
+        })->sortable();
 
-        $grid->column('id', __('Id'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
-        $grid->column('customer_name', __('Customer name'));
-        $grid->column('invoice_date', __('Invoice date'));
-        $grid->column('invoice_no', __('Invoice no'));
-        $grid->column('total', __('Total'));
-        $grid->column('paid', __('Paid'));
-        $grid->column('balance', __('Balance'));
 
-
-        $grid->column('print', __('CV'))->display(function () {
+        $grid->column('print', __('PRINT INVOICE'))->display(function () {
             $link = url('invoice?id=' . $this->id);
             return '<b><a target="_blank" href="' . $link . '">PRINT INVOICE</a></b>';
         });
