@@ -21,12 +21,20 @@ Route::get('cv', function () {
 
 
 Route::get('invoice', function () {
-    //return view('print/print-admission-letter');
     $pdf = App::make('dompdf.wrapper');
-    //$pdf->setOption(['DOMPDF_ENABLE_REMOTE' => false]);
-
-    //$pdf->loadHTML(view('print/print-admission-letter'));
     $pdf->loadHTML(view('print/invoice'));
+    return $pdf->stream();
+});
+
+Route::get('quotation', function () {
+    $pdf = App::make('dompdf.wrapper');
+    $pdf->loadHTML(view('print/quotation'));
+    return $pdf->stream();
+});
+
+Route::get('delivery', function () {
+    $pdf = App::make('dompdf.wrapper');
+    $pdf->loadHTML(view('print/delivery'));
     return $pdf->stream();
 });
 

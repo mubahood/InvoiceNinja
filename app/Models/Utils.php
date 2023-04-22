@@ -493,9 +493,10 @@ administrator_id
         foreach ($r = Invoice::where([
             'processed' => null
         ])->get() as $key => $inv) {
-            $inv->do_process(); 
-             
+            $inv->do_process();
         }
+
+        return;
         foreach ($r = Candidate::where([
             'name' => null
         ])->get() as $key => $value) {

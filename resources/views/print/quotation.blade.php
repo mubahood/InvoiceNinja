@@ -1,9 +1,10 @@
 <?php
 $link = public_path('css/bootstrap-print.css');
 use App\Models\Utils;
-use App\Models\Invoice;
+use App\Models\Quotation;
 
-$c = Invoice::find($_GET['id']);
+$c = Quotation::find($_GET['id']);
+
 //$logo_link = public_path('/storage/' . $c->photo);
 $logo_link = public_path('/logo-1.jpg' . $c->photo);
 ?>
@@ -16,7 +17,7 @@ $logo_link = public_path('/logo-1.jpg' . $c->photo);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{ public_path('css/bootstrap-print.css') }}">
-    <title>Invoice - {{ $c->id }}</title>
+    <title>Quotation - {{ $c->id }}</title>
     {{--     @if ($template->print_water_mark == 1)
         <style>
             body::before {
@@ -83,8 +84,8 @@ $logo_link = public_path('/logo-1.jpg' . $c->photo);
                 </td>
 
 
-                <td style="width: 15%;" class="">
-                    <b style="font-size: 35px;">INVOICE</b>
+                <td style="width: 25%;" class="">
+                    <b style="font-size: 25px;">PRO-INVOICE</b>
 
                 </td>
             </tr>
@@ -93,12 +94,8 @@ $logo_link = public_path('/logo-1.jpg' . $c->photo);
                     <p>P.O.Box <b><i>36580, Kampala</i></b></p>
                     <p>Tel: <b><i>+256 772-544 263,<br>+256 702-544 263</i></b></p>
                 </td>
-                <td class=" text-center">
 
-                </td>
-                <td style="width: 15%;">
-                    <p>INOVICE NO. <b style="color: red;"><i>0000{{ $c->id }}</i></b></p>
-                </td>
+
             </tr>
         </tbody>
     </table>
@@ -107,7 +104,7 @@ $logo_link = public_path('/logo-1.jpg' . $c->photo);
     <hr style="background-color: rgb(255, 255, 255); height: 3px;" class="p-0 m-0 mt-0">
     <hr style="background-color: rgb(26, 9, 94); height: 3px;" class="p-0 m-0 mt-0 mb-4">
 
-    <b>BILL TO</b>
+    <b>QUOTATION TO</b>
     <p>{{ $c->customer_name }},</p>
     <p>{{ $c->customer_address }},</p>
     <p>{{ $c->customer_contact }}.</p>
@@ -118,13 +115,11 @@ $logo_link = public_path('/logo-1.jpg' . $c->photo);
             <tr>
                 <th style="width: 5%;">S/n</th>
                 <th>PARTICULARS</th>
-                <th style="width: 8%;">QRY</th>
-                <th style="width: 15%;">PRICE</th>
-                <th style="width: 20%;">TOTAL</th>
+                <th style="width: 8%;">QTY</th>
+                <th style="width: 15%;">RATE</th>
+                <th style="width: 20%;">AMOUNT</th>
             </tr>
         </thead>
-
-
         <tbody>
             <?php $i = 0;
             $tot = 0; ?>
@@ -162,10 +157,10 @@ $logo_link = public_path('/logo-1.jpg' . $c->photo);
     <p class="text-center p-0 m-0"><i>Accounts are due on demand</i></p>
     <br>
     <p class=""><b>IN WORDS:</b> {{ Utils::convert_number_to_words($tot) }}.</p>
+    <br>
     <p class=""><b>SIGNATURE:</b></p>
     <p class="mt-2">................................................................</p>
 
- 
 
     {{-- 
     <p class="text-right"><b>{{ Utils::my_date(time()) }}</b></p> --}}
