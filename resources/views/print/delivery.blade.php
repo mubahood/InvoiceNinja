@@ -95,7 +95,7 @@ $logo_link = public_path('/logo-1.jpg' . $c->photo);
                     <p>Tel: <b><i>+256 772-544 263,<br>+256 702-544 263</i></b></p>
                 </td>
 
-
+                
             </tr>
         </tbody>
     </table>
@@ -104,7 +104,7 @@ $logo_link = public_path('/logo-1.jpg' . $c->photo);
     <hr style="background-color: rgb(255, 255, 255); height: 3px;" class="p-0 m-0 mt-0">
     <hr style="background-color: rgb(26, 9, 94); height: 3px;" class="p-0 m-0 mt-0 mb-4">
 
-    <b>QUOTATION TO</b>
+    <b>DELIVERED TO</b>
     <p>{{ $c->customer_name }},</p>
     <p>{{ $c->customer_address }},</p>
     <p>{{ $c->customer_contact }}.</p>
@@ -156,14 +156,19 @@ $logo_link = public_path('/logo-1.jpg' . $c->photo);
     </table>
     {{--     <p class="text-center p-0 m-0"><i>Accounts are due on demand</i></p> --}}
     <br>
-    {{--     <p class=""><b>IN WORDS:</b> {{ Utils::convert_number_to_words($tot) }}.</p> --}}
+    {{--     <p class=""><b>AMOUNT IN WORDS:</b> {{ Utils::convert_number_to_words($tot) }}.</p> --}}
 
     {{-- 
     <p class="text-right"><b>{{ Utils::my_date(time()) }}</b></p> --}}
 
-    <p class=""><b>SIGNATURE:</b></p>
+    <p class=""><b>DELIVERED BY:</b></p>
     <p class="mt-2">................................................................</p>
+    <p class=""><i>For Sen Logistics and Medical Supplies td</i></p>
+    <BR>
 
+    <p class=""><b>RECEIVED BY:</b></p>
+    <p class="mt-2">................................................................</p>
+   
 
 </body>
 

@@ -156,10 +156,11 @@ $logo_link = public_path('/logo-1.jpg' . $c->photo);
     </table>
     <p class="text-center p-0 m-0"><i>Accounts are due on demand</i></p>
     <br>
-    <p class=""><b>IN WORDS:</b> {{ Utils::convert_number_to_words($tot) }}.</p>
+    <p class=""><b>AMOUNT IN WORDS:</b> {{ Utils::convert_number_to_words($tot) }}.</p>
     <br>
     <p class=""><b>SIGNATURE:</b></p>
     <p class="mt-2">................................................................</p>
+    <p class=""><i>For Sen Logistics and Medical Supplies td</i></p>
 
 
     {{-- 

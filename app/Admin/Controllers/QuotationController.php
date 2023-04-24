@@ -92,7 +92,7 @@ class QuotationController extends AdminController
         $form->text('customer_contact', __('Customer Contact'))->required();
         $form->datetime('invoice_date', __('Date'))->required();
         /*  $form->decimal('paid', __('Amount Paid'))->required(); */
-        $form->morphMany('items', 'Click on new to add a invoice item', function (Form\NestedForm $form) {
+        $form->morphMany('items', 'Click on new to add a quotation item', function (Form\NestedForm $form) {
             $form->select('product_id', __('Product'))
                 ->options(Product::where([])->orderBy('name', 'desc')->get()->pluck('name', 'id'))
                 ->rules('required');
