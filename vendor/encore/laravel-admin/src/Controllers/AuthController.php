@@ -247,108 +247,26 @@ class AuthController extends Controller
         Utils::checkEventRegustration();
 
         $form = new Form(new $class());
-        $form->html('<br>Dear respected member, thank you for your interest in the <b>ICT for Persons With Disabilities</b>. We
-        are seeking to create an national database for for Persons With Disabilities to enhance ways of
-        reaching out and supporting.
-        Please fill out this form to help us get to know you better.', '<br>NOTICE:');
+   
 
+ 
 
-        $form->divider('Bio information');
-
-        $form->radio('title', 'Title')
-            ->options([
-                'Mr' => 'Mr',
-                'Ms' => 'Ms',
-                'Mrs' => 'Mrs',
-                'Dr' => 'Dr',
-                'Prof' => 'Prof',
-                'Haji' => 'Haji',
-                'Hajjat' => 'Hajjat',
-                'Imam' => 'Imam',
-                'Shaykh' => 'Shaykh',
-                'Mufti' => 'Mufti',
-            ])
-            ->rules('required');
+ 
 
         $form->text('first_name', 'First name')->rules('required');
         $form->text('last_name', 'Last name')->rules('required');
-        $form->radio('sex', 'Sex')->options(['Male' => 'Male', 'Female' => 'Female'])->rules('required');
-        $form->date('dob', 'Date of birth');
-
-        $form->textarea('intro', 'Breifly Introduce yourself')->rules('required')
-            ->help('Write a very short bio about yourself'); 
-
  
  
-
-        $form->select('country', 'Nationality')
-            ->help('Your country of origin')
-            ->options(Utils::COUNTRIES())->rules('required');
-
-
-        $form->text('occupation', 'Occupation');
-
-        $form->quill('about', 'About you')->help('Write something about yourself.');
-
-
+ 
+ 
         $form->image('avatar', 'Porfile photo');
-        $form->file('cv', 'CV File')->rules('mimes:doc,docx,pdf');
-
-
-
-        $form->divider('Academic Program(s) Accomplised');
-
-        $form->morphMany('programs', 'Click on new to add a program', function (Form\NestedForm $form) {
-            $u = Admin::user();
-            $form->hidden('user_id')->default($u->id);
-            $form->select('program_award', 'program_award')
-                ->options([
-                    'Certificate' => 'Certificate',
-                    'Diploma' => 'Diploma',
-                    "Bachelor's degree" => "Bachelor's degree",
-                    "Master's degree" => "Master's degree",
-                    'PHD' => 'PHD',
-                ])->rules('required');
-            $form->text('program_name', 'Program name')->rules('required')->placeholder('E.g Information technology');
-
-            $years = [];
-
-            for ($i = 1988; $i <= date("Y", time()); $i++) {
-                $years[$i] = $i;
-            }
-
-            $form->select('program_year', 'Program year of admission')
-                ->options($years)->rules('required');
-
   
-        });
-
-
-
-
-        $form->divider('Contact information');
-        $form->text('address', 'Current Address')->help('Leave this field empty if you don\'t want it to appear on your profile.');
-        $form->mobile('phone_number', 'Phone number')->options(['mask' => '+999 9999 99999'])->help('Leave this field empty if you don\'t want it to appear on your profile.');
-
-
-        $form->select('language', 'Fluent Language')
-            ->options([
-                'English' => 'English',
-                'Arabic' => 'Arabic',
-                'Swahili' => 'Swahili',
-                'French' => 'French',
-                'Other' => 'Other',
-            ]);
-
-        $form->url('website', 'Personal website');
-        $form->text('twitter', 'Twitter hundle (Username)');
-        $form->text('facebook', 'Facebook username');
-        $form->text('linkedin', 'Linkedin username');
+ 
+ 
+ 
         $form->mobile('whatsapp', 'Whatsapp number')->options(['mask' => '+999 9999 99999']);
 
-
-
-
+ 
         $form->divider('System account information');
 
 
