@@ -722,6 +722,7 @@ class ComposerStaticInitda89eef54c810448a827ed04bb3da82f
         'App\\Models\\Crop' => __DIR__ . '/../..' . '/app/Models/Crop.php',
         'App\\Models\\CropProtocol' => __DIR__ . '/../..' . '/app/Models/CropProtocol.php',
         'App\\Models\\Delivery' => __DIR__ . '/../..' . '/app/Models/Delivery.php',
+        'App\\Models\\DeliveryItem' => __DIR__ . '/../..' . '/app/Models/DeliveryItem.php',
         'App\\Models\\Disability' => __DIR__ . '/../..' . '/app/Models/Disability.php',
         'App\\Models\\Event' => __DIR__ . '/../..' . '/app/Models/Event.php',
         'App\\Models\\EventBooking' => __DIR__ . '/../..' . '/app/Models/EventBooking.php',

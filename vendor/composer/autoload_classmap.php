@@ -118,6 +118,7 @@ return array(
     'App\\Models\\Crop' => $baseDir . '/app/Models/Crop.php',
     'App\\Models\\CropProtocol' => $baseDir . '/app/Models/CropProtocol.php',
     'App\\Models\\Delivery' => $baseDir . '/app/Models/Delivery.php',
+    'App\\Models\\DeliveryItem' => $baseDir . '/app/Models/DeliveryItem.php',
     'App\\Models\\Disability' => $baseDir . '/app/Models/Disability.php',
     'App\\Models\\Event' => $baseDir . '/app/Models/Event.php',
     'App\\Models\\EventBooking' => $baseDir . '/app/Models/EventBooking.php',
