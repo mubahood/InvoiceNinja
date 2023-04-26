@@ -107,7 +107,7 @@ $sign = public_path('/sign.jpg');
     <hr style="background-color: rgb(26, 9, 94); height: 3px;" class="p-0 m-0 mt-0 mb-4">
 
 
-
+    <p class="text-right">{{ Utils::my_date($c->invoice_date) }}</p><br> 
     
 
     <b>DELIVERED TO</b>
