@@ -92,7 +92,7 @@ $sign = public_path('/sign.jpg');
             <tr>
                 <td style="width: 35%;" class="">
                     <p>Dealers in Dental materials and equipment and general medical supplies.</p>
-
+ 
                     <br>
                     <p>P.O.Box <b><i>36580, Kampala</i></b></p>
                     <p>Tel: <b><i>+256 772-544 263,<br>+256 702-544 263</i></b></p>
