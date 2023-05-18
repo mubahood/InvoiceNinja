@@ -13,6 +13,9 @@ Route::group([
 
     $router->get('/', 'HomeController@index')->name('home');
 
+    $router->resource('landloads', LandloadController::class); 
+    $router->resource('houses', HouseController::class); 
+
     $router->resource('quotations', QuotationController::class);
     $router->resource('invoices', InvoiceController::class);
     $router->resource('invoice-items', InvoiceItemController::class);
