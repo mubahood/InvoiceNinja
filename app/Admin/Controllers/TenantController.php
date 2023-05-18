@@ -2,21 +2,21 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\Landload;
+use App\Models\Tenant;
 use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 
-class LandloadController extends AdminController
+class TenantController extends AdminController
 {
     /**
      * Title for current resource.
      *
      * @var string
      */
-    protected $title = 'Landlords';
+    protected $title = 'Tenants';
 
     /**
      * Make a grid builder.
@@ -25,7 +25,7 @@ class LandloadController extends AdminController
      */
     protected function grid()
     {
-        $grid = new Grid(new Landload());
+        $grid = new Grid(new Tenant());
 
         $grid->quickSearch('name')->placeholder('Search by name....');
         $grid->model()->orderBy('id', 'desc');
@@ -36,17 +36,12 @@ class LandloadController extends AdminController
         })->sortable();
 
         $grid->column('name', __('Name'))->sortable();
-        $grid->column('email', __('Email'))->hide();
+        $grid->column('email', __('Email'));
         $grid->column('phone_number', __('Phone number'));
-        $grid->column('phone_number_2', __('Phone number 2'))->hide();
-        $grid->column('address', __('Address'))->hide();
-        $grid->column('balance', __('Balance (UGX)'))
-            ->display(function ($x) {
-                return number_format($x);
-            })->totalRow(function ($x) {
-                return  number_format($x);
-            })->sortable();
-        $grid->column('fully_paid', __('Fully Paid'))->sortable();
+        $grid->column('phone_number_2', __('Phone number 2'));
+        $grid->column('address', __('Address'));
+
+
         return $grid;
     }
 
@@ -58,16 +53,19 @@ class LandloadController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(Landload::findOrFail($id));
+        $show = new Show(Tenant::findOrFail($id));
 
         $show->field('id', __('Id'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
+        $show->field('region_id', __('Region id'));
+        $show->field('area_id', __('Area id'));
         $show->field('name', __('Name'));
-        $show->field('email', __('Email'));
-        $show->field('phone_number', __('Phone number'));
-        $show->field('phone_number_2', __('Phone number 2'));
+        $show->field('gender', __('Gender'));
         $show->field('address', __('Address'));
+        $show->field('image', __('Image'));
+        $show->field('attachment', __('Attachment'));
+        $show->field('details', __('Details'));
 
         return $show;
     }
@@ -79,9 +77,13 @@ class LandloadController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Landload());
+        $form = new Form(new Tenant());
 
         $form->text('name', __('Name'))->rules('required');
+        /*         $form->radio('gender', __('Gender'))->options([
+            'Male' => 'Male',
+            'Female' => 'Female',
+        ])->rules('required'); */
         $form->text('email', __('Email'));
         $form->text('phone_number', __('Phone number'))->rules('required');
         $form->text('phone_number_2', __('Phone number 2'));

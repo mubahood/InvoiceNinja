@@ -83,6 +83,7 @@ return array(
     'Facade\\IgnitionContracts\\' => array($vendorDir . '/facade/ignition-contracts/src'),
     'Facade\\FlareClient\\' => array($vendorDir . '/facade/flare-client-php/src'),
     'Encore\\Summernote\\' => array($vendorDir . '/laravel-admin-ext/summernote/src'),
+    'Encore\\Grid\\Lightbox\\' => array($vendorDir . '/laravel-admin-ext/grid-lightbox/src'),
     'Encore\\Chartjs\\' => array($vendorDir . '/laravel-admin-ext/chartjs/src'),
     'Encore\\Admin\\' => array($vendorDir . '/encore/laravel-admin/src'),
     'Egulias\\EmailValidator\\' => array($vendorDir . '/egulias/email-validator/src'),

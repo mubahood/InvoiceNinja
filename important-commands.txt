@@ -23,6 +23,7 @@ lsphp artisan make:component Alert --inline
 
 php artisan migrate
 
+php artisan make:migration create_rooms_table
 php artisan make:migration create_courses_table
 php artisan make:migration create_course_categories_table
 php artisan make:migration create_course_chapters_table
@@ -56,6 +57,10 @@ php artisan make:migration create_quotation_items_table
 php artisan make:migration create_quotations_table
 php artisan make:migration create_deliveries_table
 php artisan make:migration create_delivery_items_table
+php artisan make:migration create_tenants_table
+php artisan make:migration create_rentings_table
+php artisan make:migration create_landload_payments_table
+php artisan make:migration create_tenant_payments_table
 
 Encore\Admin\Auth\Database\Administrator::class,
 php artisan admin:make FormSr4Controller --model=App\FormSr4
@@ -63,6 +68,7 @@ php artisan admin:make ParticipantController --model=App\\Participant
 
 php artisan admin:controller --model=App\FormSr4
 php artisan admin:make FormSr4Controller --model=App\FormSr4
+php artisan admin:make FormSr4Controller --model=App\invoices
 php artisan admin:make FormSr4Controller --model=App\invoices
 
  
@@ -96,7 +102,17 @@ php artisan admin:make DeliveryController --model=App\Models\Delivery
 php artisan admin:make QuotationItemController --model=App\Models\QuotationItem
 php artisan admin:make LandloadController --model=App\Models\Landload
 php artisan admin:make HouseController --model=App\Models\House
+php artisan admin:make RoomController --model=App\Models\Room
+php artisan admin:make TenantController --model=App\Models\Tenant
+php artisan admin:make LandloadPaymentController --model=App\Models\LandloadPayment
+php artisan admin:make TenantPaymentController --model=App\Models\TenantPayment
 
+php artisan make:model TenantPayment
+php artisan make:model LandloadPayment
+php artisan make:model Renting
+php artisan make:model Tenant
+php artisan make:model Tenant
+php artisan make:model Room
 php artisan make:model House
 php artisan make:model Landload
 php artisan make:model InvoiceItem

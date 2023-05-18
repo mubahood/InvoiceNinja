@@ -3,6 +3,9 @@
 namespace App\Admin\Controllers;
 
 use App\Models\House;
+use App\Models\Landload;
+use App\Models\Location;
+use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -15,7 +18,7 @@ class HouseController extends AdminController
      *
      * @var string
      */
-    protected $title = 'House';
+    protected $title = 'Houses';
 
     /**
      * Make a grid builder.
@@ -26,17 +29,47 @@ class HouseController extends AdminController
     {
         $grid = new Grid(new House());
 
-        $grid->column('id', __('Id'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
-        $grid->column('landload_id', __('Landload id'));
-        $grid->column('region_id', __('Region id'));
-        $grid->column('area_id', __('Area id'));
-        $grid->column('name', __('Name'));
+
+        $grid->quickSearch('name')->placeholder('Search by name....');
+        $grid->model()->orderBy('id', 'desc');
+        $grid->disableBatchActions();
+        $grid->column('id', __('No.'))->sortable();
+
+        $grid->column('image', __('Photo'))
+            ->lightbox(['width' => 60, 'height' => 60])
+            ->sortable();
+
+
+
+        $grid->column('name', __('House Name'))->sortable();
+        $grid->column('landload_id', __('Landload'))->display(function ($x) {
+            $loc = Landload::find($x);
+            if ($loc != null) {
+                return $loc->name;
+            }
+            return $x;
+        })->sortable();
+        $grid->column('region_id', __('Region'))->display(function ($x) {
+            $loc = Location::find($x);
+            if ($loc != null) {
+                return $loc->name_text;
+            }
+            return $x;
+        })->hide();
+        $grid->column('area_id', __('Area'))->display(function ($x) {
+            $loc = Location::find($x);
+            if ($loc != null) {
+                return $loc->name_text;
+            }
+            return $x;
+        })->sortable();
         $grid->column('address', __('Address'));
-        $grid->column('image', __('Image'));
-        $grid->column('attachment', __('Attachment'));
-        $grid->column('details', __('Details'));
+
+        $grid->column('attachment', __('Attachment'))->hide();
+        $grid->column('details', __('Details'))->hide();
+        $grid->column('created_at', __('Registered'))->display(function ($x) {
+            return Utils::my_date_time($x);
+        })->sortable();
 
         return $grid;
     }
@@ -75,15 +108,21 @@ class HouseController extends AdminController
     {
         $form = new Form(new House());
 
-        $form->number('landload_id', __('Landload id'));
-        $form->number('region_id', __('Region id'));
-        $form->number('area_id', __('Area id'));
-        $form->textarea('name', __('Name'));
-        $form->textarea('address', __('Address'));
-        $form->textarea('image', __('Image'));
-        $form->textarea('attachment', __('Attachment'));
-        $form->textarea('details', __('Details'));
+        $form->select('landload_id', __('Landload'))
+            ->options(Landload::where([])->orderBy('name', 'asc')->get()->pluck('name', 'id'))
+            ->rules('required');
 
+        $form->select('area_id', __('Select Area'))
+            ->options(Location::get_sub_counties_array())
+            ->rules('required');
+
+        $form->text('name', __('House/Building Name'))->rules('required');
+        $form->text('address', __('Full Address'))->rules('required');
+        $form->image('image', __('Image'));
+        $form->file('attachment', __('Attachment'));
+        $form->quill('details', __('Details'));
+
+        $form->hidden('region_id', __('Region id'))->default(1);
         return $form;
     }
 }
