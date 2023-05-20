@@ -1,5 +1,5 @@
-php artisan make:migration create_shelves_table
+php artisan make:migration create_stock_items_table
 
-php artisan admin:make ShelveController --model=App\Models\Shelve
+php artisan admin:make StockItemController --model=App\Models\StockItem
 
-php artisan make:model Shelve
+php artisan make:model StockItem

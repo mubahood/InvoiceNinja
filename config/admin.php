@@ -22,7 +22,7 @@ return [
     | `img` tag, eg '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo' => '<b>Invoice Ninja</b> admin',
+    'logo' => '<b>EAGLE AIR</b> admin',
 
     /*
     |--------------------------------------------------------------------------
@@ -34,7 +34,7 @@ return [
     | '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo-mini' => '<b>Invoice Ninja</b>',
+    'logo-mini' => '<b>EAGLE AIR</b>',
 
     /*
     |--------------------------------------------------------------------------
@@ -310,7 +310,7 @@ return [
     | each page
     |
     */
-    'show_version' => false,
+    'show_version' => TRUE,
 
     /*
     |--------------------------------------------------------------------------

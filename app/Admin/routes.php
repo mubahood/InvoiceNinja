@@ -16,6 +16,11 @@ Route::group([
     $router->resource('stores', StoreController::class);
     $router->resource('store-sections', StoreSectionController::class);
     $router->resource('shelves', ShelveController::class); 
+    $router->resource('stock-items', StockItemController::class); 
+    $router->resource('bonded-store', BondedStoreController::class); 
+    $router->resource('quarantine-in-store', QuarantineInStoreController::class);   
+    $router->resource('quarantine-out-store', QuarantineOutStoreController::class); 
+    $router->resource('issued-out', IssuedOutController::class); 
 
     $router->get('/', 'HomeController@index')->name('home');
 

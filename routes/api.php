@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ApiAuthController;
 use App\Http\Controllers\ApiResurceController;
+use App\Models\Shelve;
+use App\Models\StoreSection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -45,6 +47,32 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('ajax', function (Request $r) {
 
     $_model = trim($r->get('model'));
+    $q = trim($r->get('q')); 
+
+    if($_model == 'StoreSection'){
+        $data = [];
+        foreach (StoreSection::where('store_id',$q)->get() as $key => $v) { 
+             
+            $data[] = [
+                'id' => $v->id,
+                'text' => $v->name
+            ];
+        }
+        return $data;
+    }
+
+    if($_model == 'Shelve'){
+        $data = [];
+        foreach (Shelve::where('store_section_id',$q)->get() as $key => $v) { 
+             
+            $data[] = [
+                'id' => $v->id,
+                'text' => $v->name
+            ];
+        }
+        return $data;
+    }
+
     $conditions = [];
     foreach ($_GET as $key => $v) {
         if (substr($key, 0, 6) != 'query_') {
@@ -64,7 +92,7 @@ Route::get('ajax', function (Request $r) {
     $search_by_1 = trim($r->get('search_by_1'));
     $search_by_2 = trim($r->get('search_by_2'));
 
-    $q = trim($r->get('q'));
+
 
     $res_1 = $model::where(
         $search_by_1,
@@ -89,17 +117,17 @@ Route::get('ajax', function (Request $r) {
     foreach ($res_1 as $key => $v) {
         $name = "";
         if (isset($v->name)) {
-            $name = " - " . $v->name;
+            $name =  $v->name;
         }
         $data[] = [
             'id' => $v->id,
-            'text' => "#$v->id" . $name
+            'text' =>   $name
         ];
     }
     foreach ($res_2 as $key => $v) {
         $name = "";
         if (isset($v->name)) {
-            $name = " - " . $v->name;
+            $name =  $v->name;
         }
         $data[] = [
             'id' => $v->id,
