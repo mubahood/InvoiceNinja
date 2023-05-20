@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class BatchCopy extends BatchAction
 {
-    public $name = 'Batch Copy';
+    public $name = 'Duplicate record';
 
     public function handle(Collection $collection, Request $r)
     {
@@ -18,8 +18,6 @@ class BatchCopy extends BatchAction
             $m = $model->replicate();
 
             $m->name .= ' - Copy';
-            $m->is_active = 'Pending';
-            $i++;
             $m->save();
         }
 

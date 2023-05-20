@@ -11,15 +11,21 @@ Route::group([
     'as'            => config('admin.route.prefix') . '.',
 ], function (Router $router) {
 
+    $router->resource('stock-categories', StockCategoryController::class);
+    $router->resource('stock-sub-categories', StockSubCategoryController::class);
+    $router->resource('stores', StoreController::class);
+    $router->resource('store-sections', StoreSectionController::class);
+    $router->resource('shelves', ShelveController::class); 
+
     $router->get('/', 'HomeController@index')->name('home');
 
     $router->resource('landloads', LandloadController::class);
     $router->resource('houses', HouseController::class);
     $router->resource('rooms', RoomController::class);
     $router->resource('tenants', TenantController::class);
-    $router->resource('rentings', RentingController::class); 
-    $router->resource('landload-payments', LandloadPaymentController::class); 
-    $router->resource('tenant-payments', TenantPaymentController::class); 
+    $router->resource('rentings', RentingController::class);
+    $router->resource('landload-payments', LandloadPaymentController::class);
+    $router->resource('tenant-payments', TenantPaymentController::class);
 
     $router->resource('quotations', QuotationController::class);
     $router->resource('invoices', InvoiceController::class);
