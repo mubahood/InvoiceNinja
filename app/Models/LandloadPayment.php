@@ -24,8 +24,7 @@ class LandloadPayment extends Model
                 $value->save();
             }
         });
-        self::created(function ($m) {
-
+        self::created(function ($m) { 
 
             foreach (Landload::all() as $key => $value) {
                 $value->balance = LandloadPayment::where('landload_id', $value->id)->sum('amount');

@@ -33,6 +33,20 @@ class House extends Model
     {
         return $this->belongsTo(Landload::class);
     }
+
+    public function rooms()
+    {
+        return $this->hasMany(Room::class);
+    }
+    public function getNameTextAttribute()
+    {
+        $name = $this->name;
+        if ($this->landload != null) {
+            $name .= ", " . $this->landload->name;
+        }
+        return $name;
+    }
+
     public static function my_update($m)
     {
         $m->region_id  = 1;
@@ -42,4 +56,7 @@ class House extends Model
         }
         return $m;
     }
+
+
+    protected $appends = ['name_text'];
 }

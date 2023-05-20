@@ -31,9 +31,34 @@ class RoomController extends AdminController
     {
         $grid = new Grid(new Room());
 
+        $grid->filter(function ($filter) {
+            // Remove the default id filter
+            $filter->disableIdFilter();
+
+
+
+            $filter->equal('house_id', 'Filter by House')
+                ->select(
+                    House::where([])->orderBy('name', 'Asc')->get()->pluck('name_text', 'id')
+                );
+            $filter->equal('landload_id', 'Filter by Landlord')
+                ->select(
+                    Landload::where([])->orderBy('name', 'asc')->get()->pluck('name', 'id')
+                );
+
+            $filter->group('price', function ($group) {
+                $group->gt('greater than');
+                $group->lt('less than');
+                $group->equal('equal to');
+            });
+        });
+
+
+
+
         $grid->batchActions(function ($batch) {
             $batch->disabledelete();
-            $batch->add(new BatchCopy()); 
+            $batch->add(new BatchCopy());
         });
 
         $grid->quickSearch('name')->placeholder('Search by name....');
@@ -69,10 +94,16 @@ class RoomController extends AdminController
             }
             return $x;
         })->sortable();
-        $grid->column('address', __('Address'));
-        
+        $grid->column('address', __('Address'))->hide();
+        $grid->column('house_id', __('House'));
+
         $grid->column('status', __('Status'));
-        $grid->column('is_active', __('Is active'));
+        $grid->column('is_active', __('Status'))->label([
+            'Pending' => 'danger',
+            'Construction' => 'danger',
+            'Repair' => 'danger',
+            'Ready' => 'success',
+        ]);
         $grid->column('number_of_rooms', __('Number of rooms'));
         $grid->column('room_size', __('Room size'));
         $grid->column('bed_rooms', __('Bed rooms'));
@@ -81,8 +112,6 @@ class RoomController extends AdminController
         $grid->column('indoor_toilets', __('Indoor toilets'));
         $grid->column('price', __('Price'));
         $grid->column('landload_price', __('Landload price'));
-        $grid->column('image', __('Image'));
-        $grid->column('images', __('Images'));
         $grid->column('furnishings', __('Furnishings'));
         $grid->column('utilities', __('Utilities'));
         $grid->column('internet_access', __('Internet access'));
@@ -176,20 +205,20 @@ class RoomController extends AdminController
             'Cabel internet' => 'Cabel internet',
         ]);
 
-        
+
         $form->checkboxCard('security', __('Security'))->options([
             'Fence' => 'Fence',
             'CCTV Cemaras' => 'CCTV Cemaras',
             'Security officer' => 'Security officer',
         ]);
- 
+
         $form->checkboxCard('amenities', __('Amenities'))->options([
             'Parking' => 'Parking',
             'Laundry facility' => 'Laundry facility',
             'Gym' => 'Gym',
             'Swimming pool' => 'Swimming pool',
             'Garden' => 'Garden',
-        ]);  
+        ]);
 
         $form->image('image', __('Room Main Photo'));
         $form->multipleImage('images', __('Other Images'));
@@ -218,7 +247,7 @@ class RoomController extends AdminController
             'Occupied' => 'Occupied',
             'Vacant' => 'Vacant',
         ])->rules('required');
- 
+
         return $form;
     }
 }

@@ -39,10 +39,8 @@ class HouseController extends AdminController
             ->lightbox(['width' => 60, 'height' => 60])
             ->sortable();
 
-
-
         $grid->column('name', __('House Name'))->sortable();
-        $grid->column('landload_id', __('Landload'))->display(function ($x) {
+        $grid->column('landload_id', __('Landlord'))->display(function ($x) {
             $loc = Landload::find($x);
             if ($loc != null) {
                 return $loc->name;
@@ -63,7 +61,12 @@ class HouseController extends AdminController
             }
             return $x;
         })->sortable();
-        $grid->column('address', __('Address'));
+        $grid->column('rooms', __('Rooms'))
+            ->display(function ($x) {
+                $x = count($this->rooms);
+                return '<a style="font-size: 16px; text-align: center;" href="' . admin_url('rooms?house_id=' . $x) . '" ><b>' . $x . '</b></a>';
+            });
+        $grid->column('address', __('Address'))->hide();
 
         $grid->column('attachment', __('Attachment'))->hide();
         $grid->column('details', __('Details'))->hide();
@@ -108,7 +111,7 @@ class HouseController extends AdminController
     {
         $form = new Form(new House());
 
-        $form->select('landload_id', __('Landload'))
+        $form->select('landload_id', __('Landlord'))
             ->options(Landload::where([])->orderBy('name', 'asc')->get()->pluck('name', 'id'))
             ->rules('required');
 
