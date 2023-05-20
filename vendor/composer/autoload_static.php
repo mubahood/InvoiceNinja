@@ -161,6 +161,7 @@ class ComposerStaticInitda89eef54c810448a827ed04bb3da82f
         'E' => 
         array (
             'Encore\\Summernote\\' => 18,
+            'Encore\\Grid\\Lightbox\\' => 21,
             'Encore\\Chartjs\\' => 15,
             'Encore\\Admin\\' => 13,
             'Egulias\\EmailValidator\\' => 23,
@@ -508,6 +509,10 @@ class ComposerStaticInitda89eef54c810448a827ed04bb3da82f
         'Encore\\Summernote\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel-admin-ext/summernote/src',
+        ),
+        'Encore\\Grid\\Lightbox\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel-admin-ext/grid-lightbox/src',
         ),
         'Encore\\Chartjs\\' => 
         array (
@@ -1751,6 +1756,10 @@ class ComposerStaticInitda89eef54c810448a827ed04bb3da82f
         'Encore\\Admin\\Widgets\\Widget' => __DIR__ . '/..' . '/encore/laravel-admin/src/Widgets/Widget.php',
         'Encore\\Chartjs\\Chartjs' => __DIR__ . '/..' . '/laravel-admin-ext/chartjs/src/Chartjs.php',
         'Encore\\Chartjs\\ChartjsServiceProvider' => __DIR__ . '/..' . '/laravel-admin-ext/chartjs/src/ChartjsServiceProvider.php',
+        'Encore\\Grid\\Lightbox\\GalleryDisplayer' => __DIR__ . '/..' . '/laravel-admin-ext/grid-lightbox/src/GalleryDisplayer.php',
+        'Encore\\Grid\\Lightbox\\Lightbox' => __DIR__ . '/..' . '/laravel-admin-ext/grid-lightbox/src/Lightbox.php',
+        'Encore\\Grid\\Lightbox\\LightboxDisplayer' => __DIR__ . '/..' . '/laravel-admin-ext/grid-lightbox/src/LightboxDisplayer.php',
+        'Encore\\Grid\\Lightbox\\LightboxServiceProvider' => __DIR__ . '/..' . '/laravel-admin-ext/grid-lightbox/src/LightboxServiceProvider.php',
         'Encore\\Summernote\\Editor' => __DIR__ . '/..' . '/laravel-admin-ext/summernote/src/Editor.php',
         'Encore\\Summernote\\Summernote' => __DIR__ . '/..' . '/laravel-admin-ext/summernote/src/Summernote.php',
         'Encore\\Summernote\\SummernoteServiceProvider' => __DIR__ . '/..' . '/laravel-admin-ext/summernote/src/SummernoteServiceProvider.php',
