@@ -63,7 +63,6 @@ class RoomController extends AdminController
 
         $grid->quickSearch('name')->placeholder('Search by name....');
         $grid->model()->orderBy('id', 'desc');
-        $grid->disableBatchActions();
         $grid->column('id', __('No.'))->sortable();
 
         $grid->column('image', __('Photo'))
