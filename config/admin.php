@@ -11,7 +11,7 @@ return [
     | login page.
     |
     */
-    'name' => 'SEN LOGISTICS AND MEDICAL SUPPLIES LTD - Admin', 
+    'name' => 'NICSIM PROPERTY MANAGERS LIMITED - Admin', 
 
     /*
     |--------------------------------------------------------------------------
@@ -22,7 +22,7 @@ return [
     | `img` tag, eg '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo' => '<b>Invoice Ninja</b> admin',
+    'logo' => '<b>NICSIM PROPERTY</b> admin',
 
     /*
     |--------------------------------------------------------------------------
@@ -34,7 +34,7 @@ return [
     | '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo-mini' => '<b>Invoice Ninja</b>',
+    'logo-mini' => '<b>NICSIM PROPERTY</b>',
 
     /*
     |--------------------------------------------------------------------------

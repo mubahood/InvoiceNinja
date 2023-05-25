@@ -179,7 +179,7 @@ class HomeController extends Controller
 
         $u = Auth::user();
         $content
-            ->title('SEN LOGISTICS AND MEDICAL SUPPLIES LTD - Dashboard')
+            ->title('NICSIM PROPERTY MANAGERS LIMITED - Dashboard')
             ->description('Hello ' . $u->name . "!");
 
 

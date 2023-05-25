@@ -173,7 +173,7 @@ $sign = public_path('/sign.jpg');
             <td>
                 <p class=""><b>DELIVERED BY:</b></p>
                 <img class="img-fluid w-25" src="{{ $sign }}"> 
-                <p class=""><i>For Sen Logistics and Medical Supplies td</i></p>
+                <p class=""><i>NICSIM PROPERTY MANAGERS LIMITED</i></p>
                 <BR>
             </td>
             <td>

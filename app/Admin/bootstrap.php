@@ -36,8 +36,11 @@ Admin::navbar(function (\Encore\Admin\Widgets\Navbar $navbar) {
     ]));
 
     $navbar->left(Shortcut::make([
-        'Invoice' => 'invoices/create',
-        'News product' => 'products/create',
+        'News renting' => 'rentings/create',
+        'News tenant' => 'tenants/create',
+        'News room' => 'rooms/create',
+        'News house' => 'houses/create',
+        'New landlord' => 'landloads/create',
         /*  'Products or Services' => 'products/create',
         'Jobs and Opportunities' => 'jobs/create',
         'Event' => 'events/create', */
@@ -46,12 +49,12 @@ Admin::navbar(function (\Encore\Admin\Widgets\Navbar $navbar) {
         'Candidate' => 'people/create', 
     ], 'fa-wpforms')->title('Register new')); */
 
-/*     $navbar->left(new Dropdown()); */
+ 
 
-    $navbar->right(Shortcut::make([
+/*     $navbar->right(Shortcut::make([
         'How to register a new candidate' => '',
         'How to change  candidate\'s status' => '',
-    ], 'fa-question')->title('HELP'));
+    ], 'fa-question')->title('HELP')); */
 });
 
 

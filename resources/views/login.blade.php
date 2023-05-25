@@ -55,7 +55,7 @@
                             <p class="nav d-block  text-center text-md-start pb-2 pb-lg-0 mb-0">
                                 Hand-made with ❤️ by
                                 <a class="nav-link d-inline-block p-0" href="https://twitter.com/mubahood360"
-                                    target="_blank" rel="noopener">Sumayya Swaib 🥰</a>
+                                    target="_blank" rel="noopener">M. Muhindo</a>
                             </p>
                         </div>
                     </div>
