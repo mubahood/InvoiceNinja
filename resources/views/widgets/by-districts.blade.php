@@ -20,7 +20,7 @@ use App\Models\Utils;
             type: 'doughnut',
             data: {
                 datasets: [{
-                    data: [370, 57, 101, 210, 259, 712, 100, 11, 53, 12, 187],
+                    data: [370, 57, 101],
                     backgroundColor: [
                         '#8EFCDF',
                         '#D0B1FD',
@@ -36,17 +36,9 @@ use App\Models\Utils;
                     label: 'Dataset 1'
                 }],
                 labels: [
-                    'Kampala',
-                    'Kasese',
-                    'Mbarara',
-                    'Arua',
-                    'Gulu',
-                    'Jinja',
-                    'Mbale',
-                    'Kumi',
-                    'Soroti',
-                    'Wakiso',
-                    'Others',
+                    'Categoy 1',
+                    'Categoy 2',
+                    'Categoy 3', 
                 ],
             },
             options: {

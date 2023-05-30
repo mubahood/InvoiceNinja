@@ -5,7 +5,7 @@ use App\Models\Utils;
     <!--begin::Header-->
     <div class="d-flex justify-content-between px-3 pt-2 px-md-4 border-bottom">
         <h4 style="line-height: 1; margrin: 0; " class="fs-22 fw-800">
-            Products in stock
+            Stock Categories
         </h4>
     </div>
     <div class="card-body py-0 py-md-4">
@@ -20,35 +20,25 @@ use App\Models\Utils;
             type: 'pie',
             data: {
                 datasets: [{
-                    data: [370, 57, 101, 210, 259, 712, 100, 259, 210, 100, 70],
+                    data: [370, 57, 101, ],
                     backgroundColor: [
+                        '#C71C5D',
                         '#8EFCDF',
-                        '#F43DE3',
+                        '#868686',
                         '#F6DE5C',
+                        '#D0B1FD',
                         '#7D57F8',
+                        '#34F1B7',
                         '#431B02',
                         '#23A2E9',
-                        '#34F1B7',
-                        '#868686',
-                        '#C71C5D',
-                        '#D0B1FD',
+                        '#F43DE3',
                     ],
                     label: 'Dataset 1'
                 }],
                 labels: [
-                    'Stethoscopes',
-                    'Tongue depressors',
-                    'Suture kits',
-                    'Scalpels',
-                    'Surgical masks',
-                    'Face shields',
-                    'Surgical blades',
-                    'Sterile syringes',
-                    'Eye shields',
-                    'Protective gowns',
-                    'Isolation gowns',
-                    'Surgical sponges',
-                    'Surgical towels',
+                    'Category 1',
+                    'Category 2',
+                    'Category 3',
                 ],
             },
             options: {

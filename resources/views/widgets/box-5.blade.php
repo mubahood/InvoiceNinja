@@ -23,9 +23,9 @@ if ($is_dark) {
 
 if ($style == 'danger') {
     $text = 'text-white';
-    $bg = 'bg-danger';
+    $bg = 'bg-primary';
     $text2 = 'text-white';
-    $border = 'border-danger';
+    $border = 'border-info';
 }
 ?><a href="{{ $link }}" class="card {{ $bg }} {{ $border }} mb-4 mb-md-5">
     <div class="card-body py-0">

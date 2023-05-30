@@ -12,6 +12,7 @@ use App\Models\InvoiceItem;
 use App\Models\Location;
 use App\Models\Person;
 use App\Models\Product;
+use App\Models\StockItem;
 use App\Models\Utils;
 use Carbon\Carbon;
 use Encore\Admin\Auth\Database\Administrator;
@@ -179,45 +180,58 @@ class HomeController extends Controller
 
         $u = Auth::user();
         $content
-            ->title('SEN LOGISTICS AND MEDICAL SUPPLIES LTD - Dashboard')
-            ->description('Hello ' . $u->name . "!");
+            ->title('EAGLE AIR ADMIN - Dashboard');
 
 
         $content->row(function (Row $row) {
             $row->column(3, function (Column $column) {
                 $column->append(view('widgets.box-5', [
                     'is_dark' => false,
-                    'title' => 'This month Sales',
+                    'title' => 'Quarantine In - Stock',
                     'sub_title' => NULL,
-                    'number' => "UGX " . number_format(rand(10000, 10000000)),
-                    'link' => 'sales'
+                    'number' => "$" . number_format(
+                        StockItem::where([
+                            'stage' => 'Quarantine In'
+                        ])->sum('price')
+                    ),
+                    'link' => 'quarantine-in-store'
                 ]));
             });
             $row->column(3, function (Column $column) {
                 $column->append(view('widgets.box-5', [
                     'is_dark' => false,
-                    'title' => 'Last month Sales',
+                    'title' => 'Bonded - Stock',
                     'sub_title' => NULL,
-                    'number' => "UGX " . number_format(rand(10000, 10000000)),
-                    'link' => 'invoices'
+                    'number' => "$" . number_format(
+                        StockItem::where([
+                            'stage' => 'Bonded'
+                        ])->sum('price')
+                    ),
+                    'link' => 'bonded-store'
                 ]));
             });
             $row->column(3, function (Column $column) {
                 $column->append(view('widgets.box-5', [
                     'is_dark' => false,
-                    'title' => 'This week Sales',
+                    'title' => 'Quarantine Out - Stock',
                     'sub_title' => NULL,
-                    'number' => "UGX " . number_format(rand(1000, 100000)),
-                    'link' => 'invoices'
+                    'number' => "$" . number_format(
+                        StockItem::where([
+                            'stage' => 'Quarantine Out'
+                        ])->sum('price')
+                    ),
+                    'link' => 'quarantine-out-store'
                 ]));
             });
             $row->column(3, function (Column $column) {
                 $column->append(view('widgets.box-5', [
                     'style' => 'danger',
-                    'title' => 'Debtors',
+                    'title' => 'All Stock',
                     'sub_title' => NULL,
-                    'number' => "UGX " . number_format(rand(1000, 100000)),
-                    'link' => 'invoices'
+                    'number' => "$" . number_format(
+                        StockItem::where([])->sum('price')
+                    ),
+                    'link' => 'stock-items'
                 ]));
             });
         });
@@ -291,8 +305,7 @@ class HomeController extends Controller
             $row->column(6, function (Column $column) {
                 $column->append(view('widgets.by-categories', []));
             });
-            $row->column(6, function (Column $column) {
-
+            $row->column(6, function (Column $column) { 
                 $column->append(view('widgets.by-districts', []));
                 // $column->append(Dashboard::dashboard_events());
             });

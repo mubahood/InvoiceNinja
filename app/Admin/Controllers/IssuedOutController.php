@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Admin\Controllers;
- 
+
 use App\Admin\Actions;
 use App\Admin\Actions\Post\BatchCopy;
 use App\Admin\Actions\Post\ActionToBondedStore;
@@ -32,7 +32,14 @@ class IssuedOutController extends AdminController
     {
         $grid = new Grid(new StockItem());
 
-        $grid->disableActions(); 
+        $grid->disableActions();
+
+        $grid->export(function ($export) {
+
+            $export->filename('Stock Items');
+            $export->except(['actions']);
+            $export->originalValue(['stage', 'status']);
+        });
 
         $grid->batchActions(function ($batch) {
             $batch->disabledelete();
@@ -42,8 +49,14 @@ class IssuedOutController extends AdminController
 
         $grid->model()->orderBy('id', 'desc');
         $grid->disableBatchActions();
+        
 
         $grid->quickSearch('name')->placeholder('Search...');
+
+        $grid->column('photo', __('Photo'))
+        ->lightbox(['width' => 60, 'height' => 60])
+        ->sortable();
+
         $grid->column('name', __('Part number'))->sortable();
         $grid->column('serial_no', __('Serial no'));
 
@@ -85,16 +98,26 @@ class IssuedOutController extends AdminController
                 return '-';
             })->sortable();
 
-        $grid->column('status', __('Status'))->sortable(); 
-        $grid->column('stage', __('Stage'))->sortable();
-        $grid->column('description', __('Description'))->hide(); 
+        $grid->column('status', __('State'))
+            ->label([
+                'New' => 'success',
+                'Used' => 'danger',
+            ])->sortable();
+        $grid->column('stage', __('Stage'))
+            ->dot([
+                'Quarantine In' => 'warning',
+                'Bonded' => 'success',
+                'Quarantine Out' => 'danger',
+            ])
+            ->sortable();
+        $grid->column('description', __('Description'))->hide();
 
         $grid->column('expiry_date', __('Expiry date'));
         $grid->column('card_no', __('Green Card'))->hide();
         $grid->column('inspected_by', __('Inspected by'))->hide();
         $grid->column('aircraft_hours', __('Air Craft Hours'))->hide();
- 
-/* 
+
+        /* 
 
  
         $grid->column('', __('Aircraft hours'));
@@ -123,9 +146,9 @@ class IssuedOutController extends AdminController
             return Utils::my_date_time($x);
         })->hide()->sortable();
 
-        $grid->actions(function($act){
-            $act->disableDelete(); 
-            $act->add(new ActionToBondedStore()); 
+        $grid->actions(function ($act) {
+            $act->disableDelete();
+            $act->add(new ActionToBondedStore());
         });
         return $grid;
     }
@@ -269,7 +292,7 @@ class IssuedOutController extends AdminController
             ->required();
 
 
-        $form->radioCard('status', __('Status'))
+        $form->radioCard('status', __('State'))
             ->options([
                 'New' => 'New',
                 'Used' => 'Used',

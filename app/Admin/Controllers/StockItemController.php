@@ -6,6 +6,7 @@ use App\Admin\Actions\Post\ActionToBondedStore;
 use App\Admin\Actions\Post\ActionToQuarantineInStore;
 use App\Admin\Actions\Post\ActionToQuarantineOutStore;
 use App\Admin\Actions\Post\BatchCopy;
+use App\Models\Shelve;
 use App\Models\StockItem;
 use App\Models\StockSubCategory;
 use App\Models\Store;
@@ -42,12 +43,16 @@ class StockItemController extends AdminController
             $batch->add(new ActionToQuarantineOutStore());
         });
 
+        $grid->column('photo', __('Photo'))
+            ->lightbox(['width' => 60, 'height' => 60])
+            ->sortable();
 
         $grid->model()->orderBy('id', 'desc');
         $grid->disableBatchActions();
 
         $grid->quickSearch('name')->placeholder('Search...');
         $grid->column('name', __('Part number'))->sortable();
+
         $grid->column('serial_no', __('Serial no'));
 
 
@@ -88,9 +93,19 @@ class StockItemController extends AdminController
                 return '-';
             })->sortable();
 
-        $grid->column('status', __('Status'))->sortable();
-        $grid->column('state', __('State'))->sortable();
-        $grid->column('stage', __('Stage'))->sortable();
+        $grid->column('status', __('State'))
+            ->label([
+                'New' => 'success',
+                'Used' => 'danger',
+            ])->sortable();
+        $grid->column('stage', __('Stage'))
+            ->dot([
+                'Quarantine In' => 'warning',
+                'Bonded' => 'success',
+                'Quarantine Out' => 'danger',
+            ])
+            ->sortable();
+
         $grid->column('description', __('Description'))->hide();
 
         $grid->column('expiry_date', __('Expiry date'));
@@ -191,7 +206,7 @@ class StockItemController extends AdminController
         $form = new Form(new StockItem());
         $form->divider('ITEM INFORMATION');
 
-        //$form->select('', __('Stock category id'));
+        $form->image('photo', 'Item photo');
         $form->select('stock_sub_category_id', __('Item type/Category'))
             ->options(StockSubCategory::getItems())
             ->rules('required');
@@ -200,34 +215,31 @@ class StockItemController extends AdminController
         $form->decimal('price', __('Price in USD'))->rules('required');
         $form->decimal('price_2', __('Price in UGX'))->rules('required');
 
-        $form->radioCard('status', __('Status'))
+        $form->radioCard('status', __('State'))
             ->options([
                 'New' => 'New',
                 'Used' => 'Used',
-            ])->required();
+            ])
+            ->rules('required');
 
 
         $form->date('expiry_date', __('Expiry date'))
-            ->rules('required')
-            ->required();
+            ->rules('required');
         $form->text('serial_no', __('Serial no'));
-        $form->radioCard('monitor_position', __('Monitor position'))
+        $form->radioCard('monitor_position', __('Monitor position chancging'))
             ->options([
                 'Yes' => 'Yes',
                 'No' => 'No',
             ])
             ->when('in', ['Yes'], function ($form) {
-                $form->decimal('monitor_position_cycle', __('Position chancing cycle (In days)'))->rules('required');
+                $form->decimal('monitor_position_cycle', __('Position chancging cycle (In days)'))->rules('required');
                 $form->text('monitor_position_value', __('Current postion'))->rules('required');
                 $form->date('monitor_position_date', __('Last change date'))->rules('required');
             })
-            ->rules('required')
-            ->required();
+            ->rules('required');
 
 
         $form->divider('STORAGE');
-
-
 
 
         $form->radioCard('is_inspected', __('Has this item been inspected'))
@@ -236,13 +248,12 @@ class StockItemController extends AdminController
                 'Not Inspected' => 'No',
             ])
             ->when('in', ['Not Inspected'], function ($form) {
-
                 $form->radioCard('stage', __('Stage'))
                     ->options([
                         'Quarantine In' => 'Quarantine in',
-                        'Quarantine Out' => 'Quarantine out',
+                        'Quarantine Out' => 'Quarantine Out',
                     ])
-                    ->when('in', ['Quarantine In'], function ($form) {
+                    ->when('Quarantine In', function ($form) {
                         $form->text('red_card_no', __('Red Card Number'))->rules('required');
                         $form->select('store_id', __('Select store'))
                             ->options(Store::where([
@@ -260,13 +271,13 @@ class StockItemController extends AdminController
 
                         $form->select('shelve_id', __('Select Shelve'))
                             ->options(function ($x) {
-                                return Store::where(['id' => $x])->get()->pluck('name', 'id');
+                                return Shelve::where(['id' => $x])->get()->pluck('name', 'id');
                             })
                             ->rules('required');
                         return $form;
                     })
 
-                    ->when('in', ['Quarantine Out'], function ($form) {
+                    ->when('Quarantine Out', function ($form) {
                         $form->text('red_card_no', __('Red Card Number'))->rules('required');
 
                         $form->select('store_id', __('Select store'))
@@ -285,18 +296,18 @@ class StockItemController extends AdminController
 
                         $form->select('shelve_id', __('Select Shelve'))
                             ->options(function ($x) {
-                                return Store::where(['id' => $x])->get()->pluck('name', 'id');
+                                return Shelve::where(['id' => $x])->get()->pluck('name', 'id');
                             })
                             ->rules('required');
                         return $form;
-                    })
-                    ->required();
+                    });
             })
             ->when('in', ['Inspected'], function ($form) {
+
+
+
                 $form->text('inspected_by', __('Inspected by'));
                 $form->text('inspection_remarks', __('Inspection remarks'));
-
-
                 $form->radioCard('inspection_results', __('Inspection results'))
                     ->options([
                         'Success' => 'Success',
@@ -328,7 +339,7 @@ class StockItemController extends AdminController
 
                                 $form->select('shelve_id', __('Select Shelve'))
                                     ->options(function ($x) {
-                                        return Store::where(['id' => $x])->get()->pluck('name', 'id');
+                                        return Shelve::where(['id' => $x])->get()->pluck('name', 'id');
                                     })
                                     ->rules('required');
                                 return $form;
@@ -353,23 +364,21 @@ class StockItemController extends AdminController
 
                                 $form->select('shelve_id', __('Select Shelve'))
                                     ->options(function ($x) {
-                                        return Store::where(['id' => $x])->get()->pluck('name', 'id');
+                                        return Shelve::where(['id' => $x])->get()->pluck('name', 'id');
                                     })
                                     ->rules('required');
                                 return $form;
                             })
-                            ->required();
+                            ->rules('required');
                     })
                     ->when('in', ['Success'], function ($form) {
-
-
                         $form->radioCard('stage', __('Stage'))
                             ->options([
                                 'Quarantine In' => 'Quarantine in',
                                 'Bonded' => 'Bonded',
                                 'Quarantine Out' => 'Quarantine out',
                             ])
-                            ->when('in', ['Bonded'], function ($form) {
+                            ->when('Bonded', function ($form) {
 
                                 $form->text('green_card_no', __('Green Card Number'))->rules('required');
                                 $form->select('store_id', __('Select store'))
@@ -392,7 +401,7 @@ class StockItemController extends AdminController
                                     })
                                     ->rules('required');
                             })
-                            ->when('in', ['Quarantine In'], function ($form) {
+                            ->when('in', ['Quarantine In', 'Quarantine Out'], function ($form) {
                                 $form->text('red_card_no', __('Red Card Number'))->rules('required');
                                 $form->select('store_id', __('Select store'))
                                     ->options(Store::where([
@@ -410,41 +419,14 @@ class StockItemController extends AdminController
 
                                 $form->select('shelve_id', __('Select Shelve'))
                                     ->options(function ($x) {
-                                        return Store::where(['id' => $x])->get()->pluck('name', 'id');
+                                        return Shelve::where(['id' => $x])->get()->pluck('name', 'id');
                                     })
                                     ->rules('required');
                                 return $form;
-                            })
-
-                            ->when('in', ['Quarantine Out'], function ($form) {
-                                $form->text('red_card_no', __('Red Card Number'))->rules('required');
-
-                                $form->select('store_id', __('Select store'))
-                                    ->options(Store::where([
-                                        'store_type' => 'Quarantine Out'
-                                    ])->get()->pluck('name', 'id'))
-                                    ->load('store_section_id', url('api/ajax?model=StoreSection&search_by_1=name'))
-                                    ->rules('required');
-
-                                $form->select('store_section_id', __('Select Store section'))
-                                    ->options(function ($x) {
-                                        return StoreSection::where(['id' => $x])->get()->pluck('name', 'id');
-                                    })
-                                    ->load('shelve_id', url('api/ajax?model=Shelve&search_by_1=name'))
-                                    ->rules('required');
-
-                                $form->select('shelve_id', __('Select Shelve'))
-                                    ->options(function ($x) {
-                                        return Store::where(['id' => $x])->get()->pluck('name', 'id');
-                                    })
-                                    ->rules('required');
-                                return $form;
-                            })
-                            ->required();
+                            });
                     })->rules('required');
             })
-            ->rules('required')
-            ->required();
+            ->rules('required');
 
 
 

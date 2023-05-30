@@ -47,6 +47,11 @@ class QuarantineInStoreController extends AdminController
             ->orderBy('id', 'desc');
         $grid->disableBatchActions();
 
+        $grid->column('photo', __('Photo'))
+        ->lightbox(['width' => 60, 'height' => 60])
+        ->sortable();
+
+        
         $grid->quickSearch('name')->placeholder('Search...');
         $grid->column('name', __('Part number'))->sortable();
         $grid->column('serial_no', __('Serial no'));

@@ -46,6 +46,9 @@ class BondedStoreController extends AdminController
             ])
             ->orderBy('id', 'desc');
         $grid->disableBatchActions();
+        $grid->column('photo', __('Photo'))
+        ->lightbox(['width' => 60, 'height' => 60])
+        ->sortable();
 
         $grid->quickSearch('name')->placeholder('Search...');
         $grid->column('name', __('Part number'))->sortable();
@@ -89,9 +92,24 @@ class BondedStoreController extends AdminController
                 return '-';
             })->sortable();
 
-        $grid->column('status', __('Status'))->sortable();
-        $grid->column('state', __('State'))->sortable();
-        $grid->column('stage', __('Stage'))->sortable();
+        $grid->column('status', __('State'))
+            ->label([
+                'New' => 'success',
+                'Used' => 'danger',
+            ])
+            ->filter([
+                'New' => 'New',
+                'Used' => 'Used',
+            ])
+            ->sortable();
+        $grid->column('stage', __('Stage'))
+            ->dot([
+                'Quarantine In' => 'warning',
+                'Bonded' => 'success',
+                'Quarantine Out' => 'danger',
+            ])
+            ->sortable();
+
         $grid->column('description', __('Description'))->hide();
 
         $grid->column('expiry_date', __('Expiry date'));

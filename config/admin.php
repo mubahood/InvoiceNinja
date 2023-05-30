@@ -11,7 +11,7 @@ return [
     | login page.
     |
     */
-    'name' => 'SEN LOGISTICS AND MEDICAL SUPPLIES LTD - Admin', 
+    'name' => 'EAGLE AIR - Admin Dashboard', 
 
     /*
     |--------------------------------------------------------------------------
