@@ -5,9 +5,12 @@ namespace App\Admin\Controllers;
 use App\Admin\Actions;
 use App\Admin\Actions\Post\BatchCopy;
 use App\Admin\Actions\Post\ActionToBondedStore;
+use App\Models\Shelve;
 use App\Models\StockItem;
 use App\Models\StockSubCategory;
 use App\Models\Store;
+use App\Models\StoreSection;
+use App\Models\User;
 use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -46,16 +49,14 @@ class IssuedOutController extends AdminController
             $batch->add(new BatchCopy());
         });
 
-
         $grid->model()->orderBy('id', 'desc');
         $grid->disableBatchActions();
-        
 
         $grid->quickSearch('name')->placeholder('Search...');
 
         $grid->column('photo', __('Photo'))
-        ->lightbox(['width' => 60, 'height' => 60])
-        ->sortable();
+            ->lightbox(['width' => 60, 'height' => 60])
+            ->sortable();
 
         $grid->column('name', __('Part number'))->sortable();
         $grid->column('serial_no', __('Serial no'));
@@ -117,30 +118,6 @@ class IssuedOutController extends AdminController
         $grid->column('inspected_by', __('Inspected by'))->hide();
         $grid->column('aircraft_hours', __('Air Craft Hours'))->hide();
 
-        /* 
-
- 
-        $grid->column('', __('Aircraft hours'));
-        $grid->column('hours_run', __('Hours run'));
-        $grid->column('remarks', __('Remarks'));
-        $grid->column('instalation_aircraft_no', __('Instalation aircraft no'));
-        $grid->column('instalation_position', __('Instalation position'));
-        $grid->column('instalation_aircraft_engine_hours', __('Instalation aircraft engine hours'));
-        $grid->column('instalation_s_n', __('Instalation s n'));
-        $grid->column('instalation_job_no', __('Instalation job no'));
-        $grid->column('instalation_auth_lc_no', __('Instalation auth lc no'));
-        $grid->column('instalation_date', __('Instalation date'));
-        $grid->column('monitor_position', __('Monitor position'));
-        $grid->column('monitor_position_cycle', __('Monitor position cycle'));
-        $grid->column('monitor_position_date', __('Monitor position date'));
-        $grid->column('monitor_position_value', __('Monitor position value'));
-        $grid->column('monitor_position_changed_by', __('Monitor position changed by'));
-        $grid->column('removed_from_aircraft', __('Removed from aircraft'));
-        $grid->column('removal_description', __('Removal description'));
-        $grid->column('removal_station', __('Removal station'));
-        $grid->column('removal_job_no', __('Removal job no'));
-        $grid->column('removal_by', __('Removal by'));
-        $grid->column('red_rescription', __('Red rescription')); */
 
         $grid->column('created_at', __('Added'))->display(function ($x) {
             return Utils::my_date_time($x);
@@ -214,13 +191,60 @@ class IssuedOutController extends AdminController
     {
         $form = new Form(new StockItem());
 
-
         //$form->select('', __('Stock category id'));
-        $form->select('stock_sub_category_id', __('Stock type/Category'))
+        $form->display('name', __('Part number'));
+        $form->display('serial_no', __('Serial Number'));
+        $form->select('store_id', __('Select store'))
+            ->options(Store::where([])->get()->pluck('name', 'id'))
+            ->readonly();
+
+        $form->select('store_section_id', __('Select Store section'))
+            ->options(StoreSection::where([])->get()->pluck('name', 'id'))
+            ->readonly();
+
+        $form->select('shelve_id', __('Shelve'))
+            ->options(Shelve::where([])->get()->pluck('name', 'id'))
+            ->readonly();
+        $form->divider();
+
+        $form->select('instalation_by', __('Collected by'))
+            ->options(User::where([])->get()->pluck('name', 'id'))
+            ->rules('required')
+            ->required();
+
+        $form->text('removal_job_no', __('Removal job no'));
+
+        /*
+        
+        $form->decimal('hours_run', __('Hours run'));
+        $form->text('remarks', __('Remarks'));
+        $form->decimal('aircraft_hours', __('Aircraft hours'));
+        $form->text('instalation_aircraft_no', __('Instalation aircraft no'));
+        
+        $form->date('instalation_position', __('Instalation position'));
+        $form->date('instalation_aircraft_engine_hours', __('Instalation aircraft engine hours'));
+        $form->date('instalation_s_n', __('Instalation s n'));
+        $form->date('instalation_job_no', __('Instalation job no'));
+        $form->date('instalation_auth_lc_no', __('Instalation auth lc no'));
+        $form->date('instalation_date', __('Instalation date'));
+
+
+
+        $form->text('monitor_position_changed_by', __('Monitor position changed by'));
+        $form->text('removed_from_aircraft', __('Removed from aircraft'));
+        $form->text('removal_description', __('Removal description'));
+        $form->text('removal_station', __('Removal station'));
+        $form->text('removal_job_no', __('Removal job no'));
+        $form->text('removal_by', __('Removal by'));
+        $form->text('red_rescription', __('Red rescription')); */
+
+
+
+
+        /*
+            $form->select('stock_sub_category_id', __('Stock type/Category'))
             ->options(StockSubCategory::getItems())
-            ->rules('required');
-
-
+            ->rules('required'); 
 
         $form->radioCard('stage', __('Stage'))
             ->options([
@@ -338,33 +362,13 @@ class IssuedOutController extends AdminController
                 $form->date('monitor_position_date', __('Last change date'))->rules('required');
             })
             ->rules('required')
-            ->required();
+            ->required(); */
 
 
 
 
 
-        /*         $form->text('instalation_by', __('Instalation by'));
-        $form->decimal('aircraft_hours', __('Aircraft hours'));
-        $form->decimal('hours_run', __('Hours run'));
-        $form->text('remarks', __('Remarks'));
-        $form->text('instalation_aircraft_no', __('Instalation aircraft no'));
-        $form->date('instalation_position', __('Instalation position'));
-        $form->date('instalation_aircraft_engine_hours', __('Instalation aircraft engine hours'));
-        $form->date('instalation_s_n', __('Instalation s n'));
-        $form->date('instalation_job_no', __('Instalation job no'));
-        $form->date('instalation_auth_lc_no', __('Instalation auth lc no'));
-        $form->date('instalation_date', __('Instalation date'));
 
-
-
-        $form->text('monitor_position_changed_by', __('Monitor position changed by'));
-        $form->text('removed_from_aircraft', __('Removed from aircraft'));
-        $form->text('removal_description', __('Removal description'));
-        $form->text('removal_station', __('Removal station'));
-        $form->text('removal_job_no', __('Removal job no'));
-        $form->text('removal_by', __('Removal by'));
-        $form->text('red_rescription', __('Red rescription')); */
 
         return $form;
     }
