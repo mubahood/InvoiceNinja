@@ -228,8 +228,6 @@ class IssuedOutController extends AdminController
         $form->date('instalation_auth_lc_no', __('Instalation auth lc no'));
         $form->date('instalation_date', __('Instalation date'));
 
-
-
         $form->text('monitor_position_changed_by', __('Monitor position changed by'));
         $form->text('removed_from_aircraft', __('Removed from aircraft'));
         $form->text('removal_description', __('Removal description'));
