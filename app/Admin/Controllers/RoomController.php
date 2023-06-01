@@ -78,7 +78,8 @@ class RoomController extends AdminController
                 return $loc->name;
             }
             return $x;
-        })->sortable();
+        })
+            ->sortable();
         $grid->column('region_id', __('Region'))->display(function ($x) {
             $loc = Location::find($x);
             if ($loc != null) {
