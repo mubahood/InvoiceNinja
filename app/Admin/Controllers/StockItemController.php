@@ -93,11 +93,6 @@ class StockItemController extends AdminController
                 return '-';
             })->sortable();
 
-        $grid->column('status', __('State'))
-            ->label([
-                'New' => 'success',
-                'Used' => 'danger',
-            ])->sortable();
         $grid->column('stage', __('Stage'))
             ->dot([
                 'Quarantine In' => 'warning',
@@ -129,8 +124,7 @@ class StockItemController extends AdminController
         $grid->column('monitor_position', __('Monitor position'));
         $grid->column('monitor_position_cycle', __('Monitor position cycle'));
         $grid->column('monitor_position_date', __('Monitor position date'));
-        $grid->column('monitor_position_value', __('Monitor position value'));
-        $grid->column('monitor_position_changed_by', __('Monitor position changed by'));
+         $grid->column('monitor_position_changed_by', __('Monitor position changed by'));
         $grid->column('removed_from_aircraft', __('Removed from aircraft'));
         $grid->column('removal_description', __('Removal description'));
         $grid->column('removal_station', __('Removal station'));
@@ -184,7 +178,6 @@ class StockItemController extends AdminController
         $show->field('monitor_position', __('Monitor position'));
         $show->field('monitor_position_cycle', __('Monitor position cycle'));
         $show->field('monitor_position_date', __('Monitor position date'));
-        $show->field('monitor_position_value', __('Monitor position value'));
         $show->field('monitor_position_changed_by', __('Monitor position changed by'));
         $show->field('removed_from_aircraft', __('Removed from aircraft'));
         $show->field('removal_description', __('Removal description'));
@@ -213,15 +206,7 @@ class StockItemController extends AdminController
         $form->text('name', __('Part number'))->rules('required');
         $form->text('description', __('Description'))->rules('required');
         $form->decimal('price', __('Price in USD'))->rules('required');
-        $form->decimal('price_2', __('Price in UGX'))->rules('required');
-
-        $form->radioCard('status', __('State'))
-            ->options([
-                'New' => 'New',
-                'Used' => 'Used',
-            ])
-            ->rules('required');
-
+        $form->decimal('price_2', __('Price in UGX'));
 
         $form->date('expiry_date', __('Expiry date'))
             ->rules('required');
@@ -233,7 +218,6 @@ class StockItemController extends AdminController
             ])
             ->when('in', ['Yes'], function ($form) {
                 $form->decimal('monitor_position_cycle', __('Position chancging cycle (In days)'))->rules('required');
-                $form->text('monitor_position_value', __('Current postion'))->rules('required');
                 $form->date('monitor_position_date', __('Last change date'))->rules('required');
             })
             ->rules('required');
@@ -254,8 +238,7 @@ class StockItemController extends AdminController
                         'Quarantine Out' => 'Quarantine Out',
                     ])
                     ->when('Quarantine In', function ($form) {
-                        $form->text('red_card_no', __('Red Card Number'))->rules('required');
-                        $form->select('store_id', __('Select store'))
+                         $form->select('store_id', __('Select store'))
                             ->options(Store::where([
                                 'store_type' => 'Quarantine In'
                             ])->get()->pluck('name', 'id'))
@@ -278,8 +261,7 @@ class StockItemController extends AdminController
                     })
 
                     ->when('Quarantine Out', function ($form) {
-                        $form->text('red_card_no', __('Red Card Number'))->rules('required');
-
+                   
                         $form->select('store_id', __('Select store'))
                             ->options(Store::where([
                                 'store_type' => 'Quarantine Out'
@@ -322,8 +304,7 @@ class StockItemController extends AdminController
                                 'Quarantine Out' => 'Quarantine out',
                             ])
                             ->when('in', ['Quarantine In'], function ($form) {
-                                $form->text('red_card_no', __('Red Card Number'))->rules('required');
-                                $form->select('store_id', __('Select store'))
+                                  $form->select('store_id', __('Select store'))
                                     ->options(Store::where([
                                         'store_type' => 'Quarantine In'
                                     ])->get()->pluck('name', 'id'))
@@ -346,8 +327,7 @@ class StockItemController extends AdminController
                             })
 
                             ->when('in', ['Quarantine Out'], function ($form) {
-                                $form->text('red_card_no', __('Red Card Number'))->rules('required');
-
+                         
                                 $form->select('store_id', __('Select store'))
                                     ->options(Store::where([
                                         'store_type' => 'Quarantine Out'
@@ -380,8 +360,7 @@ class StockItemController extends AdminController
                             ])
                             ->when('Bonded', function ($form) {
 
-                                $form->text('green_card_no', __('Green Card Number'))->rules('required');
-                                $form->select('store_id', __('Select store'))
+                                 $form->select('store_id', __('Select store'))
                                     ->options(Store::where([
                                         'store_type' => 'Bonded'
                                     ])->get()->pluck('name', 'id'))
@@ -402,8 +381,7 @@ class StockItemController extends AdminController
                                     ->rules('required');
                             })
                             ->when('in', ['Quarantine In', 'Quarantine Out'], function ($form) {
-                                $form->text('red_card_no', __('Red Card Number'))->rules('required');
-                                $form->select('store_id', __('Select store'))
+                                 $form->select('store_id', __('Select store'))
                                     ->options(Store::where([
                                         'store_type' => 'Quarantine In'
                                     ])->get()->pluck('name', 'id'))

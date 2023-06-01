@@ -7,7 +7,7 @@ use Faker\Provider\DateTime;
 class Person extends \Faker\Provider\Person
 {
     /**
-     * National Registration Identity Card number
+     * National Registration 
      *
      * @param \DateTime|null $birthDate birth date
      *

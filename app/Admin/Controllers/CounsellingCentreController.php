@@ -48,8 +48,7 @@ class CounsellingCentreController extends AdminController
         $grid->column('phone_number_2', __('Phone number 2'));
         $grid->column('photo', __('Photo'));
         $grid->column('gps_latitude', __('Gps latitude'));
-        $grid->column('gps_longitude', __('Gps longitude'));
-        $grid->column('status', __('Status'));
+        $grid->column('gps_longitude', __('Gps longitude')); 
         $grid->column('skills', __('Skills'));
         $grid->column('fees_range', __('Fees range'));
         $grid->column('deleted_at', __('Deleted at'));

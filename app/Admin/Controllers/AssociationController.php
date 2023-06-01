@@ -49,8 +49,7 @@ class AssociationController extends AdminController
         $grid->column('mission', __('Mission'));
         $grid->column('photo', __('Photo'));
         $grid->column('gps_latitude', __('Gps latitude'));
-        $grid->column('gps_longitude', __('Gps longitude'));
-        $grid->column('status', __('Status'));
+        $grid->column('gps_longitude', __('Gps longitude')); 
         $grid->column('deleted_at', __('Deleted at'));
 
         return $grid;

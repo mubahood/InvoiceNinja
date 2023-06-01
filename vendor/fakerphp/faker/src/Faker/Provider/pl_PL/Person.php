@@ -184,7 +184,7 @@ class Person extends \Faker\Provider\Person
     }
 
     /**
-     * National Identity Card number
+     * National  
      *
      * @see http://en.wikipedia.org/wiki/Polish_National_Identity_Card
      *

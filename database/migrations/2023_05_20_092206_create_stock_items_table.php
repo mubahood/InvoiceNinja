@@ -53,9 +53,7 @@ class CreateStockItemsTable extends Migration
             $table->text('monitor_position')->nullable();
             $table->text('monitor_position_cycle')->nullable();
             $table->text('monitor_position_date')->nullable();
-            $table->text('monitor_position_value')->nullable();
             $table->text('monitor_position_changed_by')->nullable();
-
             $table->text('removed_from_aircraft')->nullable();
             $table->text('removal_description')->nullable();
             $table->text('removal_station')->nullable();

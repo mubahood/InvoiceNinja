@@ -94,12 +94,7 @@ class QuarantineOutStoreController extends AdminController
                 }
                 return '-';
             })->sortable();
-
-        $grid->column('status', __('State'))
-            ->label([
-                'New' => 'success',
-                'Used' => 'danger',
-            ])->sortable();
+ 
         $grid->column('stage', __('Stage'))
             ->dot([
                 'Quarantine In' => 'warning',
@@ -131,8 +126,7 @@ class QuarantineOutStoreController extends AdminController
         $grid->column('monitor_position', __('Monitor position'));
         $grid->column('monitor_position_cycle', __('Monitor position cycle'));
         $grid->column('monitor_position_date', __('Monitor position date'));
-        $grid->column('monitor_position_value', __('Monitor position value'));
-        $grid->column('monitor_position_changed_by', __('Monitor position changed by'));
+         $grid->column('monitor_position_changed_by', __('Monitor position changed by'));
         $grid->column('removed_from_aircraft', __('Removed from aircraft'));
         $grid->column('removal_description', __('Removal description'));
         $grid->column('removal_station', __('Removal station'));
@@ -197,8 +191,7 @@ class QuarantineOutStoreController extends AdminController
         $show->field('monitor_position', __('Monitor position'));
         $show->field('monitor_position_cycle', __('Monitor position cycle'));
         $show->field('monitor_position_date', __('Monitor position date'));
-        $show->field('monitor_position_value', __('Monitor position value'));
-        $show->field('monitor_position_changed_by', __('Monitor position changed by'));
+         $show->field('monitor_position_changed_by', __('Monitor position changed by'));
         $show->field('removed_from_aircraft', __('Removed from aircraft'));
         $show->field('removal_description', __('Removal description'));
         $show->field('removal_station', __('Removal station'));
@@ -226,8 +219,7 @@ class QuarantineOutStoreController extends AdminController
                 'Quarantine Out' => 'Quarantine Out',
             ])
             ->when('in', ['Quarantine Out'], function ($form) {
-                $form->text('red_card_no', __('Red Card Number'))->rules('required');
-                $form->text('remarks', __('Remarks'))->rules('required');
+                 $form->text('remarks', __('Remarks'))->rules('required');
                 $form->decimal('hours_run', __('Hours run'))->rules('required');
 
 

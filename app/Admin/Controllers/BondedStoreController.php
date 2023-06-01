@@ -92,16 +92,7 @@ class BondedStoreController extends AdminController
                 return '-';
             })->sortable();
 
-        $grid->column('status', __('State'))
-            ->label([
-                'New' => 'success',
-                'Used' => 'danger',
-            ])
-            ->filter([
-                'New' => 'New',
-                'Used' => 'Used',
-            ])
-            ->sortable();
+ 
         $grid->column('stage', __('Stage'))
             ->dot([
                 'Quarantine In' => 'warning',
@@ -133,8 +124,7 @@ class BondedStoreController extends AdminController
         $grid->column('monitor_position', __('Monitor position'));
         $grid->column('monitor_position_cycle', __('Monitor position cycle'));
         $grid->column('monitor_position_date', __('Monitor position date'));
-        $grid->column('monitor_position_value', __('Monitor position value'));
-        $grid->column('monitor_position_changed_by', __('Monitor position changed by'));
+         $grid->column('monitor_position_changed_by', __('Monitor position changed by'));
         $grid->column('removed_from_aircraft', __('Removed from aircraft'));
         $grid->column('removal_description', __('Removal description'));
         $grid->column('removal_station', __('Removal station'));
@@ -196,7 +186,6 @@ class BondedStoreController extends AdminController
         $show->field('monitor_position', __('Monitor position'));
         $show->field('monitor_position_cycle', __('Monitor position cycle'));
         $show->field('monitor_position_date', __('Monitor position date'));
-        $show->field('monitor_position_value', __('Monitor position value'));
         $show->field('monitor_position_changed_by', __('Monitor position changed by'));
         $show->field('removed_from_aircraft', __('Removed from aircraft'));
         $show->field('removal_description', __('Removal description'));
@@ -247,7 +236,6 @@ class BondedStoreController extends AdminController
                                 'Bonded' => 'Bonded',
                             ])
                             ->when('in', ['Bonded'], function ($form) {
-                                $form->text('green_card_no', __('Green Card Number'))->rules('required');
                                 $form->select('store_id', __('Select store'))
                                     ->options(Store::where([
                                         'store_type' => 'Bonded'

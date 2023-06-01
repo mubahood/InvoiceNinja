@@ -16,7 +16,7 @@ class Payment extends Base
     ];
 
     /**
-     * @var array List of card brand masks for generating valid credit card numbers
+     * @var array List of card brand masks for generating valid  
      *
      * @see https://en.wikipedia.org/wiki/Payment_card_number Reference for existing prefixes
      * @see https://www.mastercard.us/en-us/issuers/get-support/2-series-bin-expansion.html MasterCard 2017 2-Series BIN Expansion
@@ -150,11 +150,11 @@ class Payment extends Base
     }
 
     /**
-     * Returns the String of a credit card number.
+ 
      *
      * @param string $type      Supporting any of 'Visa', 'MasterCard', 'American Express', 'Discover' and 'JCB'
      * @param bool   $formatted Set to true if the output string should contain one separator every 4 digits
-     * @param string $separator Separator string for formatting card number. Defaults to dash (-).
+     * @param string $separator Separator string for Defaults to dash (-).
      *
      * @return string
      *

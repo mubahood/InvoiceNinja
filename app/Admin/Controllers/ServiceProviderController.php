@@ -47,8 +47,7 @@ class ServiceProviderController extends AdminController
         $grid->column('services_offered', __('Services offered'));
         $grid->column('photo', __('Photo'));
         $grid->column('gps_latitude', __('Gps latitude'));
-        $grid->column('gps_longitude', __('Gps longitude'));
-        $grid->column('status', __('Status'));
+        $grid->column('gps_longitude', __('Gps longitude')); 
         $grid->column('deleted_at', __('Deleted at'));
 
         return $grid;

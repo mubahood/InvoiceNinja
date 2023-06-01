@@ -34,6 +34,7 @@ class IssuedOutController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new StockItem());
+        $grid->disableCreateButton();   
 
         $grid->disableActions();
 
@@ -49,7 +50,11 @@ class IssuedOutController extends AdminController
             $batch->add(new BatchCopy());
         });
 
-        $grid->model()->orderBy('id', 'desc');
+        $grid->model()
+            ->where([
+                'stage' => 'Issued Out'
+            ])
+            ->orderBy('id', 'desc');
         $grid->disableBatchActions();
 
         $grid->quickSearch('name')->placeholder('Search...');
@@ -99,12 +104,20 @@ class IssuedOutController extends AdminController
                 return '-';
             })->sortable();
 
-        $grid->column('status', __('State'))
-            ->label([
-                'New' => 'success',
-                'Used' => 'danger',
-            ])->sortable();
+
         $grid->column('stage', __('Stage'))
+            ->label([
+                'Quarantine In' => 'warning',
+                'Bonded' => 'success',
+                'Quarantine Out' => 'danger',
+                'Issued Out' => 'danger',
+            ])
+            ->filter([
+                'Quarantine In' => 'Quarantine In',
+                'Bonded' => 'Bonded',
+                'Quarantine Out' => 'Quarantine Out',
+                'Quarantine Out' => 'Quarantine Out',
+            ])
             ->dot([
                 'Quarantine In' => 'warning',
                 'Bonded' => 'success',
@@ -170,7 +183,6 @@ class IssuedOutController extends AdminController
         $show->field('monitor_position', __('Monitor position'));
         $show->field('monitor_position_cycle', __('Monitor position cycle'));
         $show->field('monitor_position_date', __('Monitor position date'));
-        $show->field('monitor_position_value', __('Monitor position value'));
         $show->field('monitor_position_changed_by', __('Monitor position changed by'));
         $show->field('removed_from_aircraft', __('Removed from aircraft'));
         $show->field('removal_description', __('Removal description'));
@@ -190,44 +202,72 @@ class IssuedOutController extends AdminController
     protected function form()
     {
         $form = new Form(new StockItem());
+        $form->disableCreatingCheck();
+        $form->disableEditingCheck();
 
-        //$form->select('', __('Stock category id'));
         $form->display('name', __('Part number'));
         $form->display('serial_no', __('Serial Number'));
-        $form->select('store_id', __('Select store'))
-            ->options(Store::where([])->get()->pluck('name', 'id'))
-            ->readonly();
-
-        $form->select('store_section_id', __('Select Store section'))
-            ->options(StoreSection::where([])->get()->pluck('name', 'id'))
-            ->readonly();
-
-        $form->select('shelve_id', __('Shelve'))
-            ->options(Shelve::where([])->get()->pluck('name', 'id'))
-            ->readonly();
         $form->divider();
+        $form->radioCard('stage', __('stage'))
+            ->options(['Issued Out' => 'Issued Out'])
+            ->when('in', ['Issued Out'], function ($form) {
 
-        $form->select('instalation_by', __('Collected by'))
-            ->options(User::where([])->get()->pluck('name', 'id'))
-            ->rules('required')
+
+                /*      $form->select('store_id', __('Select store'))
+                    ->options(Store::where([])->get()->pluck('name', 'id'))
+                    ->readonly();
+
+                $form->select('store_section_id', __('Select Store section'))
+                    ->options(StoreSection::where([])->get()->pluck('name', 'id'))
+                    ->readonly();
+
+                $form->select('shelve_id', __('Shelve'))
+                    ->options(Shelve::where([])->get()->pluck('name', 'id'))
+                    ->readonly();
+                $form->divider(); */
+
+                $form->text('instalation_aircraft_no', __('Instalation aircraft no'))
+                    ->rules('required')
+                    ->required();
+                $form->select('instalation_by', __('Instaled by'))
+                    ->options(User::where([])->get()->pluck('name', 'id'))
+                    ->rules('required')
+                    ->required();
+
+                $form->text('instalation_position', __('Instalation position'))
+                    ->rules('required')
+                    ->required();
+
+                $form->text(
+                    'instalation_aircraft_engine_hours',
+                    __('Instalation Aircraft Engine Hours')
+                )
+                    ->rules('required')
+                    ->required();
+                $form->text(
+                    'instalation_aircraft_engine_hours',
+                    __('Instalation Job Number')
+                )
+                    ->rules('required')
+                    ->required();
+                $form->date('instalation_date', __('Instalation date'))
+                    ->rules('required')
+                    ->required();
+                /*                 $form->text('instalation_auth_lc_no', __('Instalation Location')); */
+                return $form;
+            })
             ->required();
 
-        $form->text('removal_job_no', __('Removal job no'));
-
         /*
-        
+ 
+                $form->date('instalation_s_n', __('Instalation s n'));
+
+        $form->text('removal_job_no', __('Removal job no'));
         $form->decimal('hours_run', __('Hours run'));
         $form->text('remarks', __('Remarks'));
         $form->decimal('aircraft_hours', __('Aircraft hours'));
-        $form->text('instalation_aircraft_no', __('Instalation aircraft no'));
         
-        $form->date('instalation_position', __('Instalation position'));
-        $form->date('instalation_aircraft_engine_hours', __('Instalation aircraft engine hours'));
-        $form->date('instalation_s_n', __('Instalation s n'));
-        $form->date('instalation_job_no', __('Instalation job no'));
-        $form->date('instalation_auth_lc_no', __('Instalation auth lc no'));
-        $form->date('instalation_date', __('Instalation date'));
-
+        
         $form->text('monitor_position_changed_by', __('Monitor position changed by'));
         $form->text('removed_from_aircraft', __('Removed from aircraft'));
         $form->text('removal_description', __('Removal description'));
@@ -251,8 +291,7 @@ class IssuedOutController extends AdminController
                 'Quarantine Out' => 'Quarantine out',
             ])
             ->when('in', ['Quarantine In'], function ($form) {
-                $form->text('card_no', __('Green Card Number'))->rules('required');
-                $form->select('store_id', __('Select store'))
+                  $form->select('store_id', __('Select store'))
                     ->options(Store::where([
                         'store_type' => 'Quarantine In'
                     ])->get()->pluck('name', 'id'))
@@ -271,8 +310,7 @@ class IssuedOutController extends AdminController
                 return $form;
             })
             ->when('in', ['Bonded'], function ($form) {
-                $form->text('red_card_no', __('Red Card Number'))->rules('required');
-                $form->select('store_id', __('Select store'))
+                 $form->select('store_id', __('Select store'))
                     ->options(Store::where([
                         'store_type' => 'Bonded'
                     ])->get()->pluck('name', 'id'))
@@ -291,8 +329,7 @@ class IssuedOutController extends AdminController
                 return $form;
             })
             ->when('in', ['Quarantine Out'], function ($form) {
-                $form->text('card_no', __('Green Card Number'))->rules('required');
-
+            
                 $form->select('store_id', __('Select store'))
                     ->options(Store::where([
                         'store_type' => 'Quarantine Out'
@@ -356,8 +393,7 @@ class IssuedOutController extends AdminController
             ])
             ->when('in', ['Yes'], function ($form) {
                 $form->decimal('monitor_position_cycle', __('Position chancing cycle (In days)'))->rules('required');
-                $form->text('monitor_position_value', __('Current postion'))->rules('required');
-                $form->date('monitor_position_date', __('Last change date'))->rules('required');
+                 $form->date('monitor_position_date', __('Last change date'))->rules('required');
             })
             ->rules('required')
             ->required(); */

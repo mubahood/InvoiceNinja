@@ -96,8 +96,7 @@ class RoomController extends AdminController
         })->sortable();
         $grid->column('address', __('Address'))->hide();
         $grid->column('house_id', __('House'));
-
-        $grid->column('status', __('Status'));
+ 
         $grid->column('is_active', __('Status'))->label([
             'Pending' => 'danger',
             'Construction' => 'danger',

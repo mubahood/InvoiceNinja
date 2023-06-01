@@ -93,8 +93,7 @@ class QuarantineInStoreController extends AdminController
                 }
                 return '-';
             })->sortable();
-
-        $grid->column('status', __('Status'))->sortable();
+ 
         $grid->column('stage', __('Stage'))->sortable();
         $grid->column('description', __('Description'))->hide();
 
@@ -118,8 +117,7 @@ class QuarantineInStoreController extends AdminController
         $grid->column('monitor_position', __('Monitor position'));
         $grid->column('monitor_position_cycle', __('Monitor position cycle'));
         $grid->column('monitor_position_date', __('Monitor position date'));
-        $grid->column('monitor_position_value', __('Monitor position value'));
-        $grid->column('monitor_position_changed_by', __('Monitor position changed by'));
+         $grid->column('monitor_position_changed_by', __('Monitor position changed by'));
         $grid->column('removed_from_aircraft', __('Removed from aircraft'));
         $grid->column('removal_description', __('Removal description'));
         $grid->column('removal_station', __('Removal station'));
@@ -180,8 +178,7 @@ class QuarantineInStoreController extends AdminController
         $show->field('monitor_position', __('Monitor position'));
         $show->field('monitor_position_cycle', __('Monitor position cycle'));
         $show->field('monitor_position_date', __('Monitor position date'));
-        $show->field('monitor_position_value', __('Monitor position value'));
-        $show->field('monitor_position_changed_by', __('Monitor position changed by'));
+         $show->field('monitor_position_changed_by', __('Monitor position changed by'));
         $show->field('removed_from_aircraft', __('Removed from aircraft'));
         $show->field('removal_description', __('Removal description'));
         $show->field('removal_station', __('Removal station'));
@@ -216,8 +213,7 @@ class QuarantineInStoreController extends AdminController
                 'Quarantine Out' => 'Quarantine out',
             ])
             ->when('in', ['Quarantine In'], function ($form) {
-                $form->text('red_card_no', __('Red Card Number'))->rules('required');
-
+       
                 $form->select('store_id', __('Select store'))
                     ->options(Store::where([
                         'store_type' => 'Quarantine In'
@@ -237,8 +233,7 @@ class QuarantineInStoreController extends AdminController
                 return $form;
             })
             ->when('in', ['Bonded'], function ($form) {
-                $form->text('card_no', __('Green Card Number'))->rules('required');
-                $form->select('store_id', __('Select store'))
+                  $form->select('store_id', __('Select store'))
                     ->options(Store::where([
                         'store_type' => 'Bonded'
                     ])->get()->pluck('name', 'id'))
@@ -257,8 +252,7 @@ class QuarantineInStoreController extends AdminController
                 return $form;
             })
             ->when('in', ['Quarantine Out'], function ($form) {
-                $form->text('red_card_no', __('Red Card Number'))->rules('required');
-                $form->text('remarks', __('Remarks'))->rules('required');
+                  $form->text('remarks', __('Remarks'))->rules('required');
                 $form->text('hours_run', __('Hours run'))->rules('required');
  
 
@@ -325,7 +319,6 @@ class QuarantineInStoreController extends AdminController
             ])
             ->when('in', ['Yes'], function ($form) {
                 $form->decimal('monitor_position_cycle', __('Position chancing cycle (In days)'))->rules('required');
-                $form->text('monitor_position_value', __('Current postion'))->rules('required');
                 $form->date('monitor_position_date', __('Last change date'))->rules('required');
             })
             ->rules('required')

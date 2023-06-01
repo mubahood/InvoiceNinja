@@ -33,8 +33,7 @@ class GardenController extends AdminController
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
         $grid->column('name', __('Name'));
-        $grid->column('crop_name', __('Crop name'));
-        $grid->column('status', __('Status'));
+        $grid->column('crop_name', __('Crop name')); 
         $grid->column('production_scale', __('Production scale'));
         $grid->column('planting_date', __('Planting date'));
         $grid->column('land_occupied', __('Land occupied'));
