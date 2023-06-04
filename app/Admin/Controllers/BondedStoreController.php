@@ -136,9 +136,12 @@ class BondedStoreController extends AdminController
 
         $grid->actions(function ($act) {
             $act->disableDelete();
-            $act->add(new ActionToQuarantineOutStore());
+/*             $act->add(new ActionToQuarantineOutStore()); */
             $act->add(new ActionIssueOut());
         });
+
+        $grid->disableCreateButton(); 
+        $grid->disableExport(); 
 
         $grid->column('created_at', __('Added'))->display(function ($x) {
             return Utils::my_date_time($x);

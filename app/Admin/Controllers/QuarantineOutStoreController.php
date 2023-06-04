@@ -33,6 +33,8 @@ class QuarantineOutStoreController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new StockItem());
+        $grid->disableCreateButton();
+        $grid->disableExport();
 
         $grid->batchActions(function ($batch) {
             $batch->disabledelete();
@@ -50,10 +52,10 @@ class QuarantineOutStoreController extends AdminController
         $grid->quickSearch('name')->placeholder('Search...');
 
         $grid->column('photo', __('Photo'))
-        ->lightbox(['width' => 60, 'height' => 60])
-        ->sortable();
+            ->lightbox(['width' => 60, 'height' => 60])
+            ->sortable();
 
-        
+
         $grid->column('name', __('Part number'))->sortable();
         $grid->column('serial_no', __('Serial no'));
 
@@ -94,7 +96,7 @@ class QuarantineOutStoreController extends AdminController
                 }
                 return '-';
             })->sortable();
- 
+
         $grid->column('stage', __('Stage'))
             ->dot([
                 'Quarantine In' => 'warning',
@@ -191,7 +193,7 @@ class QuarantineOutStoreController extends AdminController
         $show->field('monitor_position', __('Monitor position'));
         $show->field('monitor_position_cycle', __('Monitor position cycle'));
         $show->field('monitor_position_date', __('Monitor position date'));
-         $show->field('monitor_position_changed_by', __('Monitor position changed by'));
+        $show->field('monitor_position_changed_by', __('Monitor position changed by'));
         $show->field('removed_from_aircraft', __('Removed from aircraft'));
         $show->field('removal_description', __('Removal description'));
         $show->field('removal_station', __('Removal station'));
@@ -219,8 +221,8 @@ class QuarantineOutStoreController extends AdminController
                 'Quarantine Out' => 'Quarantine Out',
             ])
             ->when('in', ['Quarantine Out'], function ($form) {
-                 $form->text('remarks', __('Remarks'))->rules('required');
-                $form->decimal('hours_run', __('Hours run'))->rules('required');
+                $form->text('remarks', __('Remarks'))->rules('required');
+                $form->decimal('hours_run', __('Hours run')); 
 
 
                 $form->select('store_id', __('Select store'))
@@ -237,7 +239,7 @@ class QuarantineOutStoreController extends AdminController
                     })
                     ->rules('required');
 
-                $form->select('shelve_id', __('Select Shelve'))
+                $form->select('shelve_id', __('Select Shelf'))
                     ->options(function ($x) {
                         return Shelve::where(['id' => $x])->get()->pluck('name', 'id');
                     })

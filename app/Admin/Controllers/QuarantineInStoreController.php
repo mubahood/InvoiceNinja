@@ -48,10 +48,10 @@ class QuarantineInStoreController extends AdminController
         $grid->disableBatchActions();
 
         $grid->column('photo', __('Photo'))
-        ->lightbox(['width' => 60, 'height' => 60])
-        ->sortable();
+            ->lightbox(['width' => 60, 'height' => 60])
+            ->sortable();
 
-        
+
         $grid->quickSearch('name')->placeholder('Search...');
         $grid->column('name', __('Part number'))->sortable();
         $grid->column('serial_no', __('Serial no'));
@@ -93,7 +93,7 @@ class QuarantineInStoreController extends AdminController
                 }
                 return '-';
             })->sortable();
- 
+
         $grid->column('stage', __('Stage'))->sortable();
         $grid->column('description', __('Description'))->hide();
 
@@ -135,6 +135,8 @@ class QuarantineInStoreController extends AdminController
             $act->add(new ActionToQuarantineOutStore());
             $act->add(new ActionIssueOut());
         });
+        $grid->disableCreateButton();
+        $grid->disableExport();
         return $grid;
     }
 
@@ -178,7 +180,7 @@ class QuarantineInStoreController extends AdminController
         $show->field('monitor_position', __('Monitor position'));
         $show->field('monitor_position_cycle', __('Monitor position cycle'));
         $show->field('monitor_position_date', __('Monitor position date'));
-         $show->field('monitor_position_changed_by', __('Monitor position changed by'));
+        $show->field('monitor_position_changed_by', __('Monitor position changed by'));
         $show->field('removed_from_aircraft', __('Removed from aircraft'));
         $show->field('removal_description', __('Removal description'));
         $show->field('removal_station', __('Removal station'));
@@ -213,7 +215,7 @@ class QuarantineInStoreController extends AdminController
                 'Quarantine Out' => 'Quarantine out',
             ])
             ->when('in', ['Quarantine In'], function ($form) {
-       
+
                 $form->select('store_id', __('Select store'))
                     ->options(Store::where([
                         'store_type' => 'Quarantine In'
@@ -233,7 +235,7 @@ class QuarantineInStoreController extends AdminController
                 return $form;
             })
             ->when('in', ['Bonded'], function ($form) {
-                  $form->select('store_id', __('Select store'))
+                $form->select('store_id', __('Select store'))
                     ->options(Store::where([
                         'store_type' => 'Bonded'
                     ])->get()->pluck('name', 'id'))
@@ -252,9 +254,9 @@ class QuarantineInStoreController extends AdminController
                 return $form;
             })
             ->when('in', ['Quarantine Out'], function ($form) {
-                  $form->text('remarks', __('Remarks'))->rules('required');
+                $form->text('remarks', __('Remarks'))->rules('required');
                 $form->text('hours_run', __('Hours run'))->rules('required');
- 
+
 
                 $form->select('store_id', __('Select store'))
                     ->options(Store::where([

@@ -490,11 +490,11 @@ administrator_id
     }
     public static function system_boot()
     {
-        foreach ($r = Invoice::where([
-            'processed' => null
-        ])->get() as $key => $inv) {
-            $inv->do_process();
-        }
+        // foreach ($r = Invoice::where([
+        //     'processed' => null
+        // ])->get() as $key => $inv) {
+        //     $inv->do_process();
+        // }
 
         return;
         foreach ($r = Candidate::where([

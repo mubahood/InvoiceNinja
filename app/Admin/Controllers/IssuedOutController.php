@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Admin\Actions;
 use App\Admin\Actions\Post\BatchCopy;
 use App\Admin\Actions\Post\ActionToBondedStore;
+use App\Admin\Actions\Post\ActionToQuarantineOutStore;
 use App\Models\Shelve;
 use App\Models\StockItem;
 use App\Models\StockSubCategory;
@@ -34,21 +35,17 @@ class IssuedOutController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new StockItem());
-        $grid->disableCreateButton();   
+        $grid->disableCreateButton();
 
-        $grid->disableActions();
+
 
         $grid->export(function ($export) {
-
             $export->filename('Stock Items');
             $export->except(['actions']);
             $export->originalValue(['stage', 'status']);
         });
 
-        $grid->batchActions(function ($batch) {
-            $batch->disabledelete();
-            $batch->add(new BatchCopy());
-        });
+
 
         $grid->model()
             ->where([
@@ -138,8 +135,10 @@ class IssuedOutController extends AdminController
 
         $grid->actions(function ($act) {
             $act->disableDelete();
-            $act->add(new ActionToBondedStore());
+            $act->disableEdit();
+            $act->add(new ActionToQuarantineOutStore());
         });
+
         return $grid;
     }
 
@@ -229,7 +228,7 @@ class IssuedOutController extends AdminController
                 $form->text('instalation_aircraft_no', __('Instalation aircraft no'))
                     ->rules('required')
                     ->required();
-                $form->select('instalation_by', __('Instaled by'))
+                $form->select('instalation_by', __('Installed by'))
                     ->options(User::where([])->get()->pluck('name', 'id'))
                     ->rules('required')
                     ->required();
@@ -302,7 +301,7 @@ class IssuedOutController extends AdminController
                     ->load('shelve_id', url('api/ajax?model=Shelve&search_by_1=name'))
                     ->rules('required');
 
-                $form->select('shelve_id', __('Select Shelve'))
+                $form->select('shelve_id', __('Select Shelf'))
                     ->options(function ($x) {
                         return Store::where(['id' => $x])->get()->pluck('name', 'id');
                     })
@@ -321,7 +320,7 @@ class IssuedOutController extends AdminController
                     ->load('shelve_id', url('api/ajax?model=Shelve&search_by_1=name'))
                     ->rules('required');
 
-                $form->select('shelve_id', __('Select Shelve'))
+                $form->select('shelve_id', __('Select Shelf'))
                     ->options(function ($x) {
                         return Store::where(['id' => $x])->get()->pluck('name', 'id');
                     })
@@ -341,7 +340,7 @@ class IssuedOutController extends AdminController
                     ->load('shelve_id', url('api/ajax?model=Shelve&search_by_1=name'))
                     ->rules('required');
 
-                $form->select('shelve_id', __('Select Shelve'))
+                $form->select('shelve_id', __('Select Shelf'))
                     ->options(function ($x) {
                         return Store::where(['id' => $x])->get()->pluck('name', 'id');
                     })

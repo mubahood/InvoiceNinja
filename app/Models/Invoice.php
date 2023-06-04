@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Encore\Admin\Form\Field\Id;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Invoice extends Model
 {
@@ -14,25 +16,33 @@ class Invoice extends Model
         return $this->hasMany(InvoiceItem::class);
     }
 
+    public static function boot()
+    {
+        parent::boot();
+        self::created(function ($m) {
+            $m->do_process();
+        });
+        self::updated(function ($m) {
+            $m->do_process();
+        });
+    }
+
+
     public function do_process()
     {
 
         $tot = 0;
         foreach ($this->items as $key => $item) {
-            if ($item->pro == null) {
-                continue;
-            }
-            $item->name = $item->pro->name;
-            $item->price = $item->pro->price;
-            $item->total = $item->quantity*$item->pro->price;
-            $item->save();
-            $tot+= $item->total;
 
+
+            $item->total = $item->quantity * $item->price;
+            $item->save();
+            $tot += $item->total;
         }
         $this->total = $tot;
         $this->balance = $tot - $this->paid;
-        $this->processed = 'Yes';
-        $this->save();
-      
+        DB::update('update invoices set total = ? where id = ?', [$tot,$this->id]);
+        //$this->processed = 'Yes';
+        //$this->save();
     }
 }

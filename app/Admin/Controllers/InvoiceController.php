@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\Invoice;
 use App\Models\Product;
+use App\Models\Supplier;
 use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -17,7 +18,7 @@ class InvoiceController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Invoices';
+    protected $title = 'Orders';
 
     /**
      * Make a grid builder.
@@ -88,18 +89,36 @@ class InvoiceController extends AdminController
     {
         $form = new Form(new Invoice());
 
-        $form->text('customer_name', __('Customer Name'))->required();
-        $form->text('customer_address', __('Customer Address'))->required();
-        $form->text('customer_contact', __('Customer Contact'))->required();
-        $form->datetime('invoice_date', __('Date'))->required();
-        $form->decimal('paid', __('Amount Paid'))->required();
+        $form->text('customer_name', __('Order description'))->rules('required');
+        $form->date('invoice_date', __('Order Date'))->rules('required');
+        $form->date('customer_contact', __('Expeted Delivery Date'))->rules('required');
+        if ($form->isEditing()) {
+            $form->display('total', __('Total Amount (In USD)'))->rules('required');
+        }
+        $form->radioCard('processed', __('Is Paid'))
+            ->options([
+                'Paid' => 'Paid',
+                'Not Paid' => 'Not Paid'
+            ]);
+        $form->radio('customer_address', __('Order status'))
+            ->options([
+                'Pending' => 'Pending',
+                'Processing' => 'Processing',
+                'Shipping' => 'Shipping',
+                'Delivered' => 'Delivered',
+                'Completed' => 'Completed',
+                'Canceled' => 'Canceled',
+            ])
+            ->rules('required');
 
 
-        $form->morphMany('items', 'Click on new to add a invoice item', function (Form\NestedForm $form) {
-            $form->select('product_id', __('Product'))
-                ->options(Product::where([])->orderBy('name', 'desc')->get()->pluck('name', 'id'))
-                ->rules('required');
+        $form->morphMany('items', 'Click on new to add items to this order', function (Form\NestedForm $form) {
+            $form->text('product', __('Item/Product'))->rules('required');
+            $form->decimal('price', __('Unit price (in USD)'))->rules('required');
             $form->decimal('quantity', __('Quantity'))->rules('required');
+            $form->select('product_id', __('Supplier'))
+                ->options(Supplier::where([])->orderBy('name', 'desc')->get()->pluck('name', 'id'))
+                ->rules('required');
         });
 
 
