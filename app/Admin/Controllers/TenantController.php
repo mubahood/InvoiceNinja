@@ -38,8 +38,8 @@ class TenantController extends AdminController
         $grid->column('name', __('Name'))->sortable();
         $grid->column('email', __('Email'));
         $grid->column('phone_number', __('Phone number'));
-        $grid->column('phone_number_2', __('Phone number 2'));
-        $grid->column('address', __('Address'));
+        $grid->column('phone_number_2', __('NIN'));
+        $grid->column('address', __('Details'));
 
 
         return $grid;
@@ -85,9 +85,9 @@ class TenantController extends AdminController
             'Female' => 'Female',
         ])->rules('required'); */
         $form->text('email', __('Email'));
+        $form->text('phone_number_2', __('Natioanl ID Number'));
         $form->text('phone_number', __('Phone number'))->rules('required');
-        $form->text('phone_number_2', __('Phone number 2'));
-        $form->text('address', __('Address'))->rules('required');
+        $form->text('address', __('Details'))->rules('required');
 
         return $form;
     }

@@ -104,20 +104,29 @@ class RoomController extends AdminController
             'Repair' => 'danger',
             'Ready' => 'success',
         ]);
-        $grid->column('number_of_rooms', __('Number of rooms'));
-        $grid->column('room_size', __('Room size'));
-        $grid->column('bed_rooms', __('Bed rooms'));
-        $grid->column('sitting_rooms', __('Sitting rooms'));
-        $grid->column('dining_rooms', __('Dining rooms'));
-        $grid->column('indoor_toilets', __('Indoor toilets'));
-        $grid->column('price', __('Price'));
-        $grid->column('landload_price', __('Landload price'));
-        $grid->column('furnishings', __('Furnishings'));
-        $grid->column('utilities', __('Utilities'));
-        $grid->column('internet_access', __('Internet access'));
-        $grid->column('security', __('Security'));
-        $grid->column('amenities', __('Amenities'));
-        $grid->column('remarks', __('Remarks'));
+        $grid->column('number_of_rooms', __('Number of rooms'))
+            ->sortable();
+        $grid->column('room_size', __('Room size'))->hide();
+        $grid->column('bed_rooms', __('Bed rooms'))->hide();
+        $grid->column('sitting_rooms', __('Sitting rooms'))->hide();
+        $grid->column('dining_rooms', __('Dining rooms'))->hide();
+        $grid->column('indoor_toilets', __('Indoor toilets'))->hide();
+        $grid->column('price', __('Price (UGX)'))
+            ->display(function ($x) {
+                return '<b>' . number_format($x) . '</b>';
+            })
+            ->sortable();
+        $grid->column('landload_price', __('Landload price'))
+            ->display(function ($x) {
+                return '<b>' . number_format($x) . '</b>';
+            })
+            ->sortable();
+        $grid->column('furnishings', __('Furnishings'))->label()->hide();
+        $grid->column('utilities', __('Utilities'))->label()->hide();
+        $grid->column('internet_access', __('Internet access'))->label()->hide();
+        $grid->column('security', __('Security'))->label()->hide();
+        $grid->column('amenities', __('Amenities'))->label()->hide(); 
+        $grid->column('remarks', __('Remarks'))->sortable()->editable();
 
         return $grid;
     }

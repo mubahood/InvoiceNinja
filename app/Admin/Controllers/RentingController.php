@@ -54,7 +54,6 @@ class RentingController extends AdminController
                 return Utils::my_date($x);
             })->sortable();
         $grid->column('number_of_months', __('Months'))->sortable();
-        $grid->column('discount', __('Discount'))->hide()->sortable();
         $grid->column('payable_amount', __('Payable amount (UGX)'))
             ->display(function ($x) {
                 return number_format($x);
@@ -134,9 +133,7 @@ class RentingController extends AdminController
                 ->required();
         }
 
-        $form->decimal('discount', __('Total Discount'))
-            ->rules('required')
-            ->required();
+        $form->hidden('discount','discount')->default(0);
         $form->text('remarks', __('Remarks'));
 
         return $form;

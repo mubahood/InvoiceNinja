@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\LandloadPayment;
+use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -15,7 +16,7 @@ class LandloadPaymentController extends AdminController
      *
      * @var string
      */
-    protected $title = 'LandloadPayment';
+    protected $title = 'Landlord Payments';
 
     /**
      * Make a grid builder.
@@ -26,11 +27,14 @@ class LandloadPaymentController extends AdminController
     {
         $grid = new Grid(new LandloadPayment());
 
-        $grid->column('id', __('Id'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
-        $grid->column('renting_id', __('Renting id'));
-        $grid->column('landload_id', __('Landload id'));
+        $grid->model()->orderBy('id', 'desc');
+        $grid->disableBatchActions();
+        $grid->column('id', __('ID'))->sortable();
+        $grid->column('created_at', __('Date'))->display(function ($x) {
+            return Utils::my_date_time($x);
+        })->sortable();
+        $grid->column('renting_id', __('Renting'))->hide();
+        $grid->column('landload_id', __('Landload'));
         $grid->column('amount', __('Amount'));
         $grid->column('details', __('Details'));
 
