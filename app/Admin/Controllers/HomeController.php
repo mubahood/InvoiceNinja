@@ -187,7 +187,7 @@ class HomeController extends Controller
             $row->column(3, function (Column $column) {
                 $column->append(view('widgets.box-5', [
                     'is_dark' => false,
-                    'title' => 'This month Sales',
+                    'title' => 'This Month Income',
                     'sub_title' => NULL,
                     'number' => "UGX " . number_format(rand(10000, 10000000)),
                     'link' => 'sales'
@@ -196,7 +196,7 @@ class HomeController extends Controller
             $row->column(3, function (Column $column) {
                 $column->append(view('widgets.box-5', [
                     'is_dark' => false,
-                    'title' => 'Last month Sales',
+                    'title' => 'Landlords',
                     'sub_title' => NULL,
                     'number' => "UGX " . number_format(rand(10000, 10000000)),
                     'link' => 'invoices'
@@ -205,7 +205,7 @@ class HomeController extends Controller
             $row->column(3, function (Column $column) {
                 $column->append(view('widgets.box-5', [
                     'is_dark' => false,
-                    'title' => 'This week Sales',
+                    'title' => 'Profits',
                     'sub_title' => NULL,
                     'number' => "UGX " . number_format(rand(1000, 100000)),
                     'link' => 'invoices'

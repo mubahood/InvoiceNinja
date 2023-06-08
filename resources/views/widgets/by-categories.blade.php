@@ -5,7 +5,7 @@ use App\Models\Utils;
     <!--begin::Header-->
     <div class="d-flex justify-content-between px-3 pt-2 px-md-4 border-bottom">
         <h4 style="line-height: 1; margrin: 0; " class="fs-22 fw-800">
-            Products in stock
+            Rooms
         </h4>
     </div>
     <div class="card-body py-0 py-md-4">
