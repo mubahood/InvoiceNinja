@@ -18,7 +18,7 @@ class HouseController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Houses';
+    protected $title = 'Estates';
 
     /**
      * Make a grid builder.

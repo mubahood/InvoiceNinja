@@ -46,6 +46,14 @@ class RoomController extends AdminController
                     Landload::where([])->orderBy('name', 'asc')->get()->pluck('name', 'id')
                 );
 
+            $filter->equal('status', 'Availability')
+                ->select([
+                    'Available' => 'Available',
+                    'Occupied' => 'Occupied',
+                    'Reserved' => 'Reserved',
+                    'Unavailable' => 'Unavailable',
+                ]);
+                
             $filter->group('price', function ($group) {
                 $group->gt('greater than');
                 $group->lt('less than');
