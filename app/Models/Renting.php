@@ -79,7 +79,7 @@ class Renting extends Model
             $bill = new LandloadPayment();
             $bill->renting_id = $m->id;
             $bill->landload_id = $house->landload_id;
-            $bill->amount = $room->landload_price * $m->number_of_months;
+            $bill->amount = $room->price * $m->number_of_months;
             $bill->amount = $bill->amount * -1;
             $bill->details = "Being bill for rent of {$m->number_of_months} months in room {$room->name}, from {$m->start_date} to {$m->end_date}. 
             Invoice no. #{$m->id}";

@@ -244,12 +244,25 @@ class RoomController extends AdminController
         $form->decimal('number_of_rooms', __('Total number of rooms'))->rules('required');
 
         $form->divider('Room Pricing');
-        $form->decimal('landload_price', __('Landload price'))
-            ->help('Without commission')
-            ->rules('required');
-        $form->decimal('price', __('Price'))
-            ->help('With commission')
-            ->rules('required');
+      
+        $form->decimal('price', __('Room Total Price'))
+        ->rules('required');
+        $form->radio('commission_type', 'Commission type')
+            ->options
+            ([
+                '1' => 'Flate Rate',
+                '2' => 'Percentage',
+            ])->required()
+
+            ->when('1', function (Form $form) 
+            {
+                $form->text('flate_rate_amount', 'Amount');
+            })
+
+            ->when('2', function (Form $form) 
+            {
+                $form->text('percentage_rate', 'Percentage Rate');
+            }); 
 
 
         $form->divider('Room State');
