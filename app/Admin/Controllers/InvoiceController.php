@@ -51,6 +51,7 @@ class InvoiceController extends AdminController
             $link = url('invoice?id=' . $this->id);
             return '<b><a target="_blank" href="' . $link . '">PRINT INVOICE</a></b>';
         });
+        
 
 
         return $grid;

@@ -79,8 +79,21 @@ class Renting extends Model
             $bill = new LandloadPayment();
             $bill->renting_id = $m->id;
             $bill->landload_id = $house->landload_id;
-            $bill->amount = $room->price * $m->number_of_months;
-            $bill->amount = $bill->amount * -1;
+            //calculating , total amount for room and commission
+            $total_room_amount = $room->price * $m->number_of_months;
+            if($room->percentage_rate != null){
+                $total_commission_rate = ($room->percentage_rate * $m->number_of_months)/100;
+                $commission = $total_room_amount*$commission;
+            }
+            else{
+                $total_commission_rate = $room->flat_rate * $m->number_of_months;
+                $commission = $total_room_amount - $commission;
+            }
+
+            $bill->amount = $total_room_amount;
+            $bill->amount_payable_to_landload = $total_room_amount-$commission;
+            $bill->amount_payable_to_company = $commission;
+
             $bill->details = "Being bill for rent of {$m->number_of_months} months in room {$room->name}, from {$m->start_date} to {$m->end_date}. 
             Invoice no. #{$m->id}";
             $bill->save();

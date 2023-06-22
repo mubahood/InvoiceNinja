@@ -22,6 +22,7 @@ class CreateLandloadPaymentsTable extends Migration
             $table->foreignIdFor(Landload::class);
             $table->integer('amount');
             $table->text('details');
+           
         });
     }
 

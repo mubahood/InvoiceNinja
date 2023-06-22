@@ -26,7 +26,7 @@ class LandloadPaymentController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new LandloadPayment());
-
+    
         $grid->model()->orderBy('id', 'desc');
         $grid->disableBatchActions();
         $grid->column('id', __('ID'))->sortable();
@@ -36,6 +36,9 @@ class LandloadPaymentController extends AdminController
         $grid->column('renting_id', __('Renting'))->hide();
         $grid->column('landload_id', __('Landload'));
         $grid->column('amount', __('Amount'));
+        $grid->column('amount_payable_to_landload', __('Amount Payable To Landload'));
+        $grid->column('amount_payable_to_company', __('Amount Payable To Company'));
+        
         $grid->column('details', __('Details'));
 
         return $grid;
