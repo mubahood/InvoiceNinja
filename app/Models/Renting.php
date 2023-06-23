@@ -79,24 +79,34 @@ class Renting extends Model
             $bill = new LandloadPayment();
             $bill->renting_id = $m->id;
             $bill->landload_id = $house->landload_id;
-            //calculating , total amount for room and commission
+            $bill->room_id = $m->room_id;
+            // calculating total amount for room and commission
             $total_room_amount = $room->price * $m->number_of_months;
-            if($room->percentage_rate != null){
-                $total_commission_rate = ($room->percentage_rate * $m->number_of_months)/100;
-                $commission = $total_room_amount*$commission;
-            }
-            else{
-                $total_commission_rate = $room->flat_rate * $m->number_of_months;
-                $commission = $total_room_amount - $commission;
+            if ($room->percentage_rate != null) {
+                error_log("perce");
+                $total_commission_rate = ($room->percentage_rate * $m->number_of_months) / 100;
+                $company_credit = $total_room_amount * $total_commission_rate; 
+                $landlord_credit = $total_room_amount - $company_credit;
+            } 
+            elseif($room->flate_rate_amount != null){
+                
+                $company_credit = intval($room->flate_rate_amount * $m->number_of_months);
+                error_log($company_credit);
+                $landlord_credit = $total_room_amount - $company_credit; 
+            }else{
+                $company_credit = 10;
+                $landlord_credit = $total_room_amount; 
             }
 
             $bill->amount = $total_room_amount;
-            $bill->amount_payable_to_landload = $total_room_amount-$commission;
-            $bill->amount_payable_to_company = $commission;
+            $bill->amount_payable_to_landload = $landlord_credit;
+            $bill->amount_payable_to_company = $company_credit;
 
             $bill->details = "Being bill for rent of {$m->number_of_months} months in room {$room->name}, from {$m->start_date} to {$m->end_date}. 
             Invoice no. #{$m->id}";
+            
             $bill->save();
+
         }
     }
 

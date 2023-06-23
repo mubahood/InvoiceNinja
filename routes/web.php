@@ -26,6 +26,13 @@ Route::get('invoice', function () {
     return $pdf->stream();
 });
 
+//tenant receipts
+Route::get('receipt', function () {
+    $pdf = App::make('dompdf.wrapper');
+    $pdf->loadHTML(view('print/receipt'));
+    return $pdf->stream();
+});
+
 Route::get('quotation', function () {
     $pdf = App::make('dompdf.wrapper');
     $pdf->loadHTML(view('print/quotation'));

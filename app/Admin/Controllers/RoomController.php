@@ -124,11 +124,7 @@ class RoomController extends AdminController
                 return '<b>' . number_format($x) . '</b>';
             })
             ->sortable();
-        $grid->column('landload_price', __('Landload price'))
-            ->display(function ($x) {
-                return '<b>' . number_format($x) . '</b>';
-            })
-            ->sortable();
+      
         $grid->column('furnishings', __('Furnishings'))->label()->hide();
         $grid->column('utilities', __('Utilities'))->label()->hide();
         $grid->column('internet_access', __('Internet access'))->label()->hide();
@@ -165,7 +161,6 @@ class RoomController extends AdminController
         $show->field('dining_rooms', __('Dining rooms'));
         $show->field('indoor_toilets', __('Indoor toilets'));
         $show->field('price', __('Price'));
-        $show->field('landload_price', __('Landload price'));
         $show->field('image', __('Image'));
         $show->field('images', __('Images'));
         $show->field('furnishings', __('Furnishings'));

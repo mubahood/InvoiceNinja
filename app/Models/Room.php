@@ -9,14 +9,13 @@ use Illuminate\Database\Eloquent\Model;
 class Room extends Model
 {
     use HasFactory;
-
+ 
 
     public static function boot()
     {
         parent::boot();
         self::creating(function ($m) {
-            $m->status = 'Available';
-            return Room::my_update($m);
+            
         });
         self::updating(function ($m) {
             return Room::my_update($m);
@@ -46,11 +45,15 @@ class Room extends Model
         }
         return $houses;
     }
+
+    //find a list of available and ready rooms
     public static function get_ready_rooms()
     {
         $houses = [];
-        foreach (Room::where(['status' => 'Vacant'])->orderBy('name', 'asc')->get() as $key => $h) {
-            $houses[$h->id] = "#".$h->id." - ". $h->name . ", " . $h->house->name." - UGX ".number_format($h->price);
+        foreach (Room::where(['status' => 'Vacant'])
+               ->where(['is_active'=> 'Ready'])
+               ->orderBy('name', 'asc')->get() as $key => $room) {
+            $houses[$room->id] = "#".$room->id." - ". $room->name . ", " . $room->house->name." - UGX ".number_format($room->price);
         }
         return $houses;
     }
