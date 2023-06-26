@@ -26,6 +26,9 @@ class LandloadPaymentController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new LandloadPayment());
+
+        //disable new button
+        $grid->disableCreateButton();
     
         $grid->model()->orderBy('id', 'desc');
         $grid->disableBatchActions();
