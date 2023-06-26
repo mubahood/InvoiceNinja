@@ -9,13 +9,13 @@ use Illuminate\Database\Eloquent\Model;
 class Room extends Model
 {
     use HasFactory;
- 
+
 
     public static function boot()
     {
         parent::boot();
         self::creating(function ($m) {
-            
+            return Room::my_update($m);//she removed this, so when adding a new room, automatic things like landload_id where not being set!
         });
         self::updating(function ($m) {
             return Room::my_update($m);
@@ -41,7 +41,7 @@ class Room extends Model
     {
         $houses = [];
         foreach (Room::where([])->orderBy('name', 'asc')->get() as $key => $h) {
-            $houses[$h->id] = "#".$h->id." - ". $h->name . ", " . $h->house->name;
+            $houses[$h->id] = "#" . $h->id . " - " . $h->name . ", " . $h->house->name;
         }
         return $houses;
     }
@@ -51,9 +51,9 @@ class Room extends Model
     {
         $houses = [];
         foreach (Room::where(['status' => 'Vacant'])
-               ->where(['is_active'=> 'Ready'])
-               ->orderBy('name', 'asc')->get() as $key => $room) {
-            $houses[$room->id] = "#".$room->id." - ". $room->name . ", " . $room->house->name." - UGX ".number_format($room->price);
+            ->where(['is_active' => 'Ready'])
+            ->orderBy('name', 'asc')->get() as $key => $room) {
+            $houses[$room->id] = "#" . $room->id . " - " . $room->name . ", " . $room->house->name . " - UGX " . number_format($room->price);
         }
         return $houses;
     }
