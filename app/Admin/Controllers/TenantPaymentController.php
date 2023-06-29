@@ -48,12 +48,12 @@ class TenantPaymentController extends AdminController
             return  number_format($b);
         })->sortable();
         $grid->column('details', __('Details'));
-        
-        $grid->column('print', __('PRINT INVOICE'))->display(function () {
+
+        $grid->column('print', __('PRINT RECEIPT'))->display(function () {
             $link = url('receipt?id=' . $this->id);
-            return '<b><a target="_blank" href="' . $link . '">PRINT INVOICE</a></b>';
+            return '<b><a target="_blank" href="' . $link . '">PRINT RECEIPT</a></b>';
         });
-        
+
 
         $grid->column('payment_method', __('Payment method'))->hide();
         $grid->column('payment_destination', __('Payment destination'))->hide();
