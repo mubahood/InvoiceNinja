@@ -2,7 +2,9 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\Landload;
 use App\Models\LandloadPayment;
+use App\Models\Renting;
 use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -27,9 +29,7 @@ class LandloadPaymentController extends AdminController
     {
         $grid = new Grid(new LandloadPayment());
 
-        //disable new button
-        $grid->disableCreateButton();
-    
+
         $grid->model()->orderBy('id', 'desc');
         $grid->disableBatchActions();
         $grid->column('id', __('ID'))->sortable();
@@ -41,7 +41,7 @@ class LandloadPaymentController extends AdminController
         $grid->column('amount', __('Amount'));
         $grid->column('amount_payable_to_landload', __('Amount Payable To Landload'));
         $grid->column('amount_payable_to_company', __('Amount Payable To Company'));
-        
+
         $grid->column('details', __('Details'));
 
         return $grid;
@@ -77,10 +77,32 @@ class LandloadPaymentController extends AdminController
     {
         $form = new Form(new LandloadPayment());
 
-        $form->number('renting_id', __('Renting id'));
-        $form->number('landload_id', __('Landload id'));
-        $form->number('amount', __('Amount'));
-        $form->textarea('details', __('Details'));
+        /*       $invoices = [];
+        foreach (Renting::where([])->orderBy('id', 'desc')->get() as $key => $v) {
+            if ($v->balance > 0) {
+                continue;
+            }
+            $invoices[$v->id] = "#" . $v->id . " - ROOM: " . $v->room->name . ", Tenant: " . $v->tenant->name . " , Balance: UGX " . number_format($v->balance);
+        }
+        $form->select('renting_id', __('Renting - Invoice'))
+            ->options($invoices)
+            ->rules('required')
+            ->required(); */
+
+        $landlords = [];
+        foreach (Landload::where([])->orderBy('name', 'asc')->get() as $key => $val) {
+            if ($val->balance < 1) {
+                continue;
+            }
+            $landlords[$val->id] = $val->name . ", Balance: UGX " . number_format($val->balance);
+        }
+
+        $form->select('landload_id', __('Landlord'))
+            ->options($landlords)
+            ->rules('required');
+
+        $form->decimal('amount', __('Amount'))->rules('required');
+        $form->textarea('details', __('Details'))->rules('required');
 
         return $form;
     }

@@ -287,6 +287,7 @@ class HomeController extends Controller
         });
  */
 
+        return $content;
         $content->row(function (Row $row) {
             $row->column(6, function (Column $column) {
                 $column->append(view('widgets.by-categories', []));
