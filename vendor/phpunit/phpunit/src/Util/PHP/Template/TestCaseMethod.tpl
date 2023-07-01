@@ -1,6 +1,5 @@
 <?php
- use Tests\TestCase;
-
+use PHPUnit\Framework\TestCase;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
 use SebastianBergmann\CodeCoverage\Driver\Selector;
 use PHPUnit\TextUI\XmlConfiguration\Loader;

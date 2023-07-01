@@ -38,8 +38,7 @@ use function strtolower;
 use function strtoupper;
 use function substr;
 use function trim;
-use Tests\TestCase;
-
+use PHPUnit\Framework\TestCase;
 use PHPUnit\Util\Color;
 use PHPUnit\Util\Exception as UtilException;
 use PHPUnit\Util\Test;
@@ -125,7 +124,7 @@ final class NamePrettifier
     {
         $annotations = Test::parseTestMethodAnnotations(
             get_class($test),
-            $test->getName(false)
+            $test->getName(false),
         );
 
         $annotationWithPlaceholders = false;
@@ -244,7 +243,7 @@ final class NamePrettifier
             throw new UtilException(
                 $e->getMessage(),
                 $e->getCode(),
-                $e
+                $e,
             );
         }
         // @codeCoverageIgnoreEnd
@@ -264,7 +263,7 @@ final class NamePrettifier
                     throw new UtilException(
                         $e->getMessage(),
                         $e->getCode(),
-                        $e
+                        $e,
                     );
                 }
                 // @codeCoverageIgnoreEnd

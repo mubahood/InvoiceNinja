@@ -80,8 +80,7 @@ class LandloadController extends AdminController
     protected function form()
     {
         $form = new Form(new Landload());
-
-        $form->text('name', __('Name'))->rules('required');
+         $form->text('name', __('Name'))->rules('required');
         $form->text('email', __('Email'));
         $form->text('phone_number', __('Phone number'))->rules('required');
         $form->text('phone_number_2', __('Phone number 2'));

@@ -19,8 +19,7 @@ use function trim;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Reorderable;
 use PHPUnit\Framework\Test;
-use Tests\TestCase;
-
+use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestResult;
 use PHPUnit\Framework\TestSuite;
 use PHPUnit\Framework\Warning;
@@ -382,8 +381,8 @@ class TestDoxPrinter extends DefaultResultPrinter
                 {
                     return '   ' . $prefix . ($text ? ' ' . $text : '');
                 },
-                preg_split('/\r\n|\r|\n/', $message)
-            )
+                preg_split('/\r\n|\r|\n/', $message),
+            ),
         );
     }
 }

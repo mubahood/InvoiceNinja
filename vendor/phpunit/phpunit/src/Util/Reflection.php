@@ -10,8 +10,7 @@
 namespace PHPUnit\Util;
 
 use PHPUnit\Framework\Assert;
-use Tests\TestCase;
-
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
 
