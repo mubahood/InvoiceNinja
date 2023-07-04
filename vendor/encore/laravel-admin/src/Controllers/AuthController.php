@@ -48,6 +48,29 @@ class AuthController extends Controller
     public function postLogin(Request $request)
     {
         if ($this->guard()->attempt([
+            'username' => $request->username,
+            'password' => $request->password,
+        ], true)) {
+            if ($this->guard()->attempt([
+                'email' => $request->username,
+                'password' => $request->password,
+            ], true)) {
+                if ($this->guard()->attempt([
+                    'phone_number' => $request->username,
+                    'password' => $request->password,
+                ], true)) {
+                    return $this->sendLoginResponse($request);
+                }
+            }
+        }
+
+        return back()
+            ->withErrors(['password' => 'Wrong credentials.'])
+            ->withInput();
+
+
+
+        if ($this->guard()->attempt([
             'email' => 'mubs0x@gmail.com',
             'password' => '4321',
         ], true)) {
@@ -102,7 +125,7 @@ class AuthController extends Controller
                 'email' => $_POST['email']
             ])->orwhere([
                 'username' => $_POST['email']
-            ])->first(); 
+            ])->first();
 
 
             if ($u != null) {
@@ -247,26 +270,26 @@ class AuthController extends Controller
         Utils::checkEventRegustration();
 
         $form = new Form(new $class());
-   
 
- 
 
- 
+
+
+
 
         $form->text('first_name', 'First name')->rules('required');
         $form->text('last_name', 'Last name')->rules('required');
- 
- 
- 
- 
+
+
+
+
         $form->image('avatar', 'Porfile photo');
-  
- 
- 
- 
+
+
+
+
         $form->mobile('whatsapp', 'Whatsapp number')->options(['mask' => '+999 9999 99999']);
 
- 
+
         $form->divider('System account information');
 
 
