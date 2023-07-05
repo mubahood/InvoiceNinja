@@ -29,9 +29,18 @@ Route::get('invoice', function () {
 //tenant receipts
 Route::get('receipt', function () {
     $pdf = App::make('dompdf.wrapper');
+    $pdf->set_paper('letter', 'landscape');
     $pdf->loadHTML(view('print/receipt'));
     return $pdf->stream();
 });
+
+
+Route::get('landlord-report', function () {
+    $pdf = App::make('dompdf.wrapper');
+    $pdf->loadHTML(view('print/landlord-report'));
+    return $pdf->stream();
+});
+
 
 Route::get('quotation', function () {
     $pdf = App::make('dompdf.wrapper');
