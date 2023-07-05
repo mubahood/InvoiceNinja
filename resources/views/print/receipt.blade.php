@@ -20,7 +20,11 @@ $sign = public_path('/sign.jpg');
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{ public_path('css/bootstrap-print.css') }}">
     <title>Payment receipt</title>
-
+    <style>
+        @page {
+            size: A4 portrait;
+        }
+    </style>
 </head>
 
 <body>
