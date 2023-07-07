@@ -15,10 +15,15 @@ class Room extends Model
     {
         parent::boot();
         self::creating(function ($m) {
-            return Room::my_update($m);//she removed this, so when adding a new room, automatic things like landload_id where not being set!
+            return Room::my_update($m); //she removed this, so when adding a new room, automatic things like landload_id where not being set!
         });
         self::updating(function ($m) {
             return Room::my_update($m);
+        });
+        self::deleting(function ($m) {
+            if ($m->id == 1) {
+                throw new Exception("You cannot delete this room.", 1);
+            }
         });
     }
 
@@ -60,8 +65,12 @@ class Room extends Model
 
     public function house()
     {
+        $x = House::find($this->house_id);
+        if ($x == null) {
+            $this->house_id = 1;
+            $this->save();
+        }
         return $this->belongsTo(House::class);
-        # code...
     }
 
 

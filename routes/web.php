@@ -4,6 +4,9 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\MainController;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Models\LandloadPayment;
+use App\Models\Renting;
+use App\Models\TenantPayment;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
@@ -29,16 +32,27 @@ Route::get('invoice', function () {
 //tenant receipts
 Route::get('receipt', function () {
     $pdf = App::make('dompdf.wrapper');
-    $pdf->set_paper('letter', 'landscape');
     $pdf->loadHTML(view('print/receipt'));
     return $pdf->stream();
 });
 
 
 Route::get('landlord-report', function () {
+    $landLord = \App\Models\Landload::find(request()->id);
+    if ($landLord == null) {
+        die("Landlord not found.");
+    }
     $pdf = App::make('dompdf.wrapper');
-    $pdf->loadHTML(view('print/landlord-report'));
-    return $pdf->stream();
+    $rentings = Renting::all();
+    $tenantsPayments = TenantPayment::all();
+    $landlordPayments = LandloadPayment::all();
+    $pdf->loadHTML(view('print/landlord-report', compact(
+        'rentings',
+        'tenantsPayments',
+        'landlordPayments',
+        'landLord'
+    )));
+    return $pdf->stream('landlord-report.pdf');
 });
 
 

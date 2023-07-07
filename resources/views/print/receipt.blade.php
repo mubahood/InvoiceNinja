@@ -28,7 +28,6 @@ $sign = public_path('/sign.jpg');
 </head>
 
 <body>
-
     <div class="receipt  p-3 pb-4" style="border: solid black .2rem;">
         <table class="w-100 ">
             <tbody>
