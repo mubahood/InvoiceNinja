@@ -38,7 +38,7 @@ $sign = public_path('/sign.jpg');
                     <td class=" text-left">
                         <p class="p-0 m-0" style="font-size: 1.3rem;"><b>NICSIM PROPERTY MANAGERS LIMITED</b></p>
                         <p class="mt-1">P.O.BOX: <b>27063 - KAMPALA</b>
-                        <p class="mt-1">Tel: <b>+256708180880</b> , <b>+256775280880</b>
+                        <p class="mt-1">Tel: <b>0200901808</b> , <b>+256708180880</b>, <b>+2567705360104</b>
                         </p>
                     </td>
                     <td style="width: 15%; text-align: right;">
