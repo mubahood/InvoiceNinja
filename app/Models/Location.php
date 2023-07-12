@@ -14,10 +14,27 @@ class Location extends Model
     {
         $subs = [];
         foreach (Location::get_sub_counties() as $key => $value) {
-
-            $subs[$value->id] = ((string)($value->name)) .", " . ((string)($value->district_name));
+            $subs[$value->id] = ((string)($value->name)) . ", " . ((string)($value->district_name));
         }
         return $subs;
+    }
+
+    public static function get_districts_array()
+    {
+        $subs = [];
+        foreach (Location::get_districts() as $key => $value) {
+            $subs[$value->id] = ((string)($value->name));
+        }
+        return $subs;
+    }
+
+    public function houses()
+    {
+        return $this->hasMany(House::class, 'area_id');
+    }
+    public function estates()
+    {
+        return $this->hasMany(House::class, 'region_id');
     }
 
     public function district()
@@ -49,7 +66,7 @@ class Location extends Model
     }
 
     public function getNameTextAttribute()
-    { 
+    {
         if (((int)($this->parent)) > 0) {
             $mother = Location::find($this->parent);
 

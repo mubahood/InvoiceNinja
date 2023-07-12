@@ -106,6 +106,7 @@ php artisan admin:make RoomController --model=App\Models\Room
 php artisan admin:make TenantController --model=App\Models\Tenant
 php artisan admin:make LandloadPaymentController --model=App\Models\LandloadPayment
 php artisan admin:make TenantPaymentController --model=App\Models\TenantPayment
+php artisan admin:make LocationController --model=App\Models\Location
 
 php artisan make:model TenantPayment
 php artisan make:model LandloadPayment

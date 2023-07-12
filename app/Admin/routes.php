@@ -18,9 +18,12 @@ Route::group([
     $router->resource('houses', HouseController::class);
     $router->resource('rooms', RoomController::class);
     $router->resource('tenants', TenantController::class);
-    $router->resource('rentings', RentingController::class); 
-    $router->resource('landload-payments', LandloadPaymentController::class); 
-    $router->resource('tenant-payments', TenantPaymentController::class); 
+    $router->resource('rentings', RentingController::class);
+    $router->resource('landload-payments', LandloadPaymentController::class);
+    $router->resource('tenant-payments', TenantPaymentController::class);
+    $router->resource('districts', DistrictController::class);
+    $router->resource('sub-counties', SubcountyController::class);
+
 
     $router->resource('quotations', QuotationController::class);
     $router->resource('invoices', InvoiceController::class);

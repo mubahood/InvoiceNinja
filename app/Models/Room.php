@@ -155,6 +155,15 @@ class Room extends Model
     }
 
 
+    public function getImageAttribute($value)
+    {
+        if ($value == null || $value == '' || strlen($value) < 3) {
+            return url('logo.jpg');
+        }
+        return $value;
+    }
+
+
     public function setImagesAttribute($d)
     {
         if (is_array($d)) {

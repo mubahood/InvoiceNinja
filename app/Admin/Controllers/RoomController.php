@@ -77,9 +77,7 @@ class RoomController extends AdminController
             ->lightbox(['width' => 60, 'height' => 60])
             ->sortable();
 
-
-
-        $grid->column('name', __('House Name'))->sortable();
+        $grid->column('house.name', __('House Name'))->sortable();
         $grid->column('landload_id', __('Landload'))->display(function ($x) {
             $loc = Landload::find($x);
             if ($loc != null) {
@@ -255,7 +253,6 @@ class RoomController extends AdminController
             ->when('2', function (Form $form) {
                 $form->text('percentage_rate', 'Percentage Rate');
             });
-
 
         $form->divider('Room State');
         $form->radio('is_active', __('Room State'))->options([

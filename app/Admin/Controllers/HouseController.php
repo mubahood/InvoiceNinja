@@ -36,6 +36,15 @@ class HouseController extends AdminController
                 ->select(
                     Landload::where([])->orderBy('name', 'Asc')->get()->pluck('name', 'id')
                 );
+
+            $filter->equal('region_id', 'Filter by district')
+                ->select(
+                    Location::get_districts_array()
+                );
+            $filter->equal('area_id', 'Filter by Area')
+                ->select(
+                    Location::get_sub_counties_array()
+                );
         });
 
 
@@ -94,7 +103,7 @@ class HouseController extends AdminController
         $grid->column('attachment', __('Attachment'))->hide();
         $grid->column('details', __('Details'))->hide();
         $grid->column('created_at', __('Registered'))->display(function ($x) {
-            return Utils::my_date_time($x);
+            return Utils::my_date($x);
         })->sortable();
 
         return $grid;
