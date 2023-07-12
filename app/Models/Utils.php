@@ -489,15 +489,44 @@ administrator_id
         Please this form to apply for your ticket now! {$btn}"
         );
     }
+
+
+    public static function process_things()
+    {
+        foreach ($r = Renting::where(
+            'invoice_as_been_billed',
+            '!=',
+            'Yes'
+        )->get() as $key => $inv) {
+            $inv->process_bill();
+        }
+        foreach (Landload::all() as $key => $landload) {
+            $landload->update_balance();
+            echo $landload->id . ". LANDLORD - " . $landload->name . ", BALANCE {$landload->balance} <br>";
+        }
+        foreach (Tenant::all() as $key => $t) {
+            $t->update_balance();
+            echo $t->id . ". TENANT - " . $t->name . ", BALANCE {$t->balance} <br>";
+        }
+    }
+
     public static function system_boot()
     {
+
+        foreach ($r = Renting::where(
+            'invoice_as_been_billed',
+            '!=',
+            'Yes'
+        )->get() as $key => $inv) {
+            $inv->process_bill();
+        }
+
+        return;
         foreach ($r = Invoice::where([
             'processed' => null
         ])->get() as $key => $inv) {
             $inv->do_process();
         }
-
-        return;
         foreach ($r = Candidate::where([
             'name' => null
         ])->get() as $key => $value) {

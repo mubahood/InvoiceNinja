@@ -7,10 +7,12 @@ use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Models\LandloadPayment;
 use App\Models\Renting;
 use App\Models\TenantPayment;
+use App\Models\Utils;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 Route::get('generate-class', [MainController::class, 'generate_class']);
+Route::get('process-things', [Utils::class, 'process_things']);
 
 Route::get('cv', function () {
     //return view('print/print-admission-letter');

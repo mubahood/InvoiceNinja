@@ -14,31 +14,19 @@ class LandloadPayment extends Model
     {
         parent::boot();
         self::creating(function ($m) {
-            $r  =  Renting::find($m->renting_id);
-            if ($r == null) {
-                if ($m->amount > 1) {
-                    $m->amount = ((-1) * ($m->amount));
-                }
-            }
+
             return $m;
         });
         self::updated(function ($m) {
-            foreach (Landload::all() as $key => $value) {
-                $value->balance = LandloadPayment::where('landload_id', $value->id)->sum('amount');
-                if ($value->balance < 0) {
-                    $value->fully_paid = 'No';
-                } else {
-                    $value->fully_paid = 'Yes';
-                }
-                $value->save();
-            }
+            $m->landload->update_balance();
         });
         self::created(function ($m) {
-            foreach (Landload::all() as $key => $value) {
-                $value->balance = LandloadPayment::where('landload_id', $value->id)->sum('amount');
-                $value->save();
-            }
-            return $m;
+            $m->landload->update_balance();
         });
+    }
+
+    public function landload()
+    {
+        return $this->belongsTo(Landload::class);
     }
 }

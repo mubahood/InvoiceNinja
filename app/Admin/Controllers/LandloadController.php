@@ -50,12 +50,7 @@ class LandloadController extends AdminController
         $grid->column('phone_number', __('Phone number'));
         $grid->column('phone_number_2', __('Phone number 2'))->hide();
         $grid->column('address', __('Address'))->sortable();
-        $grid->column('balance', __('Balance (UGX)'))
-            ->display(function ($x) {
-                return number_format($x);
-            })->totalRow(function ($x) {
-                return  number_format($x);
-            })->sortable();
+
         $grid->column('fully_paid', __('Fully Paid'))
             ->dot([
                 'No' => 'danger',
@@ -71,6 +66,22 @@ class LandloadController extends AdminController
             ->display(function ($x) {
                 return "<a class=\"d-block text-primary text-center\" title=\"Click to view\" target=\"_blank\" href='" . admin_url('houses') . "?landload_id={$this->id}'><b>" . count($this->houses) . "</b></a>";
             });
+        $grid->column('rentings', __('Total Rentings (UGX)'))
+            ->display(function ($x) {
+                $rentings = $this->rentings->sum('landlord_amount');
+                return "<a class=\"d-block text-primary text-center\" title=\"Click to view these renting\" target=\"_blank\" href='" . admin_url('rentings') . "?landload_id={$this->id}'><b>" . number_format($rentings) . "</b></a>";
+            });
+        $grid->column('paid_amount', __('Amount Paid (UGX)'))
+            ->display(function ($x) {
+                $rentings = $this->payments->sum('amount');
+                return "<a class=\"d-block text-primary text-center\" title=\"Click to view these payments\" target=\"_blank\" href='" . admin_url('landload-payments') . "?landload_id={$this->id}'><b>" . number_format($rentings) . "</b></a>";
+            });
+        $grid->column('balance', __('Balance (UGX)'))
+            ->display(function ($x) {
+                return number_format($x);
+            })->totalRow(function ($x) {
+                return  number_format($x);
+            })->sortable();
         $grid->column('report', __('Report'))
             ->display(function ($x) {
                 return "<a class=\"d-block text-primary text-center\" target=\"_blank\" href='" . url('landlord-report') . "?id={$this->id}'><b>PRINT</b></a>";

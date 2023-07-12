@@ -111,30 +111,56 @@ class RentingController extends AdminController
     {
         $form = new Form(new Renting());
 
-        /*         $r = Renting::find(1);
+  /*       $r = Renting::find(49);
         $r->process_bill();
-        die("done");    */
+        die("done"); */
 
-        $form->select('room_id', __('Room'))->options(Room::get_ready_rooms())
-            ->rules('required')
-            ->required();
-        $form->select('tenant_id', __('Tenant'))->options(Tenant::get_items())
-            ->rules('required')
-            ->required();
-
-        $form->date('start_date', __('Start date'))->rules('required')
-            ->required();
-        if (!$form->isCreating()) {
-            $form->date('end_date', __('End date'))->rules('required')
-                ->required();
-        } else {
-            $form->decimal('number_of_months', __('Number of months'))
+        if ($form->isCreating()) {
+            $form->select('room_id', __('Room'))->options(Room::get_ready_rooms())
                 ->rules('required')
                 ->required();
-        }
+            $form->select('tenant_id', __('Tenant'))->options(Tenant::get_items())
+                ->rules('required')
+                ->required();
+        } else {
 
-        $form->hidden('discount','discount')->default(0);
+            $form->select('room_id', __('Room'))->options(function ($x) {
+                $r = Room::where('id', $x)->first();
+                return [
+                    $r->id => $r->name
+                ];
+            })->readOnly();
+            $form->select('tenant_id', __('Tenant'))->options(Tenant::get_items())
+                ->options(function ($x) {
+                    $r = Tenant::where('id', $x)->first();
+                    return [
+                        $r->id => $r->name
+                    ];
+                })->readOnly();
+        }
+        $form->date('start_date', __('Start date'))->rules('required')
+            ->required();
+        $form->decimal('number_of_months', __('Number of months'))
+            ->rules('required')
+            ->required();
+        $form->hidden('discount', 'discount')->default(0);
         $form->text('remarks', __('Remarks'));
+        if (!$form->isCreating()) {
+            $form->divider();
+            $form->radio('update_billing', __('Update billing'))->options(['Yes' => 'Yes', 'No' => 'No'])
+                ->rules('required')
+                ->default('No');
+        }
+        $form->radio('invoice_status', __('Invoice_status'))
+            ->options([
+                'Active' => 'Active',
+                'Not Active' => 'Not Active',
+            ])->default('Active');
+
+        /*
+         
+        
+        */
 
         return $form;
     }

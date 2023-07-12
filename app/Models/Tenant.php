@@ -20,6 +20,22 @@ class Tenant extends Model
         });
     }
 
+    public function update_balance()
+    {
+        $this->balance = $this->payments->sum('amount') - $this->rentings->sum('payable_amount');
+        $this->save();
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(TenantPayment::class, 'tenant_id');
+    }
+    public function rentings()
+    {
+        return $this->hasMany(Renting::class, 'tenant_id');
+    }
+
+
     public static function get_items()
     {
         $items = [];

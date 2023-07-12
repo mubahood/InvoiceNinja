@@ -29,9 +29,30 @@ class Landload extends Model
                     'landload_id' => $m->id
                 ])->update([
                     'landload_id' => 1
-                ]); 
+                ]);
             }
         });
+    }
+
+
+    public function update_balance()
+    {
+        $this->balance = $this->rentings->sum('landlord_amount') - $this->payments->sum('amount');
+        if ($this->balance < 1) {
+            $this->fully_paid = 'Yes';
+        } else {
+            $this->fully_paid = 'No';
+        }
+        $this->save();
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(LandloadPayment::class, 'landload_id');
+    }
+    public function rentings()
+    {
+        return $this->hasMany(Renting::class, 'landload_id');
     }
 
 

@@ -23,14 +23,6 @@ class Renting extends Model
                 throw new Exception("House not found while billing.", 1);
             }
             $m =  Renting::my_update($m);
-            $m->payable_amount = ($room->price * $m->number_of_months);
-            $m->balance = -1 * (($room->price * $m->number_of_months) - $m->discount);
-            $m->end_date = Carbon::parse($m->start_date)->addMonths($m->number_of_months);
-            $m->is_overstay = 'No';
-            $m->is_in_house = 'Yes';
-
-            $room->status = 'Occupied';
-            $room->save();
             return $m;
         });
 
@@ -38,7 +30,9 @@ class Renting extends Model
             $m->process_bill();
         });
         self::updated(function ($m) {
-            $m->process_bill();
+            if ($m->update_billing == 'Yes') {
+                $m->process_bill();
+            }
         });
 
         self::updating(function ($m) {
@@ -67,50 +61,50 @@ class Renting extends Model
     public function process_bill()
     {
         $m = $this;
-        $bill = LandloadPayment::where([
-            'renting_id' => $m->id
-        ])->first();
-
-        if ($bill == null) {
-            $house = House::find($m->house_id);
-            if ($house == null) {
-                throw new Exception("House not found while billing.", 1);
-            }
-            $room = Room::find($m->room_id);
-            if ($room == null) {
-                throw new Exception("House not found while billing.", 1);
-            }
-
-            $bill = new LandloadPayment();
-            $bill->renting_id = $m->id;
-            $bill->landload_id = $house->landload_id;
-            $bill->room_id = $m->room_id;
-            // calculating total amount for room and commission
-            $total_room_amount = $room->price * $m->number_of_months;
-            if ($room->percentage_rate != null) {
-                error_log("perce");
-                $total_commission_rate = ($room->percentage_rate * $m->number_of_months) / 100;
-                $company_credit = $total_room_amount * $total_commission_rate;
-                $landlord_credit = $total_room_amount - $company_credit;
-            } elseif ($room->flate_rate_amount != null) {
-
-                $company_credit = intval($room->flate_rate_amount * $m->number_of_months);
-                error_log($company_credit);
-                $landlord_credit = $total_room_amount - $company_credit;
-            } else {
-                $company_credit = 10;
-                $landlord_credit = $total_room_amount;
-            }
-
-            $bill->amount = $total_room_amount;
-            $bill->amount_payable_to_landload = $landlord_credit;
-            $bill->amount_payable_to_company = $company_credit;
-
-            $bill->details = "Being bill for rent of {$m->number_of_months} months in room {$room->name}, from {$m->start_date} to {$m->end_date}. 
-            Invoice no. #{$m->id}";
-
-            $bill->save();
+        $house = House::find($m->house_id);
+        if ($house == null) {
+            throw new Exception("House not found while billing.", 1);
         }
+        $room = Room::find($m->room_id);
+        if ($room == null) {
+            throw new Exception("House not found while billing.", 1);
+        }
+
+        $landload = Landload::find($m->landload_id);
+        if ($landload == null) {
+            throw new Exception("landload not found while billing.", 1);
+        }
+
+
+        $m->payable_amount = ($room->price * $m->number_of_months);
+        $m->balance = -1 * (($room->price * $m->number_of_months) - $m->discount);
+        $paidAmount = $m->payments->sum('amount');
+        $m->balance = $m->balance + $paidAmount;
+        $m->end_date = Carbon::parse($m->start_date)->addMonths($m->number_of_months);
+        $m->is_overstay = 'No';
+        $m->is_in_house = 'Yes';
+        $m->invoice_status = 'Active';
+
+        if ($room->commission_type == 1) {
+            $m->commision_type = 'Flat Rate';
+            $m->commision_type_value = $room->flate_rate_amount;
+            $m->commision_amount = $room->flate_rate_amount * $m->number_of_months;
+        } else {
+            $m->commision_type = 'Percentage';
+            $m->commision_type_value = $room->percentage_rate;
+            $m->commision_amount = ($room->percentage_rate / 100) * ($room->price * $m->number_of_months);
+        }
+
+        $m->landlord_amount = $m->payable_amount - $m->commision_amount;
+        $m->update_billing = 'No';
+        $m->invoice_as_been_billed = 'Yes';
+        $m->save();
+        $room->status = 'Occupied';
+        $room->save();
+        if ($m->tenant != null) {
+            $m->tenant->update_balance();
+        }
+        $landload->update_balance();
     }
 
     //$form->number('', __('Payable amount'));
@@ -120,6 +114,10 @@ class Renting extends Model
     public function house()
     {
         return $this->belongsTo(House::class);
+    }
+    public function payments()
+    {
+        return $this->hasMany(TenantPayment::class, 'renting_id');
     }
 
 

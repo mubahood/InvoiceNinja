@@ -92,7 +92,7 @@ class LandloadPaymentController extends AdminController
         $landlords = [];
         foreach (Landload::where([])->orderBy('name', 'asc')->get() as $key => $val) {
             if ($val->balance < 1) {
-                continue;
+                //continue;
             }
             $landlords[$val->id] = $val->name . ", Balance: UGX " . number_format($val->balance);
         }

@@ -55,8 +55,7 @@ class Room extends Model
     public static function get_ready_rooms()
     {
         $houses = [];
-        foreach (Room::where(['status' => 'Vacant'])
-            ->where(['is_active' => 'Ready'])
+        foreach (Room::where(['status' => 'Vacant']) 
             ->orderBy('name', 'asc')->get() as $key => $room) {
             $houses[$room->id] = "#" . $room->id . " - " . $room->name . ", " . $room->house->name . " - UGX " . number_format($room->price);
         }
