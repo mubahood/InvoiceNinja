@@ -94,7 +94,9 @@ class RoomController extends AdminController
             ->lightbox(['width' => 60, 'height' => 60])
             ->sortable();
 
-        $grid->column('name', __('Room Name'))->sortable();
+        $grid->column('name', __('Room Name'))
+            ->editable()
+            ->sortable();
         $grid->column('house_id', __('Estate'))
             ->display(function ($x) {
                 return $this->house->name;
