@@ -31,26 +31,40 @@ class LandloadController extends AdminController
         $grid->model()->orderBy('id', 'desc');
         $grid->disableBatchActions();
         $grid->column('id', __('ID'))->sortable();
-        $grid->column('created_at', __('Date'))->display(function ($x) {
-            return Utils::my_date_time($x);
-        })->sortable();
+
 
         $grid->column('name', __('Name'))->sortable();
         $grid->column('email', __('Email'))->hide();
         $grid->column('phone_number', __('Phone number'));
         $grid->column('phone_number_2', __('Phone number 2'))->hide();
-        $grid->column('address', __('Address'))->hide();
+        $grid->column('address', __('Address'))->sortable();
         $grid->column('balance', __('Balance (UGX)'))
             ->display(function ($x) {
                 return number_format($x);
             })->totalRow(function ($x) {
                 return  number_format($x);
             })->sortable();
-        $grid->column('fully_paid', __('Fully Paid'))->sortable();
+        $grid->column('fully_paid', __('Fully Paid'))
+            ->dot([
+                'No' => 'danger',
+                'Yes' => 'success',
+            ])
+            ->sortable();
+
+        $grid->column('estates', __('Eestates'))
+            ->display(function ($x) {
+                return "<a class=\"d-block text-primary text-center\" title=\"Click to view\" target=\"_blank\" href='" . admin_url('houses') . "?landload_id={$this->id}'><b>" . count($this->houses) . "</b></a>";
+            });
         $grid->column('report', __('Report'))
             ->display(function ($x) {
-                return "<a target=\"_blank\" href='".url('landlord-report')."?id={$this->id}'><b>PRINT</b></a>";
+                return "<a class=\"d-block text-primary text-center\" target=\"_blank\" href='" . url('landlord-report') . "?id={$this->id}'><b>PRINT</b></a>";
             })->sortable();
+
+        $grid->column('created_at', __('Date'))->display(function ($x) {
+            return Utils::my_date_time($x);
+        })
+        ->hide()
+        ->sortable();
         return $grid;
     }
 

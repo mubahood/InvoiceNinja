@@ -29,6 +29,15 @@ class HouseController extends AdminController
     {
         $grid = new Grid(new House());
 
+        $grid->filter(function ($filter) {
+            // Remove the default id filter
+            $filter->disableIdFilter();
+            $filter->equal('landload_id', 'Filter by landlord')
+                ->select(
+                    Landload::where([])->orderBy('name', 'Asc')->get()->pluck('name', 'id')
+                );
+        });
+
 
         $grid->quickSearch('name')->placeholder('Search by name....');
         $grid->model()->orderBy('id', 'desc');
