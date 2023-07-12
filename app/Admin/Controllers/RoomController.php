@@ -37,7 +37,7 @@ class RoomController extends AdminController
 
 
 
-            $filter->equal('house_id', 'Filter by House')
+            $filter->equal('house_id', 'Filter by Estate')
                 ->select(
                     House::where([])->orderBy('name', 'Asc')->get()->pluck('name_text', 'id')
                 );
@@ -48,20 +48,37 @@ class RoomController extends AdminController
 
             $filter->equal('status', 'Availability')
                 ->select([
-                    'Available' => 'Available',
+                    'Vacant' => 'Vacant',
                     'Occupied' => 'Occupied',
-                    'Reserved' => 'Reserved',
-                    'Unavailable' => 'Unavailable',
+                ]);
+            $filter->equal('state', 'Room State')
+                ->select([
+                    'Pending' => 'Pending',
+                    'Construction' => 'Construction',
+                    'Repair' => 'Under Repair',
+                    'Ready' => 'Ready',
                 ]);
 
+            $filter->group('number_of_rooms', function ($group) {
+                $group->gt('greater than');
+                $group->lt('less than');
+                $group->equal('equal to');
+            });
+
+            $filter->equal('region_id', 'Filter by Region')
+                ->select(
+                    Location::get_districts_array()
+                );
+            $filter->equal('area_id', 'Filter by Area')
+                ->select(
+                    Location::get_sub_counties_array()
+                );
             $filter->group('price', function ($group) {
                 $group->gt('greater than');
                 $group->lt('less than');
                 $group->equal('equal to');
             });
         });
-
-
 
 
         $grid->batchActions(function ($batch) {
@@ -77,7 +94,12 @@ class RoomController extends AdminController
             ->lightbox(['width' => 60, 'height' => 60])
             ->sortable();
 
-        $grid->column('house.name', __('House Name'))->sortable();
+        $grid->column('name', __('Room Name'))->sortable();
+        $grid->column('house_id', __('Estate'))
+            ->display(function ($x) {
+                return $this->house->name;
+            })
+            ->sortable();
         $grid->column('landload_id', __('Landload'))->display(function ($x) {
             $loc = Landload::find($x);
             if ($loc != null) {
@@ -100,18 +122,22 @@ class RoomController extends AdminController
             }
             return $x;
         })->sortable();
+        $grid->column('number_of_rooms', __('No. of rooms'))
+            ->sortable();
         $grid->column('address', __('Address'))->hide();
-        $grid->column('house_id', __('House'));
 
-        $grid->column('status', __('Status'));
-        $grid->column('is_active', __('Status'))->label([
+        $grid->column('state', __('Room State'))->dot([
             'Pending' => 'danger',
             'Construction' => 'danger',
             'Repair' => 'danger',
             'Ready' => 'success',
-        ]);
-        $grid->column('number_of_rooms', __('Number of rooms'))
-            ->sortable();
+        ])->sortable();
+
+        $grid->column('status', __('Availability'))->label([
+            'Vacant' => 'success',
+            'Occupied' => 'danger',
+        ])->sortable();
+
         $grid->column('room_size', __('Room size'))->hide();
         $grid->column('bed_rooms', __('Bed rooms'))->hide();
         $grid->column('sitting_rooms', __('Sitting rooms'))->hide();
@@ -128,7 +154,16 @@ class RoomController extends AdminController
         $grid->column('internet_access', __('Internet access'))->label()->hide();
         $grid->column('security', __('Security'))->label()->hide();
         $grid->column('amenities', __('Amenities'))->label()->hide();
-        $grid->column('remarks', __('Remarks'))->sortable()->editable();
+        $grid->column('commission_type', __('Commission'))
+            ->display(function ($x) {
+                if ($x == 1) {
+                    return '<span class=" ">UGX ' . $this->flate_rate_amount . ' - Flat</span>';
+                } else {
+                    return '<span class=" ">' . $this->percentage_rate . '%</span>';
+                }
+            })
+            ->sortable();
+        $grid->column('remarks', __('Remarks'))->sortable()->hide()->editable();
 
         return $grid;
     }
@@ -242,7 +277,7 @@ class RoomController extends AdminController
             ->rules('required');
         $form->radio('commission_type', 'Commission type')
             ->options([
-                '1' => 'Flate Rate',
+                '1' => 'Flat Rate',
                 '2' => 'Percentage',
             ])->required()
 
@@ -255,17 +290,23 @@ class RoomController extends AdminController
             });
 
         $form->divider('Room State');
-        $form->radio('is_active', __('Room State'))->options([
+        $form->radio('state', __('Room State'))->options([
             'Pending' => 'Pending',
             'Construction' => 'Construction',
             'Repair' => 'Under Repair',
             'Ready' => 'Ready',
         ])->rules('required');
 
-        $form->radio('status', __('Room Status'))->options([
+        $form->radio('status', __('Room Availabity'))->options([
             'Occupied' => 'Occupied',
             'Vacant' => 'Vacant',
         ])->rules('required');
+        $form->radio('is_active', __('Room Is Active'))->options([
+            'Yes' => 'Yes',
+            'No' => 'No',
+        ])
+            ->default('Yes')
+            ->rules('required');
 
         return $form;
     }

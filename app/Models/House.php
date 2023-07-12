@@ -19,7 +19,7 @@ class House extends Model
         });
         self::updating(function ($m) {
             return House::my_update($m);
-        });
+        }); 
         self::deleting(function ($m) {
             if ($m->id == 1) {
                 throw new Exception("You cannot delete this house.", 1);
@@ -29,7 +29,7 @@ class House extends Model
             ])->update([
                 'house_id' => 1
             ]);
-        });
+        }); 
     }
 
     public static function get_houses()
@@ -69,7 +69,7 @@ class House extends Model
     {
         $minRoom = $this->rooms()->min('price');
         $maxRoom = $this->rooms()->max('price');
-        $priceRange = Utils::number_format($minRoom, '') . " - " . Utils::number_format($maxRoom, '');
+        $priceRange = Utils::number_format($minRoom,'') . " - " . Utils::number_format($maxRoom,'');
         return $priceRange;
     }
 
