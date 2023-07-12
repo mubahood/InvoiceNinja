@@ -29,9 +29,10 @@ class UserController extends AdminController
         $grid = new Grid(new $userModel());
         $grid->quickSearch('name', 'username', 'phone_number')->placeholder('Search by name, username, phone number');
 
+        $grid->disableBatchActions();
         $grid->column('id', 'ID')->hide();
         $grid->column('avatar', __('Photo'))
-            ->width(80) 
+            ->width(80)
             ->lightbox(['width' => 60, 'height' => 60]);
 
         $grid->column('username', trans('admin.username'));
