@@ -57,6 +57,13 @@ class House extends Model
         return $m;
     }
 
+    public function getImageAttribute($value)
+    {
+        if ($value == null || $value == '' || strlen($value) < 3) {
+            return url('logo.jpg');
+        }
+        return $value;
+    }
 
     protected $appends = ['name_text'];
 }

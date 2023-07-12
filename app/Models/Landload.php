@@ -14,6 +14,22 @@ class Landload extends Model
         self::deleting(function ($m) {
             if ($m->id == 1) {
                 throw new Exception("You cannot delete the default landload.", 1);
+            } else {
+                House::where([
+                    'landload_id' => $m->id
+                ])->update([
+                    'landload_id' => 1
+                ]);
+                Room::where([
+                    'landload_id' => $m->id
+                ])->update([
+                    'landload_id' => 1
+                ]);
+                LandloadPayment::where([
+                    'landload_id' => $m->id
+                ])->update([
+                    'landload_id' => 1
+                ]); 
             }
         });
     }

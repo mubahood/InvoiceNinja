@@ -45,10 +45,10 @@ class HouseController extends AdminController
         $grid->column('id', __('No.'))->sortable();
 
         $grid->column('image', __('Photo'))
-            ->lightbox(['width' => 60, 'height' => 60])
+            ->lightbox(['width' => 50, 'height' => 50])
             ->sortable();
 
-        $grid->column('name', __('House Name'))->sortable();
+        $grid->column('name', __('Estate Name'))->sortable();
         $grid->column('landload_id', __('Landlord'))->display(function ($x) {
             $loc = Landload::find($x);
             if ($loc != null) {
@@ -70,10 +70,24 @@ class HouseController extends AdminController
             }
             return $x;
         })->sortable();
-        $grid->column('rooms', __('Rooms'))
+        $grid->column('rooms', __('No. of Rooms'))
             ->display(function ($x) {
                 $x = count($this->rooms);
-                return '<a style="font-size: 16px; text-align: center;" href="' . admin_url('rooms?house_id=' . $x) . '" ><b>' . $x . '</b></a>';
+                return '<a target="_blank" title="View These Rooms" class="d-block text-left  text-primary" style="font-size: 16px; text-align: center;" href="' . admin_url('rooms?house_id=' . $this->id) . '" ><b>' . $x . '</b></a>';
+            });
+        $grid->column('_rooms', __('Occupied Rooms'))
+            ->display(function ($x) {
+                $x = count($this->rooms);
+                return '<a target="_blank" title="View These Rooms" class="d-block text-left  text-primary" style="font-size: 16px; text-align: center;" href="' . admin_url('rooms?house_id=' . $this->id) . '" ><b>' . $x . '</b></a>';
+            });
+        $grid->column('v_rooms', __('Vancant Rooms'))
+            ->display(function ($x) {
+                $x = count($this->rooms);
+                return '<a target="_blank" title="View These Rooms" class="d-block text-left text-primary" style="font-size: 16px; text-align: center;" href="' . admin_url('rooms?house_id=' . $this->id) . '" ><b>' . $x . '</b></a>';
+            });
+        $grid->column('range', __('Price Range (UGX)'))
+            ->display(function ($x) {
+                return '20,000 - 50,000';
             });
         $grid->column('address', __('Address'))->hide();
 

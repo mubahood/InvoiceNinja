@@ -27,6 +27,18 @@ class LandloadController extends AdminController
     {
         $grid = new Grid(new Landload());
 
+        $grid->filter(function ($filter) {
+            // Remove the default id filter
+            $filter->disableIdFilter();
+            $filter->group('balance', function ($group) {
+                $group->gt('greater than');
+                $group->lt('less than');
+                $group->equal('equal to');
+            });
+        });
+
+
+
         $grid->quickSearch('name')->placeholder('Search by name....');
         $grid->model()->orderBy('id', 'desc');
         $grid->disableBatchActions();
@@ -49,6 +61,10 @@ class LandloadController extends AdminController
                 'No' => 'danger',
                 'Yes' => 'success',
             ])
+            ->filter([
+                'Yes' => 'Fully paid',
+                'No' => 'Nto fully paid',
+            ])
             ->sortable();
 
         $grid->column('estates', __('Eestates'))
@@ -63,8 +79,8 @@ class LandloadController extends AdminController
         $grid->column('created_at', __('Date'))->display(function ($x) {
             return Utils::my_date_time($x);
         })
-        ->hide()
-        ->sortable();
+            ->hide()
+            ->sortable();
         return $grid;
     }
 
