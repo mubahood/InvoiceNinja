@@ -76,18 +76,18 @@ class HouseController extends AdminController
                 return '<a target="_blank" title="View These Rooms" class="d-block text-left  text-primary" style="font-size: 16px; text-align: center;" href="' . admin_url('rooms?house_id=' . $this->id) . '" ><b>' . $x . '</b></a>';
             });
         $grid->column('_rooms', __('Occupied Rooms'))
-            ->display(function ($x) {
-                $x = count($this->rooms);
+            ->display(function () {
+                $x = count($this->occupied_rooms);
                 return '<a target="_blank" title="View These Rooms" class="d-block text-left  text-primary" style="font-size: 16px; text-align: center;" href="' . admin_url('rooms?house_id=' . $this->id) . '" ><b>' . $x . '</b></a>';
             });
         $grid->column('v_rooms', __('Vancant Rooms'))
-            ->display(function ($x) {
-                $x = count($this->rooms);
+            ->display(function () {
+                $x = count($this->vacant_rooms);
                 return '<a target="_blank" title="View These Rooms" class="d-block text-left text-primary" style="font-size: 16px; text-align: center;" href="' . admin_url('rooms?house_id=' . $this->id) . '" ><b>' . $x . '</b></a>';
             });
         $grid->column('range', __('Price Range (UGX)'))
             ->display(function ($x) {
-                return '20,000 - 50,000';
+                return $this->price_range();
             });
         $grid->column('address', __('Address'))->hide();
 

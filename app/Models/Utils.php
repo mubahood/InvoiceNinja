@@ -7,6 +7,7 @@ use Encore\Admin\Facades\Admin;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use SplFileObject;
+use Illuminate\Support\Str;
 
 class Utils extends Model
 {

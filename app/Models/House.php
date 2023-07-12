@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Dflydev\DotAccessData\Util;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,6 +32,11 @@ class House extends Model
 
     public function landload()
     {
+        $l = Landload::find($this->landload_id);
+        if ($l == null) {
+            $this->landload_id = 1;
+            $this->save();
+        }
         return $this->belongsTo(Landload::class);
     }
 
@@ -38,6 +44,24 @@ class House extends Model
     {
         return $this->hasMany(Room::class);
     }
+
+    public function occupied_rooms()
+    {
+        return $this->hasMany(Room::class)->where(['status' => 'Occupied']);
+    }
+    public function vacant_rooms()
+    {
+        return $this->hasMany(Room::class)->where(['status' => 'Vacant']);
+    }
+
+    public function price_range()
+    {
+        $minRoom = $this->rooms()->min('price');
+        $maxRoom = $this->rooms()->max('price');
+        $priceRange = Utils::number_format($minRoom,'') . " - " . Utils::number_format($maxRoom,'');
+        return $priceRange;
+    }
+
     public function getNameTextAttribute()
     {
         $name = $this->name;

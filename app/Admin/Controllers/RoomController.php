@@ -53,7 +53,7 @@ class RoomController extends AdminController
                     'Reserved' => 'Reserved',
                     'Unavailable' => 'Unavailable',
                 ]);
-                
+
             $filter->group('price', function ($group) {
                 $group->gt('greater than');
                 $group->lt('less than');
@@ -124,12 +124,12 @@ class RoomController extends AdminController
                 return '<b>' . number_format($x) . '</b>';
             })
             ->sortable();
-      
+
         $grid->column('furnishings', __('Furnishings'))->label()->hide();
         $grid->column('utilities', __('Utilities'))->label()->hide();
         $grid->column('internet_access', __('Internet access'))->label()->hide();
         $grid->column('security', __('Security'))->label()->hide();
-        $grid->column('amenities', __('Amenities'))->label()->hide(); 
+        $grid->column('amenities', __('Amenities'))->label()->hide();
         $grid->column('remarks', __('Remarks'))->sortable()->editable();
 
         return $grid;
@@ -239,36 +239,33 @@ class RoomController extends AdminController
         $form->decimal('number_of_rooms', __('Total number of rooms'))->rules('required');
 
         $form->divider('Room Pricing');
-      
+
         $form->decimal('price', __('Room Total Price'))
-        ->rules('required');
+            ->rules('required');
         $form->radio('commission_type', 'Commission type')
-            ->options
-            ([
+            ->options([
                 '1' => 'Flate Rate',
                 '2' => 'Percentage',
             ])->required()
 
-            ->when('1', function (Form $form) 
-            {
+            ->when('1', function (Form $form) {
                 $form->text('flate_rate_amount', 'Amount');
             })
 
-            ->when('2', function (Form $form) 
-            {
+            ->when('2', function (Form $form) {
                 $form->text('percentage_rate', 'Percentage Rate');
-            }); 
+            });
 
 
         $form->divider('Room State');
-        $form->radio('is_active', __('State'))->options([
+        $form->radio('is_active', __('Room State'))->options([
             'Pending' => 'Pending',
             'Construction' => 'Construction',
             'Repair' => 'Under Repair',
             'Ready' => 'Ready',
         ])->rules('required');
 
-        $form->radio('status', __('State'))->options([
+        $form->radio('status', __('Room Status'))->options([
             'Occupied' => 'Occupied',
             'Vacant' => 'Vacant',
         ])->rules('required');
