@@ -70,7 +70,7 @@ class Renting extends Model
             throw new Exception("House not found while billing.", 1);
         }
 
-        $landload = Landload::find($m->landload_id);
+        $landload = Landload::find($room->landload_id);
         if ($landload == null) {
             throw new Exception("landload not found while billing.", 1);
         }
