@@ -12,6 +12,10 @@ use App\Models\InvoiceItem;
 use App\Models\Location;
 use App\Models\Person;
 use App\Models\Product;
+use App\Models\Renting;
+use App\Models\Room;
+use App\Models\Tenant;
+use App\Models\TenantPayment;
 use App\Models\Utils;
 use Carbon\Carbon;
 use Encore\Admin\Auth\Database\Administrator;
@@ -185,32 +189,26 @@ class HomeController extends Controller
 
         $content->row(function (Row $row) {
             $row->column(3, function (Column $column) {
-                $column->append(view('widgets.box-5', [
-                    'is_dark' => false,
-                    'title' => 'Total Monthly Income',
-                    'sub_title' => NULL,
-                    'number' => "UGX " . number_format(rand(10000, 10000000)),
-                    'link' => 'sales'
+                $column->append(view('widgets.dashboard-rooms', [
+                    'rooms' => Room::all()
                 ]));
             });
             $row->column(3, function (Column $column) {
-                $column->append(view('widgets.box-5', [
-                    'is_dark' => false,
-                    'title' => 'Landlords',
-                    'sub_title' => NULL,
-                    'number' => "UGX " . number_format(rand(10000, 10000000)),
-                    'link' => 'invoices'
+                $column->append(view('widgets.dashboard-tenants', [
+                    'rooms' => Room::all(),
+                    'tenants' => Tenant::all(),
+                    'rentings' => Renting::all()
                 ]));
             });
             $row->column(3, function (Column $column) {
-                $column->append(view('widgets.box-5', [
-                    'is_dark' => false,
-                    'title' => 'Comission',
-                    'sub_title' => NULL,
-                    'number' => "UGX " . number_format(rand(1000, 100000)),
-                    'link' => 'invoices'
+                $column->append(view('widgets.dashboard-this-month', [
+                    'rooms' => Room::all(),
+                    'tenants' => Tenant::all(),
+                    'rentings' => Renting::all(),
+                    'payments' => TenantPayment::all()
                 ]));
             });
+
             $row->column(3, function (Column $column) {
                 $column->append(view('widgets.box-5', [
                     'style' => 'danger',
