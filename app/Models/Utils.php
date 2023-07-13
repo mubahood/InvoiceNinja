@@ -493,13 +493,14 @@ administrator_id
 
     public static function process_things()
     {
-        foreach ($r = Renting::where(
-            'invoice_as_been_billed',
-            '!=',
-            'Yes'
-        )->get() as $key => $inv) {
+        foreach (Renting::where([])->get() as $key => $inv) {
+            $inv->update_billing = 'Yes';
+            $inv->invoice_as_been_billed = 'No';
             $inv->process_bill();
+            echo $inv->id . ". INVOICE - " . $inv->name . ", BALANCE {$inv->balance} <br>";
+        
         }
+        dd("as");
         foreach (Landload::all() as $key => $landload) {
             $landload->update_balance();
             echo $landload->id . ". LANDLORD - " . $landload->name . ", BALANCE {$landload->balance} <br>";
