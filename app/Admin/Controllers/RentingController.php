@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\Landload;
 use App\Models\Renting;
 use App\Models\Room;
 use App\Models\Tenant;
@@ -29,10 +30,33 @@ class RentingController extends AdminController
     {
         $grid = new Grid(new Renting());
 
+        $grid->filter(function ($filter) {
+            // Remove the default id filter
+            $filter->disableIdFilter();
+            $filter->equal('landload_id', 'Filter by landlord')
+                ->select(
+                    Landload::where([])->orderBy('name', 'Asc')->get()->pluck('name', 'id')
+                );
+
+            $filter->equal('room_id', 'Filter by room')
+                ->select(
+                    Room::get_all_rooms()
+                );
+            $filter->between('created_at', 'Filter by Date Created')->date();
+            $filter->between('start_date', 'Filter by Start Date')->date();
+            $filter->between('end_date', 'Filter by End Date')->date();
+            $filter->group('balance', function ($group) {
+                $group->gt('greater than');
+                $group->lt('less than');
+                $group->equal('equal to');
+            });
+        });
+
+
         $grid->model()->orderBy('id', 'desc');
         $grid->disableBatchActions();
         $grid->column('id', __('ID'))->sortable();
-        $grid->column('created_at', __('Date'))->display(function ($x) {
+        $grid->column('created_at', __('Created'))->display(function ($x) {
             return Utils::my_date_time($x);
         })->sortable();
 
@@ -67,10 +91,41 @@ class RentingController extends AdminController
             })->totalRow(function ($x) {
                 return  number_format($x);
             })->sortable();
-        $grid->column('is_in_house', __('In House'));
-        $grid->column('is_overstay', __('Overstay'));
-        $grid->column('remarks', __('Remarks'))->editable();
+        $grid->column('landlord_amount', __('Landlord'))
+            ->display(function ($x) {
+                return number_format($x);
+            })->totalRow(function ($x) {
+                return  number_format($x);
+            })->sortable();
+        $grid->column('commision_amount', __('Commision'))
+            ->display(function ($x) {
+                return number_format($x);
+            })->totalRow(function ($x) {
+                return  number_format($x);
+            })->sortable();
 
+        $grid->column('landload_id', __('Landlord'))->display(function ($x) {
+            $loc = Landload::find($x);
+            if ($loc != null) {
+                return $loc->name;
+            }
+            return $x;
+        })->sortable();
+
+        $grid->column('invoice_status', __('STATUS'));
+        $grid->column('is_in_house', __('In House'))->hide();
+        $grid->column('is_overstay', __('Overstay'))->hide();
+        $grid->column('remarks', __('Remarks'))->editable();
+        /* 
+
+fully_paid		
+commision_type	
+commision_type_value		
+update_billing	
+	
+	
+invoice_as_been_billed
+*/
         return $grid;
     }
 
@@ -111,7 +166,7 @@ class RentingController extends AdminController
     {
         $form = new Form(new Renting());
 
-  /*       $r = Renting::find(49);
+        /*       $r = Renting::find(49);
         $r->process_bill();
         die("done"); */
 
