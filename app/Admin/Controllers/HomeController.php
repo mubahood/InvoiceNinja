@@ -201,21 +201,24 @@ class HomeController extends Controller
                 ]));
             });
             $row->column(3, function (Column $column) {
+                $min = new Carbon();
+                $max = new Carbon();
+                $max->subDays(0);
+                $min->subDays((30));
+
                 $column->append(view('widgets.dashboard-this-month', [
+                    'rooms' => Room::whereBetween('created_at', [$min, $max])->get(),
+                    'tenants' => Tenant::whereBetween('created_at', [$min, $max])->get(),
+                    'rentings' => Renting::whereBetween('start_date', [$min, $max])->get(),
+                    'payments' => TenantPayment::whereBetween('created_at', [$min, $max])->get()
+                ]));
+            });
+            $row->column(3, function (Column $column) {
+                $column->append(view('widgets.dashboard-all-time', [
                     'rooms' => Room::all(),
                     'tenants' => Tenant::all(),
                     'rentings' => Renting::all(),
                     'payments' => TenantPayment::all()
-                ]));
-            });
-
-            $row->column(3, function (Column $column) {
-                $column->append(view('widgets.box-5', [
-                    'style' => 'danger',
-                    'title' => 'Debtors',
-                    'sub_title' => NULL,
-                    'number' => "UGX " . number_format(rand(1000, 100000)),
-                    'link' => 'invoices'
                 ]));
             });
         });
