@@ -16,6 +16,13 @@ class Renting extends Model
     public static function boot()
     {
         parent::boot();
+        self::updating(function ($m) {
+            $room = Room::find($m->room_id);
+            if ($room == null) {
+                throw new Exception("House not found while billing.", 1);
+            }
+            $m->landload_id =  $room->landload_id;
+        });
         self::creating(function ($m) {
 
             $room = Room::find($m->room_id);
@@ -23,6 +30,8 @@ class Renting extends Model
                 throw new Exception("House not found while billing.", 1);
             }
             $m =  Renting::my_update($m);
+            $m->landload_id =  $room->landload_id;
+
             return $m;
         });
 
@@ -74,6 +83,7 @@ class Renting extends Model
         if ($landload == null) {
             throw new Exception("landload not found while billing.", 1);
         }
+        $m->landload_id = $landload->id;
 
 
         $m->payable_amount = ($room->price * $m->number_of_months);
