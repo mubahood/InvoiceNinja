@@ -57,16 +57,18 @@ class RentingController extends AdminController
         $grid->disableBatchActions();
         $grid->column('id', __('ID'))->sortable();
         $grid->column('created_at', __('Created'))->display(function ($x) {
-            return Utils::my_date_time($x);
+            return Utils::my_date_4($x);
         })->sortable();
 
         $grid->column('house_id', __('House'))
             ->display(function ($x) {
                 return $this->house->name;
-            })->sortable();
+            })
+            ->hide()
+            ->sortable();
         $grid->column('room_id', __('Room'))
             ->display(function ($x) {
-                return $this->room->name;
+                return $this->name_text;
             })->sortable();
         $grid->column('tenant_id', __('Tenant'))
             ->display(function ($x) {
@@ -75,9 +77,18 @@ class RentingController extends AdminController
         $grid->column('start_date', __('Start date'))->sortable();
         $grid->column('end_date', __('End date'))
             ->display(function ($x) {
-                return Utils::my_date($x);
+                return Utils::my_date_4($x);
             })->sortable();
-        $grid->column('number_of_months', __('Months'))->sortable();
+        $grid->column('is_overstay', __('Overstay'))
+            ->filter(['Yes' => 'Overstayed', 'No' => 'Within time'])
+            ->dot([
+                'Yes' => 'danger',
+                'No' => 'success'
+            ])
+            ->sortable();
+        $grid->column('number_of_months', __('Months'))
+            ->hide()
+            ->sortable();
         $grid->column('payable_amount', __('Payable amount (UGX)'))
             ->display(function ($x) {
                 return number_format($x);
@@ -104,6 +115,15 @@ class RentingController extends AdminController
                 return  number_format($x);
             })->sortable();
 
+        $grid->column('commision_type', __('Commision Calculation'))
+            ->display(function ($x) {
+                if ($x == 'Percentage') {
+                    return $this->commision_type_value . "%";
+                } else {
+                    return   "UGX " . number_format($this->commision_type_value);
+                }
+            })->sortable();
+
         $grid->column('landload_id', __('Landlord'))->display(function ($x) {
             $loc = Landload::find($x);
             if ($loc != null) {
@@ -112,9 +132,13 @@ class RentingController extends AdminController
             return $x;
         })->sortable();
 
-        $grid->column('invoice_status', __('STATUS'));
+        $grid->column('invoice_status', __('STATUS'))
+            ->filter(['Active' => 'Active', 'Not Active' => 'Not Active'])
+            ->label([
+                'Not Active' => 'danger',
+                'Active' => 'success'
+            ])->sortable();
         $grid->column('is_in_house', __('In House'))->hide();
-        $grid->column('is_overstay', __('Overstay'))->hide();
         $grid->column('remarks', __('Remarks'))->editable();
         /* 
 
@@ -202,7 +226,8 @@ invoice_as_been_billed
         $form->text('remarks', __('Remarks'));
         if (!$form->isCreating()) {
             $form->divider();
-            $form->radio('update_billing', __('Update billing'))->options(['Yes' => 'Yes', 'No' => 'No'])
+            $form->radio('update_billing', __('Update billing'))
+                ->options(['Yes' => 'Yes', 'No' => 'No'])
                 ->rules('required')
                 ->default('No');
         }

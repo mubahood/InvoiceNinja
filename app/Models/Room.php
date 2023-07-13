@@ -10,6 +10,12 @@ class Room extends Model
 {
     use HasFactory;
 
+    protected $appends = ['name_text'];
+
+    public function getNameTextAttribute()
+    {
+        return $this->house->name . ", " . $this->name;
+    }
 
     public static function boot()
     {
@@ -55,7 +61,7 @@ class Room extends Model
     public static function get_ready_rooms()
     {
         $houses = [];
-        foreach (Room::where(['status' => 'Vacant']) 
+        foreach (Room::where(['status' => 'Vacant'])
             ->orderBy('name', 'asc')->get() as $key => $room) {
             $houses[$room->id] = "#" . $room->id . " - " . $room->name . ", " . $room->house->name . " - UGX " . number_format($room->price);
         }
@@ -64,7 +70,7 @@ class Room extends Model
     public static function get_all_rooms()
     {
         $houses = [];
-        foreach (Room::where([]) 
+        foreach (Room::where([])
             ->orderBy('name', 'asc')->get() as $key => $room) {
             $houses[$room->id] = "#" . $room->id . " - " . $room->name . ", " . $room->house->name . " - UGX " . number_format($room->price);
         }

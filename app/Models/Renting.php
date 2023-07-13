@@ -12,6 +12,13 @@ class Renting extends Model
     use HasFactory;
 
 
+    protected $appends = ['name_text'];
+
+    public function getNameTextAttribute()
+    {
+        return $this->room->name_text;
+    }
+
 
     public static function boot()
     {

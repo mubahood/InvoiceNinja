@@ -593,6 +593,14 @@ administrator_id
         }
         return $c->format('d M, Y');
     }
+    public static function my_date_4($t)
+    {
+        $c = Carbon::parse($t);
+        if ($t == null) {
+            return $t;
+        }
+        return $c->format('Y-m-d');
+    }
 
     public static function my_date_time($t)
     {
