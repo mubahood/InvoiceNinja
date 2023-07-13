@@ -9,6 +9,22 @@ use Illuminate\Database\Eloquent\Model;
 class TenantPayment extends Model
 {
     use HasFactory;
+    public function process_balance($m)
+    {
+        $rent = Renting::find($m->renting_id);
+        if ($rent == null) {
+            throw new Exception("Invoice not found.", 1);
+        }
+
+        $rent->balance += $m->amount;
+        if ($rent->balance > -1) {
+            $rent->fully_paid = 'Yes';
+        } else {
+            $rent->fully_paid = 'No';
+        }
+        $rent->save();
+        $m->tenant->update_balance();
+    }
     public function tenant()
     {
         return $this->belongsTo(Tenant::class);
@@ -17,19 +33,14 @@ class TenantPayment extends Model
     {
         parent::boot();
         self::created(function ($m) {
-            $rent = Renting::find($m->renting_id);
-            if ($rent == null) {
-                throw new Exception("Invoice not found.", 1);
-            }
 
-            $rent->balance += $m->amount;
-            if ($rent->balance > -1) {
-                $rent->fully_paid = 'Yes';
-            } else {
-                $rent->fully_paid = 'No';
-            }
-            $rent->save();
-            
+            $m->process_balance($m);
+
+            return $m;
+        });
+        self::updated(function ($m) {
+
+            $m->process_balance();
 
             return $m;
         });

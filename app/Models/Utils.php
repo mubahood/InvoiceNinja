@@ -501,6 +501,24 @@ administrator_id
             $inv->process_bill();
             echo $inv->id . ". INVOICE - " . $inv->name . ", BALANCE {$inv->balance} <br>";
         }
+        foreach (Renting::where(
+            'invoice_status',
+            'Active'
+        )->get() as $key => $m) {
+            $m->is_overstay = 'No';
+            if ($m->invoice_status == 'Active') {
+                $lastDate = Carbon::parse($m->end_date);
+                $now = Carbon::now();
+                if ($now->gt($lastDate)) {
+                    $m->is_overstay = 'Yes';
+                } else {
+                    $m->is_overstay = 'No';
+                }
+            }
+            echo $m->id . ". INVOICE OVERSTAY - " . $m->name . ", is_overstay: {$m->is_overstay} <br>";
+            $m->save();
+        }
+
         foreach (Landload::all() as $key => $landload) {
             $landload->update_balance();
             echo $landload->id . ". LANDLORD - " . $landload->name . ", BALANCE {$landload->balance} <br>";

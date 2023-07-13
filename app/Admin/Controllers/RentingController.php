@@ -37,6 +37,10 @@ class RentingController extends AdminController
                 ->select(
                     Landload::where([])->orderBy('name', 'Asc')->get()->pluck('name', 'id')
                 );
+            $filter->equal('tenant_id', 'Filter By Tenant')
+                ->select(
+                    Tenant::get_items()
+                );
 
             $filter->equal('room_id', 'Filter by room')
                 ->select(
@@ -96,6 +100,15 @@ class RentingController extends AdminController
             ->totalRow(function ($x) {
                 return  number_format($x);
             })->sortable();
+
+        $grid->column('receipts', __('Receipts (UGX)'))
+            ->display(function ($x) {
+                $x = $this->payments->sum('amount');
+                $x = number_format($x);
+                return '<a target="_blank" title="View These Receipts" class="d-block text-left  text-primary" style="font-size: 16px; text-align: center;" href="' . admin_url('tenant-payments?renting_id=' . $this->id) . '" ><b>' . $x . '</b></a>';
+            });
+
+
         $grid->column('balance', __('Balance (UGX)'))
             ->display(function ($x) {
                 return number_format($x);
@@ -190,9 +203,11 @@ invoice_as_been_billed
     {
         $form = new Form(new Renting());
 
-        /*       $r = Renting::find(49);
-        $r->process_bill();
-        die("done"); */
+        /*     $r = Renting::find(199);
+        $r->remarks .= " - " . $r->id;
+        $r->invoice_status .= "Active";
+        $r->save();
+        die("done");  */
 
         if ($form->isCreating()) {
             $form->select('room_id', __('Room'))->options(Room::get_ready_rooms())
@@ -235,7 +250,9 @@ invoice_as_been_billed
             ->options([
                 'Active' => 'Active',
                 'Not Active' => 'Not Active',
-            ])->default('Active');
+            ])
+            ->rules('required')
+            ->default('Active');
 
         /*
          

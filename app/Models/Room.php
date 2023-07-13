@@ -86,6 +86,10 @@ class Room extends Model
         }
         return $this->belongsTo(House::class);
     }
+    public function rentings()
+    {
+        return $this->hasMany(Renting::class,'room_id');
+    }
 
 
     public function getFurnishingsAttribute($d)

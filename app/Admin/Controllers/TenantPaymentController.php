@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Renting;
+use App\Models\Tenant;
 use App\Models\TenantPayment;
 use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
@@ -27,6 +28,31 @@ class TenantPaymentController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new TenantPayment());
+        $grid->filter(function ($filter) {
+            // Remove the default id filter
+            $filter->disableIdFilter();
+            $filter->equal('tenant_id', 'Filter By Tenant')
+                ->select(
+                    Tenant::get_items()
+                );
+            $invoices = [];
+            foreach (Renting::where([])->orderBy('id', 'desc')->get() as $key => $v) {
+                $invoices[$v->id] = "#" . $v->id . " - ROOM: " . $v->room->name . ", Tenant: " . $v->tenant->name . " , Balance: UGX " . number_format($v->balance);
+            }
+            $filter->equal('renting_id', 'Filter by renting invoice')
+                ->select(
+                    $invoices
+                );
+            $filter->between('created_at', 'Filter by Date Created')->date();
+
+            $filter->group('amount', function ($group) {
+                $group->gt('greater than');
+                $group->lt('less than');
+                $group->equal('equal to');
+            });
+        });
+
+
 
         $grid->quickSearch('details')->placeholder('Search by details...');
         $grid->model()->orderBy('id', 'desc');

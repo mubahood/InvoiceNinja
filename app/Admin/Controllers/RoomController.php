@@ -165,6 +165,12 @@ class RoomController extends AdminController
                 }
             })
             ->sortable();
+        $grid->column('rentings', __('Invoices (UGX)'))
+            ->display(function ($x) {
+                $x = $this->rentings->sum('payable_amount');
+                $x = number_format($x);
+                return '<a target="_blank" title="View These Invoices" class="d-block text-left  text-primary" style="font-size: 16px; text-align: center;" href="' . admin_url('rentings?room_id=' . $this->id) . '" ><b>' . $x . '</b></a>';
+            });
         $grid->column('remarks', __('Remarks'))->sortable()->hide()->editable();
 
         return $grid;

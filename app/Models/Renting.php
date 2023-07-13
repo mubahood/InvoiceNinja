@@ -29,6 +29,8 @@ class Renting extends Model
                 throw new Exception("House not found while billing.", 1);
             }
             $m->landload_id =  $room->landload_id;
+            $m =  Renting::my_update($m);
+            return $m;
         });
         self::creating(function ($m) {
 
@@ -49,6 +51,17 @@ class Renting extends Model
             if ($m->update_billing == 'Yes') {
                 $m->process_bill();
             }
+
+            $room = Room::find($m->room_id);
+            if ($room == null) {
+                throw new Exception("House not found while billing.", 1);
+            }
+            if ($m->invoice_status == 'Active') {
+                $room->status = 'Occupied';
+            } else {
+                $room->status = 'Vacant';
+            }
+            $room->save();
         });
 
         self::updating(function ($m) {
@@ -100,7 +113,6 @@ class Renting extends Model
         $m->end_date = Carbon::parse($m->start_date)->addMonths($m->number_of_months);
         $m->is_overstay = 'No';
         $m->is_in_house = 'Yes';
-        $m->invoice_status = 'Active';
 
         if ($room->commission_type == 1) {
             $m->commision_type = 'Flat Rate';
@@ -116,7 +128,12 @@ class Renting extends Model
         $m->update_billing = 'No';
         $m->invoice_as_been_billed = 'Yes';
         $m->save();
-        $room->status = 'Occupied';
+        if ($m->invoice_status == 'Active') {
+            $room->status = 'Occupied';
+        } else {
+            $room->status = 'Vacant';
+        }
+
         $room->save();
         if ($m->tenant != null) {
             $m->tenant->update_balance();
@@ -145,6 +162,16 @@ class Renting extends Model
             throw new Exception("House not found.", 1);
         }
         $m->house_id = $room->house_id;
+        $m->is_overstay = 'No';
+        if ($m->invoice_status == 'Active') {
+            $lastDate = Carbon::parse($m->end_date);
+            $now = Carbon::now();
+            if ($now->gt($lastDate)) {
+                $m->is_overstay = 'Yes';
+            } else {
+                $m->is_overstay = 'No';
+            }
+        }
         return $m;
     }
 }

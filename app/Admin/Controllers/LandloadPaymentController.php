@@ -29,6 +29,22 @@ class LandloadPaymentController extends AdminController
     {
         $grid = new Grid(new LandloadPayment());
 
+        $grid->filter(function ($filter) {
+            // Remove the default id filter
+            $filter->disableIdFilter();
+            $filter->equal('landload_id', 'Filter by landlord')
+                ->select(
+                    Landload::where([])->orderBy('name', 'Asc')->get()->pluck('name', 'id')
+                );
+            $filter->between('created_at', 'Filter by Date Created')->date();
+            $filter->group('balance', function ($group) {
+                $group->gt('greater than');
+                $group->lt('less than');
+                $group->equal('equal to');
+            });
+        });
+
+
 
         $grid->model()->orderBy('id', 'desc');
         $grid->disableBatchActions();
