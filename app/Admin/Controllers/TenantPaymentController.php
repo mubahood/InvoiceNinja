@@ -62,7 +62,12 @@ class TenantPaymentController extends AdminController
             return Utils::my_date_time($x);
         })->sortable();
 
-        $grid->column('renting_id', __('Renting'))->sortable();
+        $grid->column('renting_id', __('Renting'))
+            ->display(function ($x) {
+                if($this->renting == null) return $x;
+                return Utils::my_date($this->renting->start_date)." - ".Utils::my_date($this->renting->end_date);
+            })
+            ->sortable();
         $grid->column('tenant_id', __('Tenant'))->display(function () {
             return $this->tenant->name;
         })->sortable();
@@ -142,7 +147,6 @@ class TenantPaymentController extends AdminController
                 $form->textarea('details', __('Details')); 
         */
         $form->decimal('amount', __('Amount Paid'))->rules('required')->required();
-
 
         $form->radio('payment_method', __('Payment method'))
             ->options([

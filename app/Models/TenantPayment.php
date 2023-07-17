@@ -29,6 +29,10 @@ class TenantPayment extends Model
     {
         return $this->belongsTo(Tenant::class);
     }
+    public function renting()
+    {
+        return $this->belongsTo(Renting::class);
+    }
     public static function boot()
     {
         parent::boot();
