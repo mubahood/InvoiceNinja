@@ -29,9 +29,9 @@ class DistrictController extends AdminController
         $grid->disableBatchActions();
         $grid->model()->where('parent', 0)->orderBy('name', 'asc');
         $grid->column('name', __('Name'))->sortable();
-        $grid->column('estates', __('Estates'))->display(function ($x) {
-            $x = count($this->estates);
-            return '<a target="_blank" title="View These Estates" class="d-block text-left  text-primary" style="font-size: 16px; text-align: center;" href="' . admin_url('houses?region_id=' . $this->id) . '" ><b>' . $x . '</b></a>';
+        $grid->column('cases_', __('Cases'))->display(function ($x) {
+            $x = count($this->cases);
+            return '<a target="_blank" title="View These Estates" class="d-block text-left  text-primary" style="font-size: 16px; text-align: center;" href="' . admin_url('cases?region_id=' . $this->id) . '" ><b>' . $x . '</b></a>';
         });
 
         return $grid;

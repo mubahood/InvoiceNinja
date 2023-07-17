@@ -31,7 +31,7 @@
 {{-- <body class="hold-transition login-page" @if (config('admin.login_background_image'))style="background: url({{config('admin.login_background_image')}}) no-repeat;background-size: cover;"@endif> --}}
 
 <body class="hold-transition login-page"
-    style="background: url({{ url('public/assets/images/bg-1.jpg') }}) no-repeat;background-size: cover;">
+    style="background-color: rgb(255, 166, 0);">
     <div class="login-box" >
         <div class="login-logo">
 
@@ -42,12 +42,13 @@
 
             <br>
             <center>
-                <img width="60%" src="{{ url('public/assets/images/logo.png') }}" alt="">
+                <img width="40%" src="{{ url('public/assets/images/logo.png') }}" alt="">
             </center>
             <br>
-            <hr style="background-color: rgb(13, 13, 113); height: 5px;">
+            <hr style="background-color: rgb(255, 166, 0); height: 5px;">
             <br>
-            <p class="login-box-msg h3" style="color: black; font-weight: 800;">Welcome Back</p>
+            <p class="text-center" style="font-size: 18px;">Welcome To</p>
+            <p class="login-box-msg h3" style="color: black; font-weight: 800;">Tax Appeals Tribunal</p>
             <br>
 
             <form action="{{ admin_url('auth/login') }}" method="post">

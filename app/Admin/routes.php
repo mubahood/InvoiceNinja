@@ -24,6 +24,9 @@ Route::group([
     $router->resource('districts', DistrictController::class);
     $router->resource('sub-counties', SubcountyController::class);
 
+    $router->resource('cases', CaseModelController::class);
+    $router->resource('offences', OffenceController::class);
+
 
     $router->resource('quotations', QuotationController::class);
     $router->resource('invoices', InvoiceController::class);

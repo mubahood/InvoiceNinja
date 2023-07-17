@@ -183,8 +183,10 @@ class HomeController extends Controller
 
         $u = Auth::user();
         $content
-            ->title('NICSIM PROPERTY MANAGERS LIMITED - Dashboard')
+            ->title('Tax Appeals Tribunal - Dashboard')
             ->description('Hello ' . $u->name . "!");
+
+        return $content;
 
 
         $content->row(function (Row $row) {

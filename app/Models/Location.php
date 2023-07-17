@@ -28,6 +28,16 @@ class Location extends Model
         return $subs;
     }
 
+    public function cases()
+    {
+        return $this->hasMany(CaseModel::class, 'district_id');
+    }
+
+    public function cases_by_subs()
+    {
+        return $this->hasMany(CaseModel::class, 'sub_county_id');
+    }
+
     public function houses()
     {
         return $this->hasMany(House::class, 'area_id');

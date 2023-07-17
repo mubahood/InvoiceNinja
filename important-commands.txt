@@ -60,7 +60,9 @@ php artisan make:migration create_delivery_items_table
 php artisan make:migration create_tenants_table
 php artisan make:migration create_rentings_table
 php artisan make:migration create_landload_payments_table
-php artisan make:migration create_tenant_payments_table
+php artisan make:migration create_cases_table
+php artisan make:migration create_offences_table
+
 
 Encore\Admin\Auth\Database\Administrator::class,
 php artisan admin:make FormSr4Controller --model=App\FormSr4
@@ -70,8 +72,10 @@ php artisan admin:controller --model=App\FormSr4
 php artisan admin:make FormSr4Controller --model=App\FormSr4
 php artisan admin:make FormSr4Controller --model=App\invoices
 php artisan admin:make FormSr4Controller --model=App\invoices
+php artisan admin:make CaseModelController --model=App\\CaseModel
 
  
+php artisan admin:make CourseController --model=App\\Models\\Offence
 php artisan admin:make CourseController --model=App\\Models\\Course
 php artisan admin:make ParticipantController --model=App\\Models\\Participant
 php artisan admin:make MembersController --model=App\Models\User
@@ -107,7 +111,10 @@ php artisan admin:make TenantController --model=App\Models\Tenant
 php artisan admin:make LandloadPaymentController --model=App\Models\LandloadPayment
 php artisan admin:make TenantPaymentController --model=App\Models\TenantPayment
 php artisan admin:make LocationController --model=App\Models\Location
+php artisan admin:make CaseModelController --model=App\Models\CaseModel
+php artisan admin:make OffenceController --model=App\Models\Offence
 
+php artisan make:model Offence
 php artisan make:model TenantPayment
 php artisan make:model LandloadPayment
 php artisan make:model Renting
@@ -162,3 +169,4 @@ php artisan make:model Quotation
 php artisan make:model invoiceItem
 php artisan make:model Delivery
 php artisan make:model DeliveryItem
+php artisan make:model CaseModel

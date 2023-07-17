@@ -29,11 +29,10 @@ class SubcountyController extends AdminController
         $grid->disableBatchActions();
         $grid->model()->where('parent', '>', 0)->orderBy('name', 'asc');
         $grid->column('name', __('Name'))->sortable();
-        $grid->column('estates', __('Estates'))->display(function ($x) {
-            $x = count($this->houses);
-            return '<a target="_blank" title="View These Estates" class="d-block text-left  text-primary" style="font-size: 16px; text-align: center;" href="' . admin_url('houses?area_id=' . $this->id) . '" ><b>' . $x . '</b></a>';
+        $grid->column('cases_', __('Cases'))->display(function ($x) {
+            $x = count($this->cases_by_subs);
+            return '<a target="_blank" title="View These Estates" class="d-block text-left  text-primary" style="font-size: 16px; text-align: center;" href="' . admin_url('cases?sub_county_id=' . $this->id) . '" ><b>' . $x . '</b></a>';
         });
-
         return $grid;
     }
 

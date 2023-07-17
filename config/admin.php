@@ -11,7 +11,7 @@ return [
     | login page.
     |
     */
-    'name' => 'NICSIM PROPERTY MANAGERS LIMITED - Admin', 
+    'name' => 'Tax Appeals Tribunal - Admin', 
 
     /*
     |--------------------------------------------------------------------------
@@ -22,7 +22,7 @@ return [
     | `img` tag, eg '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo' => '<b>NICSIM PROPERTY</b> admin',
+    'logo' => '<b>TAT</b> admin',
 
     /*
     |--------------------------------------------------------------------------
@@ -34,7 +34,7 @@ return [
     | '<img src="http://logo-url" alt="Admin logo">'.
     |
     */
-    'logo-mini' => '<b>NICSIM PROPERTY</b>',
+    'logo-mini' => '<b>TAT</b>',
 
     /*
     |--------------------------------------------------------------------------
@@ -275,7 +275,7 @@ return [
     |    "skin-red", "skin-red-light", "skin-black", "skin-black-light".
     |
     */
-    'skin' => env('ADMIN_SKIN', 'skin-blue-light'),
+    'skin' => env('ADMIN_SKIN', 'skin-yellow'),
 
     /*
     |--------------------------------------------------------------------------
