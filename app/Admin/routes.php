@@ -14,6 +14,8 @@ Route::group([
     //$router->resource('/', RentingController::class); 
     $router->get('/', 'HomeController@index')->name('home');
 
+    $router->resource('applications', ApplicationController::class);
+
     $router->resource('landloads', LandloadController::class);
     $router->resource('houses', HouseController::class);
     $router->resource('rooms', RoomController::class);
