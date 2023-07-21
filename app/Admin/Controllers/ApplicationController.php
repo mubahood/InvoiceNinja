@@ -134,7 +134,7 @@ class ApplicationController extends AdminController
         $form->divider(strtoupper('FORM TAT 1'));
         $form->text('registry', __('Registry'));
         $form->text('application_number', __('Application number'));
-        $form->date('year', __('Year'))->default(date('Y-m-d'));
+        $form->year('year', __('Year'))->default(date('Y-m-d'));
         $form->text('applicant', __('Applicant'));
 
         $form->divider(strtoupper('APPLICATION'));
