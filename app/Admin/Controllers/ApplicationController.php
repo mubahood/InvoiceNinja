@@ -60,11 +60,11 @@ class ApplicationController extends AdminController
         $grid->column('list_of_books', __('List of books'));
         $grid->column('witness_names', __('Witness names'));
         $grid->column('dated_at', __('Dated at'));
-        $grid->column('sign', __('Sign'))->hide();;
+        $grid->column('sign', __('Sign'))->hide();
         $grid->column('date_of_filling', __('Date of filling'));
-        $grid->column('sign1', __('Sign1'))->hide();;
-        $grid->column('date2', __('Date2'));
-        $grid->column('sign2', __('Sign2'))->hide();;
+        $grid->column('sign1', __('Sign1'))->hide();
+        $grid->column('date2', __('Date2')) ->hide();;
+        $grid->column('sign2', __('Sign2'))->hide();
 
         return $grid;
     }
@@ -113,11 +113,11 @@ class ApplicationController extends AdminController
         $show->field('list_of_books', __('List of books'));
         $show->field('witness_names', __('Witness names'));
         $show->field('dated_at', __('Dated at'));
-        $show->field('sign', __('Sign'));
+        $show->field('sign', __('Sign')) ->hide();;
         $show->field('date_of_filling', __('Date of filling'));
-        $show->field('sign1', __('Sign1'));
-        $show->field('date2', __('Date2'));
-        $show->field('sign2', __('Sign2'));
+        $show->field('sign1', __('Sign1')) ->hide();
+        $show->field('date2', __('Date2')) ->hide();
+        $show->field('sign2', __('Sign2')) ->hide();
 
         return $show;
     }
@@ -131,7 +131,7 @@ class ApplicationController extends AdminController
     {
         $form = new Form(new Application());
 
-        $form->divider(strtoupper(''));
+        $form->divider(strtoupper('FORM TAT 1'));
         $form->text('registry', __('Registry'));
         $form->text('application_number', __('Application number'));
         $form->date('year', __('Year'))->default(date('Y-m-d'));
@@ -148,7 +148,7 @@ class ApplicationController extends AdminController
         $form->text('street', __('Street'));
         $form->text('village', __('Village'));
         $form->text('trading_center', __('Trading center'));
-        $form->phone('telephone_number', __('Telephone number'));
+        $form->text('telephone_number', __('Telephone number'));
         $form->text('fax_number', __('Fax number'));
         $form->text('email', __('Email'));
         $form->text('tin', __('Tin'));
