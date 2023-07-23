@@ -17,7 +17,9 @@ class MainController extends BaseController
 {
   use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-
+public function form(){
+  return view('print.application');
+}
   public function index()
   {
 

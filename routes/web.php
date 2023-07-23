@@ -11,6 +11,7 @@ use App\Models\Utils;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
+Route::get('form', [MainController::class,'form'])->name('form');
 Route::get('generate-class', [MainController::class, 'generate_class']);
 Route::get('process-things', [Utils::class, 'process_things']);
 
