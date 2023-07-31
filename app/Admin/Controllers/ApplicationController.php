@@ -27,7 +27,11 @@ class ApplicationController extends AdminController
         $grid = new Grid(new Application());
 
         $grid->model()->orderBy('id', 'desc');
-        $grid->column('created_at', __('Created'))->sortable();
+        $grid->column('created_at', __('Created'))
+            ->display(function ($created_at) {
+                return date('d-m-Y', strtotime($created_at));
+            })
+            ->sortable();
         $grid->column('application_number', __('Application Number'))->sortable();
         $grid->column('registry', __('Registry'))->sortable();
         $grid->column('year', __('Year'))->sortable();
@@ -64,6 +68,13 @@ class ApplicationController extends AdminController
         $grid->column('sign1', __('Sign1'))->hide();
         $grid->column('date2', __('Date2'))->hide();;
         $grid->column('sign2', __('Sign2'))->hide();
+        $grid->column('stage', __('Stage'))->label([
+            'Stage 1' => 'info',
+            'Stage 2' => 'success',
+            'Stage 3' => 'warning',
+            'Stage 4' => 'danger',
+            'Stage 5' => 'primary',
+        ]);
 
         return $grid;
     }
@@ -135,9 +146,11 @@ class ApplicationController extends AdminController
 
             $form->select('stage', __('Case Stage'))
                 ->options([
-                    'APPLICATION' => 'APPLICATION',
-                    'APPEAL' => 'APPEAL',
-                    'REVIEW' => 'REVIEW',
+                    'Stage 1' => 'Stage 1',
+                    'Stage 2' => 'Stage 2',
+                    'Stage 3' => 'Stage 3',
+                    'Stage 4' => 'Stage 4',
+                    'Stage 5' => 'Stage 5',
                 ])->default('APPLICATION');
 
             $form->text('registry', __('Registry'));
@@ -200,11 +213,11 @@ class ApplicationController extends AdminController
             $form->divider(strtoupper('(FOR OFFICIAL USE))'));
 
             $form->date('dated_at', __('Dated at'));
-            $form->text('sign', __('Sign'));
+            $form->image('sign', __('Sign'));
             $form->date('date_of_filling', __('Date of filling'))->default(date('Y-m-d'));
-            $form->text('sign1', __('Sign'));
+            $form->image('sign1', __('Sign'));
             $form->date('date2', __('Date'));
-            $form->text('sign2', __('Sign'));
+            $form->image('sign2', __('Sign'));
         })->tab('Case Attachments', function ($form) {
             $form->hasMany('attarchments', function (Form\NestedForm $form) {
                 $form->text('description', 'Attachment Description');
