@@ -8,9 +8,9 @@ use App\Models\Utils;
     <!-- Logo -->
     <a href="{{ admin_url('/') }}" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini">{!! 'NICSIM PROPERTY' !!}</span>
+        <span class="logo-mini">{!! 'TAT' !!}</span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg">{!! 'NICSIM PROPERTY' !!}</span>
+        <span class="logo-lg">{!! 'TAT' !!}</span>
     </a>
 
     <!-- Header Navbar -->
