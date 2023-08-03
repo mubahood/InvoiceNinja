@@ -172,3 +172,4 @@ php artisan make:model Delivery
 php artisan make:model DeliveryItem
 php artisan make:model CaseModel
 php artisan make:model Attarchment
+php artisan make:model Application
