@@ -15,6 +15,7 @@ Route::group([
     $router->get('/', 'HomeController@index')->name('home');
 
     $router->resource('applications', ApplicationController::class);
+    $router->resource('cases', ApplicationController::class);
 
     $router->resource('landloads', LandloadController::class);
     $router->resource('houses', HouseController::class);
@@ -26,7 +27,7 @@ Route::group([
     $router->resource('districts', DistrictController::class);
     $router->resource('sub-counties', SubcountyController::class);
 
-    $router->resource('cases', CaseModelController::class);
+    //$router->resource('cases', CaseModelController::class);
     $router->resource('offences', OffenceController::class);
 
 
