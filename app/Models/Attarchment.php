@@ -15,6 +15,6 @@ class Attarchment extends Model
     }
 
     protected $fillable = [
-        'file',
+        'file', 'application_id','description'
     ];
 }

@@ -19,10 +19,10 @@ use App\Models\Utils;
     <!--begin::Header-->
     <div class="d-flex justify-content-between px-3 px-md-4 ">
         <h3>
-            <b>Recently Registered Candidates</b>
+            <b>Recently Registered Cases</b>
         </h3>
         <div>
-            <a href="{{ admin_url('/candidates') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
+            <a href="{{ admin_url('/') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
                 View All
             </a>
         </div>
@@ -35,9 +35,9 @@ use App\Models\Utils;
                 <!--begin::Table head-->
                 <thead>
                     <tr class="fw-bolder text-muted">
-                        <th class="min-w-200px">Member</th>
+                        <th class="min-w-200px">Case</th>
                         <th class="min-w-150px">Current Stage</th>
-                        <th class="text-right">Connect</th>
+                        <th class="text-right">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,7 +56,8 @@ use App\Models\Utils;
                                     ">
                                     </div>
                                     <div class="d-flex justify-content-start flex-column pl-3">
-                                        <a href="{{ admin_url('/candidates/'.$i->id) }}" style="color: black; font-weight: 600;"
+                                        <a href="{{ admin_url('/candidates/' . $i->id) }}"
+                                            style="color: black; font-weight: 600;"
                                             class="text-dark fw-bolder text-hover-primary fs-6">{{ Str::limit($i->name, 20) }}</a>
                                         <span
                                             class="text-muted fw-bold text-muted d-block fs-7">{{ $i->sub->name_text }}</span>
@@ -73,7 +74,7 @@ use App\Models\Utils;
                             </td>
                             <td>
 
-                                <b class="text-white fw-bold  badge bg-success fs-7 " >
+                                <b class="text-white fw-bold  badge bg-success fs-7 ">
                                     {{ $i->stage }}
                                 </b>
 

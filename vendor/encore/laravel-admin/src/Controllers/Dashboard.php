@@ -14,7 +14,7 @@ class Dashboard
 
     public static function dashboard_members()
     {
-        $members = Candidate::where([])->orderBy('id', 'desc')->limit(9)->get();
+        $members = [];
         return view('dashboard.members', [
             'items' => $members
         ]);
@@ -22,7 +22,7 @@ class Dashboard
 
     public static function dashboard_events()
     {
-        $events = Event::where([])->orderBy('id', 'desc')->limit(8)->get();
+        $events = [];
         return view('dashboard.events', [
             'items' => $events
         ]);
@@ -30,10 +30,10 @@ class Dashboard
 
     public static function dashboard_news()
     {
-        $events = NewsPost::where([])->orderBy('id', 'desc')->limit(8)->get();
+        $events = [];
         return view('dashboard.news', [
             'items' => $events
-        ]); 
+        ]);
     }
 
 

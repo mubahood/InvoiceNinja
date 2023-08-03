@@ -26,7 +26,7 @@ use App\Models\Utils;
             <b>News</b>
         </h3>
         <div>
-            <a href="{{ admin_url('/news') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
+            <a href="{{ admin_url('/') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
                 View All
             </a>
         </div>

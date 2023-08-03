@@ -11,7 +11,7 @@ use App\Models\Utils;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
-Route::get('form', [MainController::class,'form'])->name('form');
+Route::get('form', [MainController::class, 'form'])->name('form');
 Route::get('generate-class', [MainController::class, 'generate_class']);
 Route::get('process-things', [Utils::class, 'process_things']);
 
@@ -68,6 +68,13 @@ Route::get('quotation', function () {
 Route::get('delivery', function () {
     $pdf = App::make('dompdf.wrapper');
     $pdf->loadHTML(view('print/delivery'));
+    return $pdf->stream();
+});
+
+Route::get('print', function () {
+    return view('print/applicationnew');
+    $pdf = App::make('dompdf.wrapper');
+    $pdf->loadHTML(view('print/applicationnew'));
     return $pdf->stream();
 });
 

@@ -76,6 +76,11 @@ class ApplicationController extends AdminController
             'Stage 5' => 'primary',
         ]);
 
+        $grid->column('print', __('PRINT'))->display(function () {
+            $link = url('print?id=' . $this->id);
+            return '<b><a target="_blank" href="' . $link . '">PRINT</a></b>';
+        });
+
         return $grid;
     }
 

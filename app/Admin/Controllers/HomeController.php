@@ -186,9 +186,9 @@ class HomeController extends Controller
             ->title('Tax Appeals Tribunal - Dashboard')
             ->description('Hello ' . $u->name . "!");
 
-        return $content;
+        //return $content;
 
-
+        /* 
         $content->row(function (Row $row) {
             $row->column(3, function (Column $column) {
                 $column->append(view('widgets.dashboard-rooms', [
@@ -223,72 +223,63 @@ class HomeController extends Controller
                     'payments' => TenantPayment::all()
                 ]));
             });
-        });
+        }); */
 
-        /*        $content->row(function (Row $row) {
+        $content->row(function (Row $row) {
 
-            $row->column(2, function (Column $column) {
+            $row->column(3, function (Column $column) {
                 $column->append(view('widgets.box-5', [
                     'is_dark' => false,
-                    'title' => 'Enjaz',
+                    'title' => 'STAGE 1',
                     'sub_title' => NULL,
-                    'number' => number_format(Candidate::where(['stage' => 'enjaz'])->count()),
-                    'link' => 'enjaz'
+                    'number' => number_format(11),
+                    'link' => ''
                 ]));
             });
 
-            $row->column(2, function (Column $column) {
+            $row->column(3, function (Column $column) {
                 $column->append(view('widgets.box-5', [
                     'is_dark' => false,
-                    'title' => 'Embasy',
+                    'title' => 'STAGE 2',
                     'sub_title' => NULL,
-                    'number' => number_format(Candidate::where(['stage' => 'Embasy'])->count()),
-                    'link' => 'embasy'
+                    'number' => number_format(11),
+                    'link' => ''
                 ]));
             });
 
-            $row->column(2, function (Column $column) {
+            $row->column(3, function (Column $column) {
                 $column->append(view('widgets.box-5', [
                     'is_dark' => false,
-                    'title' => 'Departure',
+                    'title' => 'STAGE 3',
                     'sub_title' => NULL,
-                    'number' => number_format(Candidate::where(['stage' => 'Departure'])->count()),
-                    'link' => 'ready-for-departure'
+                    'number' => number_format(12),
+                    'link' => ''
                 ]));
             });
 
-            $row->column(2, function (Column $column) {
-                $column->append(view('widgets.box-5', [
-                    'is_dark' => false,
-                    'title' => 'Traveled',
-                    'sub_title' => NULL,
-                    'number' => number_format(Candidate::where(['stage' => 'Traveled'])->count()),
-                    'link' => 'traveled'
-                ]));
-            });
-
-            $row->column(2, function (Column $column) {
-                $column->append(view('widgets.box-5', [
-                    'is_dark' => false,
-                    'style' => 'danger',
-                    'title' => 'Failed',
-                    'sub_title' => NULL,
-                    'number' => number_format(Candidate::where(['stage' => 'Failed'])->count()),
-                    'link' => 'failed'
-                ]));
-            });
-
-            $row->column(2, function (Column $column) {
+            $row->column(3, function (Column $column) {
                 $column->append(view('widgets.box-5', [
                     'is_dark' => true,
-                    'title' => 'All candidates',
+                    'title' => 'STAGE 4',
                     'sub_title' => NULL,
-                    'number' => number_format(Candidate::where([])->count()),
-                    'link' => 'candidates'
+                    'number' => number_format(12),
+                    'link' => ''
                 ]));
             });
         });
- */
+
+        $content->row(function (Row $row) {
+            $row->column(6, function (Column $column) {
+                $column->append(Dashboard::dashboard_members());
+            });
+            $row->column(3, function (Column $column) {
+                $column->append(Dashboard::dashboard_events());
+            });
+            $row->column(3, function (Column $column) {
+                $column->append(Dashboard::dashboard_news());
+            });
+        });
+
 
         return $content;
         $content->row(function (Row $row) {
