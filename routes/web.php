@@ -45,18 +45,49 @@ Route::get('landlord-report', function () {
         die("Landlord not found.");
     }
     $pdf = App::make('dompdf.wrapper');
-    $rentings = Renting::all();
-    $tenantsPayments = TenantPayment::all();
-    $landlordPayments = LandloadPayment::all();
+    $rentings = Renting::where([
+        'landload_id' => $landLord->id
+    ])->orderBy('start_date', 'DESC')
+        ->limit(25)
+        ->get();
+
+    $landlordPayments = LandloadPayment::where([
+        'landload_id' => $landLord->id
+    ])->orderBy('id', 'DESC')
+        ->limit(25)
+        ->get();
+
     $pdf->loadHTML(view('print/landlord-report', compact(
         'rentings',
-        'tenantsPayments',
         'landlordPayments',
         'landLord'
     )));
-    return $pdf->stream('landlord-report.pdf');
+    return $pdf->stream($landLord->name . '-report.pdf');
 });
-
+/* 
+  "created_at" => "2023-06-30 11:17:43"
+    "updated_at" => "2023-07-13 00:10:40"
+    "house_id" => 6
+    "tenant_id" => 4
+    "start_date" => "2023-07-01"
+    "end_date" => "2023-10-01 00:00:00"
+    "number_of_months" => 3
+    "discount" => 0
+    "payable_amount" => 450000
+    "balance" => -450000
+    "is_in_house" => "Yes"
+    "is_overstay" => "No"
+    "remarks" => null
+    "room_id" => 10
+    "fully_paid" => "No"
+    "landlord_amount" => 405000
+    "commision_type" => "Percentage"
+    "commision_type_value" => 10
+    "commision_amount" => 45000
+    "update_billing" => "No"
+    "invoice_status" => "Active" 
+    "invoice_as_been_billed" => "Yes"
+*/
 
 Route::get('quotation', function () {
     $pdf = App::make('dompdf.wrapper');

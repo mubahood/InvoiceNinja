@@ -151,7 +151,7 @@ $sign = public_path('/sign.jpg');
         }
 
         abbr[title]::after {
-            content: " ("attr(title) ")"
+            content: " (" attr(title) ")"
         }
 
         pre {
@@ -268,6 +268,10 @@ $sign = public_path('/sign.jpg');
         padding: 0.2rem !important;
         font-size: 12px !important;
     }
+
+    .title {
+        font-family: 'Courier New', Courier, monospace;
+    }
 </style>
 <!DOCTYPE html>
 <html lang="en">
@@ -347,20 +351,20 @@ $sign = public_path('/sign.jpg');
             </tbody>
         </table>
 
-        <p class="my-h2 mt-3 mb-2">RECENT RENTINGS (Invoinces)</p>
+        <p class="my-h2 mt-3 mb-2 title">RECENT RENTINGS (Invoinces)</p>
         <table class="table table-bordered my-table">
             <thead style="" class="table   table-bordered">
                 <tr>
-                    <th style="border-color: black; ">Invoince No.</th>
-                    <th style="border-color: black; ">Estate</th>
+                    <th style="border-color: black; ">S/n.</th>
+                    <th style="border-color: black; ">Date</th>
                     <th style="border-color: black; ">Room</th>
                     <th style="border-color: black; ">Tenant</th>
-                    <th style="border-color: black; ">Period</th>
-                    <th style="border-color: black; ">Starts</th>
-                    <th style="border-color: black; ">Ends</th>
+                    <th style="border-color: black; ">Months</th>
                     <th style="border-color: black; ">Amount</th>
                     <th style="border-color: black; ">Paid</th>
                     <th style="border-color: black; ">Balance</th>
+                    <th style="border-color: black; ">Landlord</th>
+                    <th style="border-color: black; ">Commision</th>
                 </tr>
             </thead>
             <tbody>
@@ -373,21 +377,30 @@ $sign = public_path('/sign.jpg');
                     @endphp
                     <tr>
                         <td>{{ $i }}</td>
-                        <td>{{ $rent->room->house->name }}</td>
-                        <td>{{ $rent->room->number }}</td>
+                        <td>{{ Utils::my_date_4($rent->created_at) }}</td>
+                        <td>{{ $rent->room->name_text }}</td>
                         <td>{{ $rent->tenant->name }}</td>
+                        <td>{{ $rent->number_of_months }} Months</td>
+                        <td>UGX {{ number_format($rent->payable_amount) }}</td>
+                        <td>UGX {{ number_format($rent->payments->sum('amount')) }}</td>
+                        <td>UGX {{ number_format($rent->balance) }}</td>
+                        <td>UGX {{ number_format($rent->landlord_amount) }}</td>
+                        <td>UGX {{ number_format($rent->commision_amount) }}</td>
+
+
+                        {{-- 
                         <td>{{ Utils::my_date($rent->period) }}</td>
                         <td>{{ Utils::my_date($rent->starts) }}</td>
                         <td>{{ $rent->ends }}</td>
                         <td>{{ number_format($rent->amount) }}</td>
                         <td>{{ number_format($rent->paid) }}</td>
-                        <td>{{ number_format($rent->balance) }}</td>
+                        <td>{{ number_format($rent->balance) }}</td> --}}
                     </tr>
                 @endforeach
             </tbody>
         </table>
 
-        <p class="my-h2 mt-3 mb-2">RECENT TENANTS PAYMENTS (Receipts)</p>
+        {{--  <p class="my-h2 mt-3 mb-2">RECENT TENANTS PAYMENTS (Receipts)</p>
         <table class="table table-bordered my-table">
             <thead style="" class="table   table-bordered">
                 <tr>
@@ -418,7 +431,7 @@ $sign = public_path('/sign.jpg');
                 @endforeach
             </tbody>
         </table>
-
+ --}}
         <p class="my-h2 mt-3 mb-2">RECENT LANDLOAD PAYMENTS (Transactions)</p>
         <table class="table table-bordered my-table">
             <thead style="" class="table   table-bordered">
