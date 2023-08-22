@@ -131,9 +131,9 @@ class TenantPaymentController extends AdminController
 
         $invoices = [];
         foreach (Renting::where([])->orderBy('id', 'desc')->get() as $key => $v) {
-            if ($v->balance > 0) {
-                continue;
-            }
+            // if ($v->balance > 0) {
+            //     continue;
+            // }
             $invoices[$v->id] = "#" . $v->id . " - ROOM: " . $v->room->name . ", Tenant: " . $v->tenant->name . " , Balance: UGX " . number_format($v->balance);
         }
         $form->select('renting_id', __('Renting - Invoice'))
