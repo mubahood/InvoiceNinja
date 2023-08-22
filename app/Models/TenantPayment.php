@@ -44,7 +44,7 @@ class TenantPayment extends Model
         });
         self::updated(function ($m) {
 
-            $m->process_balance();
+            $m->process_balance($m);
 
             return $m;
         });
