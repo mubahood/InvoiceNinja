@@ -72,7 +72,7 @@ Route::get('delivery', function () {
 });
 
 Route::get('print', function () {
-    return view('print/applicationnew');
+    //return view('print/applicationnew');
     $pdf = App::make('dompdf.wrapper');
     $pdf->loadHTML(view('print/applicationnew'));
     return $pdf->stream();
