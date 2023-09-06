@@ -115,17 +115,6 @@ class Renting extends Model
         $m->is_overstay = 'No';
         $m->is_in_house = 'Yes';
 
-        if ($room->commission_type == 1) {
-            $m->commision_type = 'Flat Rate';
-            $m->commision_type_value = $room->flate_rate_amount;
-            $m->commision_amount = $room->flate_rate_amount * $m->number_of_months;
-        } else {
-            $m->commision_type = 'Percentage';
-            $m->commision_type_value = $room->percentage_rate;
-            $m->commision_amount = ($room->percentage_rate / 100) * ($room->price * $m->number_of_months);
-        }
-
-        $m->landlord_amount = $m->payable_amount - $m->commision_amount;
         $m->update_billing = 'No';
         $m->invoice_as_been_billed = 'Yes';
         $m->save();

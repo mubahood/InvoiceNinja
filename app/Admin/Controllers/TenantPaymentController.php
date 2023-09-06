@@ -75,9 +75,28 @@ class TenantPaymentController extends AdminController
             ->display(function ($b) {
                 return  number_format($b);
             })->sortable();
-        $grid->column('landlord_amount', __('Landlord Payable'));
-        $grid->column('commission_amount', __('Commission'));
-        $grid->column('commission_type_value', __('Commission   Calculation'));
+            $grid->column('landlord_amount', __('Landlord'))
+            ->display(function ($x) {
+                return number_format($x);
+            })->totalRow(function ($x) {
+                return  number_format($x);
+            })->sortable();
+        $grid->column('commission_amount', __('Commision'))
+            ->display(function ($x) {
+                return number_format($x);
+            })->totalRow(function ($x) {
+                return  number_format($x);
+            })->sortable();
+
+        $grid->column('commission_type', __('Commision Calculation'))
+        ->display(function ($x) {
+            if ($x == 'Percentage') {
+                return $this->commission_type_value . "%";
+            } else {
+                return   "UGX " . number_format($this->commision_type_value);
+            }
+        })->sortable();
+
         $grid->column('balance', __('Balance (UGX)'))->display(function ($b) {
             return  number_format($b);
         })->sortable();

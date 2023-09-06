@@ -115,27 +115,8 @@ class RentingController extends AdminController
             })->totalRow(function ($x) {
                 return  number_format($x);
             })->sortable();
-        $grid->column('landlord_amount', __('Landlord'))
-            ->display(function ($x) {
-                return number_format($x);
-            })->totalRow(function ($x) {
-                return  number_format($x);
-            })->sortable();
-        $grid->column('commision_amount', __('Commision'))
-            ->display(function ($x) {
-                return number_format($x);
-            })->totalRow(function ($x) {
-                return  number_format($x);
-            })->sortable();
-
-        $grid->column('commision_type', __('Commision Calculation'))
-            ->display(function ($x) {
-                if ($x == 'Percentage') {
-                    return $this->commision_type_value . "%";
-                } else {
-                    return   "UGX " . number_format($this->commision_type_value);
-                }
-            })->sortable();
+       
+     
 
         $grid->column('landload_id', __('Landlord'))->display(function ($x) {
             $loc = Landload::find($x);

@@ -78,18 +78,22 @@ class TenantPayment extends Model
         }
 
         if ($room->commission_type == 1) {
+            $total_rent = $m->amount * $m->months;
+            $commission = $room->flate_rate_amount * $m->months;
             $m->commission_type = 'Flat Rate';
             $m->commission_type_value = $room->flate_rate_amount;
-            $m->commission_amount = $room->flate_rate_amount * $m->number_of_months;
+            $m->commission_amount =  $commission;
+            $m->landlord_amount = $total_rent - $commission;
+
         } else {
+            $total_rent = $m->amount * $m->months;
+            $commission =  ($room->percentage_rate / 100) * $total_rent;
             $m->commission_type = 'Percentage';
             $m->commission_type_value = $room->percentage_rate;
-            $m->commission_amount = ($room->percentage_rate / 100) * ($m->amount * $m->months);
+            $m->commission_amount = $commission;
+            $m->landlord_amount = $total_rent - $commission;
         
         }
-
-        $m->landlord_amount = ($m->amount * $m->months) - (($room->percentage_rate / 100) * ($m->amount * $m->months));
-        error_log($m->landlord_amount);
       
     }
 
