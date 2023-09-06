@@ -75,6 +75,9 @@ class TenantPaymentController extends AdminController
             ->display(function ($b) {
                 return  number_format($b);
             })->sortable();
+        $grid->column('landlord_amount', __('Landlord Payable'));
+        $grid->column('commission_amount', __('Commission'));
+        $grid->column('commission_type_value', __('Commission   Calculation'));
         $grid->column('balance', __('Balance (UGX)'))->display(function ($b) {
             return  number_format($b);
         })->sortable();
@@ -146,6 +149,7 @@ class TenantPaymentController extends AdminController
         $form->number('balance', __('Balance'))->rules('required')->required();         
                 $form->textarea('details', __('Details')); 
         */
+        $form->text('months', __('Number of months'))->attribute(['type'=>'number']);
         $form->decimal('amount', __('Amount Paid'))->rules('required')->required();
 
         $form->radio('payment_method', __('Payment method'))

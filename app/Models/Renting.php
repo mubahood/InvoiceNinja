@@ -47,6 +47,7 @@ class Renting extends Model
         self::created(function ($m) {
             $m->process_bill();
         });
+        
         self::updated(function ($m) {
             if ($m->update_billing == 'Yes') {
                 $m->process_bill();

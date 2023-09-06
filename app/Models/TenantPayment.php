@@ -63,7 +63,34 @@ class TenantPayment extends Model
              {$rent->number_of_months} months from {$stat_rent} to {$end_rent}. 
              Invoice no. #{$rent->id}.";
 
+            self::process_commission($m);
             return $m;
         });
     }
+
+    public static function process_commission($m)
+    {
+        $room_id = Renting::find($m->renting_id)->value('room_id');
+        
+        $room = Room::find($room_id);
+        if ($room == null) {
+            throw new Exception("House not found while billing.", 1);
+        }
+
+        if ($room->commission_type == 1) {
+            $m->commission_type = 'Flat Rate';
+            $m->commission_type_value = $room->flate_rate_amount;
+            $m->commission_amount = $room->flate_rate_amount * $m->number_of_months;
+        } else {
+            $m->commission_type = 'Percentage';
+            $m->commission_type_value = $room->percentage_rate;
+            $m->commission_amount = ($room->percentage_rate / 100) * ($m->amount * $m->months);
+        
+        }
+
+        $m->landlord_amount = ($m->amount * $m->months) - (($room->percentage_rate / 100) * ($m->amount * $m->months));
+        error_log($m->landlord_amount);
+      
+    }
+
 }
