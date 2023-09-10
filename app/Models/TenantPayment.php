@@ -70,7 +70,7 @@ class TenantPayment extends Model
         self::creating(function ($m) {
             $rent = Renting::find($m->renting_id);
             if ($rent == null) {
-                $rent->delete();
+                $m->delete();
                 throw new Exception("Invoice not found.", 1);
             }
 
