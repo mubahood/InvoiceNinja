@@ -30,7 +30,9 @@ class TenantPaymentController extends AdminController
         foreach (TenantPayment::all() as $key => $value) {
             try {
                 $value = $value->process_commission($value);
+                $value->details .= '.';
             } catch (\Throwable $th) {
+                $value->delete(); 
                 echo $th->getMessage()."<hr>"; 
             }
             echo ($value->landlord_amount . "<br>");
