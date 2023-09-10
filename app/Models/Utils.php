@@ -502,8 +502,7 @@ administrator_id
             echo ($value->landlord_amount . "<br>");
             $value->save();
         }
-
-
+ 
         foreach (Renting::where(
             'invoice_as_been_billed',
             '!=',

@@ -33,6 +33,11 @@ class TenantPaymentController extends AdminController
         $grid->filter(function ($filter) {
             // Remove the default id filter
             $filter->disableIdFilter();
+
+            $filter->equal('landload_id', 'Filter by landlord')
+                ->select(
+                    Landload::where([])->orderBy('name', 'Asc')->get()->pluck('name', 'id')
+                );
             $filter->equal('tenant_id', 'Filter By Tenant')
                 ->select(
                     Tenant::get_items()
@@ -77,12 +82,14 @@ class TenantPaymentController extends AdminController
             ->display(function ($b) {
                 return  number_format($b);
             })->sortable();
+
         $grid->column('landlord_amount', __('Landlord (UGX)'))
             ->display(function ($x) {
                 return number_format($x);
             })->totalRow(function ($x) {
                 return  number_format($x);
             })->sortable();
+
         $grid->column('commission_amount', __('Commision (UGX)'))
             ->display(function ($x) {
                 return number_format($x);

@@ -25,15 +25,7 @@ class LandloadController extends AdminController
      */
     protected function grid()
     {
-        $load = Landload::find(41);
-        $load->update_balance();
-        die(); 
-        $loads = Landload::all();
-        foreach ($loads as $load) {
-            $load->balance = $load->balance();
-            $load->fully_paid = $load->fully_paid();
-        }
-        
+
 
         $grid = new Grid(new Landload());
 
@@ -59,7 +51,7 @@ class LandloadController extends AdminController
         $grid->column('email', __('Email'))->hide();
         $grid->column('phone_number', __('Phone number'));
         $grid->column('phone_number_2', __('Phone number 2'))->hide();
-        $grid->column('address', __('Address'))->sortable();
+        $grid->column('address', __('Address'))->hide()->sortable();
 
         $grid->column('fully_paid', __('Fully Paid'))
             ->dot([
@@ -78,14 +70,23 @@ class LandloadController extends AdminController
             });
         $grid->column('rentings', __('Total Rentings (UGX)'))
             ->display(function ($x) {
-                $rentings = $this->rentings->sum('landlord_amount');
+                $rentings = $this->rentings->count();
                 return "<a class=\"d-block text-primary text-center\" title=\"Click to view these renting\" target=\"_blank\" href='" . admin_url('rentings') . "?landload_id={$this->id}'><b>" . number_format($rentings) . "</b></a>";
             });
-        $grid->column('paid_amount', __('Amount Paid (UGX)'))
+        $grid->column('payable_amount', __('Payable Amount (UGX)'))
             ->display(function ($x) {
-                $rentings = $this->payments->sum('amount');
-                return "<a class=\"d-block text-primary text-center\" title=\"Click to view these payments\" target=\"_blank\" href='" . admin_url('landload-payments') . "?landload_id={$this->id}'><b>" . number_format($rentings) . "</b></a>";
-            });
+                return "<a class=\"d-block text-primary text-center\" title=\"Click to view these payments\" target=\"_blank\" href='" . admin_url('tenant-payments') . "?landload_id={$this->id}'><b>" . number_format($x) . "</b></a>";
+            })->totalRow(function ($x) {
+                return  number_format($x);
+            })->sortable();
+
+        $grid->column('paid_amount', __('Paid Amount (UGX)'))
+            ->display(function ($x) {
+                return "<a class=\"d-block text-primary text-center\" title=\"Click to view these payments\" target=\"_blank\" href='" . admin_url('landload-payments') . "?landload_id={$this->id}'><b>" . number_format($x) . "</b></a>";
+            })->totalRow(function ($x) {
+                return  number_format($x);
+            })->sortable();
+
         $grid->column('balance', __('Balance (UGX)'))
             ->display(function ($x) {
                 return number_format($x);
