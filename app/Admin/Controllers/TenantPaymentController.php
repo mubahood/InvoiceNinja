@@ -34,6 +34,7 @@ class TenantPaymentController extends AdminController
                 echo $th->getMessage()."<hr>"; 
             }
             echo ($value->landlord_amount . "<br>");
+            $value->save();
         }
         die('Done');
 
