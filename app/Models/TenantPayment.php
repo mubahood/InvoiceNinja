@@ -133,4 +133,13 @@ class TenantPayment extends Model
 
         return $m;
     }
+
+    public function house()
+    {
+        return $this->belongsTo(House::class);
+    }
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
 }

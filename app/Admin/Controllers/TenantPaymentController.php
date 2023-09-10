@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\Landload;
 use App\Models\Renting;
 use App\Models\Tenant;
 use App\Models\TenantPayment;
@@ -27,18 +28,6 @@ class TenantPaymentController extends AdminController
      */
     protected function grid()
     {
-        foreach (TenantPayment::all() as $key => $value) {
-            try {
-                $value = $value->process_commission($value);
-                $value->details .= '.';
-            } catch (\Throwable $th) {
-                $value->delete(); 
-                echo $th->getMessage()."<hr>"; 
-            }
-            echo ($value->landlord_amount . "<br>");
-            $value->save();
-        }
-        die('Done');
 
         $grid = new Grid(new TenantPayment());
         $grid->filter(function ($filter) {
@@ -78,7 +67,7 @@ class TenantPaymentController extends AdminController
         $grid->column('renting_id', __('Renting'))
             ->display(function ($x) {
                 if ($this->renting == null) return $x;
-                return Utils::my_date($this->renting->start_date) . " - " . Utils::my_date($this->renting->end_date);
+                return Utils::my_date($this->renting->start_date) . " - " . Utils::my_date($this->renting->end_date) . " Inoive #" . $this->renting_id;
             })
             ->sortable();
         $grid->column('tenant_id', __('Tenant'))->display(function () {
@@ -88,13 +77,13 @@ class TenantPaymentController extends AdminController
             ->display(function ($b) {
                 return  number_format($b);
             })->sortable();
-        $grid->column('landlord_amount', __('Landlord'))
+        $grid->column('landlord_amount', __('Landlord (UGX)'))
             ->display(function ($x) {
                 return number_format($x);
             })->totalRow(function ($x) {
                 return  number_format($x);
             })->sortable();
-        $grid->column('commission_amount', __('Commision'))
+        $grid->column('commission_amount', __('Commision (UGX)'))
             ->display(function ($x) {
                 return number_format($x);
             })->totalRow(function ($x) {
@@ -113,7 +102,30 @@ class TenantPaymentController extends AdminController
         $grid->column('balance', __('Balance (UGX)'))->display(function ($b) {
             return  number_format($b);
         })->sortable();
-        $grid->column('details', __('Details'));
+
+
+
+        $grid->column('house_id', __('House'))
+            ->display(function ($x) {
+                return $this->house->name;
+            })
+            ->hide()
+            ->sortable();
+        $grid->column('room_id', __('Room'))
+            ->display(function ($x) {
+                return $this->room->name_text;
+            })->sortable();
+        $grid->column('landload_id', __('Landlord'))->display(function ($x) {
+            $loc = Landload::find($x);
+            if ($loc != null) {
+                return $loc->name;
+            }
+            return $x;
+        })->sortable();
+
+
+
+        $grid->column('details', __('Details'))->hide();
 
         $grid->column('print', __('PRINT RECEIPT'))->display(function () {
             $link = url('receipt?id=' . $this->id);
@@ -180,7 +192,6 @@ class TenantPaymentController extends AdminController
         $form->number('balance', __('Balance'))->rules('required')->required();         
                 $form->textarea('details', __('Details')); 
         */
-        $form->text('months', __('Number of months'))->attribute(['type' => 'number']);
         $form->decimal('amount', __('Amount Paid'))->rules('required')->required();
 
         $form->radio('payment_method', __('Payment method'))
