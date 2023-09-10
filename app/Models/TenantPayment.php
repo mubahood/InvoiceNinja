@@ -54,6 +54,14 @@ class TenantPayment extends Model
             $landlord->update_balance();
             return $m;
         });
+        self::deleted(function ($m) { 
+            $landlord = Landload::find($m->landload_id);
+            if ($landlord != null) {
+                $landlord->update_balance();
+            }
+
+            return $m;
+        });
         self::updating(function ($m) {
             $m = self::process_commission($m);
             return $m;
