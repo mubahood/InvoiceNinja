@@ -25,6 +25,16 @@ class LandloadController extends AdminController
      */
     protected function grid()
     {
+        $load = Landload::find(41);
+        $load->update_balance();
+        die(); 
+        $loads = Landload::all();
+        foreach ($loads as $load) {
+            $load->balance = $load->balance();
+            $load->fully_paid = $load->fully_paid();
+        }
+        
+
         $grid = new Grid(new Landload());
 
         $grid->filter(function ($filter) {

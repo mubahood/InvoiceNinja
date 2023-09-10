@@ -37,12 +37,27 @@ class Landload extends Model
 
     public function update_balance()
     {
-        $this->balance = $this->rentings->sum('landlord_amount') - $this->payments->sum('amount');
-        if ($this->balance < 1) {
+
+        $payable_amount = 0;
+        $paid_amount = 0;
+        $balance = 0;
+        foreach ($this->rentings as $renting) {
+            if ($renting->payments != null) {
+                $payable_amount += $renting->payments->sum('landlord_amount');
+            }
+        }
+        foreach ($this->payments as $payment) {
+            $paid_amount += $payment->amount;
+        }
+        $balance = $payable_amount - $paid_amount;
+        if ($balance < 1) {
             $this->fully_paid = 'Yes';
         } else {
             $this->fully_paid = 'No';
         }
+        $this->payable_amount = $payable_amount;
+        $this->paid_amount = $paid_amount;
+        $this->balance = $balance;
         $this->save();
     }
 

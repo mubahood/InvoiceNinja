@@ -27,6 +27,16 @@ class TenantPaymentController extends AdminController
      */
     protected function grid()
     {
+        foreach (TenantPayment::all() as $key => $value) {
+            try {
+                $value = $value->process_commission($value);
+            } catch (\Throwable $th) {
+                echo $th->getMessage()."<hr>"; 
+            }
+            echo ($value->landlord_amount . "<br>");
+        }
+        die('Done');
+
         $grid = new Grid(new TenantPayment());
         $grid->filter(function ($filter) {
             // Remove the default id filter
@@ -64,8 +74,8 @@ class TenantPaymentController extends AdminController
 
         $grid->column('renting_id', __('Renting'))
             ->display(function ($x) {
-                if($this->renting == null) return $x;
-                return Utils::my_date($this->renting->start_date)." - ".Utils::my_date($this->renting->end_date);
+                if ($this->renting == null) return $x;
+                return Utils::my_date($this->renting->start_date) . " - " . Utils::my_date($this->renting->end_date);
             })
             ->sortable();
         $grid->column('tenant_id', __('Tenant'))->display(function () {
@@ -75,7 +85,7 @@ class TenantPaymentController extends AdminController
             ->display(function ($b) {
                 return  number_format($b);
             })->sortable();
-            $grid->column('landlord_amount', __('Landlord'))
+        $grid->column('landlord_amount', __('Landlord'))
             ->display(function ($x) {
                 return number_format($x);
             })->totalRow(function ($x) {
@@ -89,13 +99,13 @@ class TenantPaymentController extends AdminController
             })->sortable();
 
         $grid->column('commission_type', __('Commision Calculation'))
-        ->display(function ($x) {
-            if ($x == 'Percentage') {
-                return $this->commission_type_value . "%";
-            } else {
-                return   "UGX " . number_format($this->commision_type_value);
-            }
-        })->sortable();
+            ->display(function ($x) {
+                if ($x == 'Percentage') {
+                    return $this->commission_type_value . "%";
+                } else {
+                    return   "UGX " . number_format($this->commision_type_value);
+                }
+            })->sortable();
 
         $grid->column('balance', __('Balance (UGX)'))->display(function ($b) {
             return  number_format($b);
@@ -106,7 +116,6 @@ class TenantPaymentController extends AdminController
             $link = url('receipt?id=' . $this->id);
             return '<b><a target="_blank" href="' . $link . '">PRINT RECEIPT</a></b>';
         });
-
 
         $grid->column('payment_method', __('Payment method'))->hide();
         $grid->column('payment_destination', __('Payment destination'))->hide();
@@ -168,7 +177,7 @@ class TenantPaymentController extends AdminController
         $form->number('balance', __('Balance'))->rules('required')->required();         
                 $form->textarea('details', __('Details')); 
         */
-        $form->text('months', __('Number of months'))->attribute(['type'=>'number']);
+        $form->text('months', __('Number of months'))->attribute(['type' => 'number']);
         $form->decimal('amount', __('Amount Paid'))->rules('required')->required();
 
         $form->radio('payment_method', __('Payment method'))

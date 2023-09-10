@@ -37,17 +37,28 @@ class TenantPayment extends Model
     {
         parent::boot();
         self::created(function ($m) {
-
             $m->process_balance($m);
-
+            $landlord = Landload::find($m->landload_id);
+            if ($landlord == null) {
+                throw new Exception("Landlord not found.", 1);
+            }
+            $landlord->update_balance();
             return $m;
         });
         self::updated(function ($m) {
-
             $m->process_balance($m);
-
+            $landlord = Landload::find($m->landload_id);
+            if ($landlord == null) {
+                throw new Exception("Landlord not found.", 1);
+            }
+            $landlord->update_balance();
             return $m;
         });
+        self::updating(function ($m) {
+            $m = self::process_commission($m);
+            return $m;
+        });
+
         self::creating(function ($m) {
             $rent = Renting::find($m->renting_id);
             if ($rent == null) {
@@ -63,38 +74,50 @@ class TenantPayment extends Model
              {$rent->number_of_months} months from {$stat_rent} to {$end_rent}. 
              Invoice no. #{$rent->id}.";
 
-            self::process_commission($m);
+            $m = self::process_commission($m);
             return $m;
         });
     }
 
+    public function landlord()
+    {
+        return $this->belongsTo(Landload::class, 'landload_id');
+    }
+
     public static function process_commission($m)
     {
-        $room_id = Renting::find($m->renting_id)->value('room_id');
-        
+
+        $rent = Renting::find($m->renting_id);
+
+        if ($rent == null) {
+            throw new Exception("Invoice not found.", 1);
+        }
+        $room_id = $rent->room_id;
+
         $room = Room::find($room_id);
         if ($room == null) {
             throw new Exception("House not found while billing.", 1);
         }
 
         if ($room->commission_type == 1) {
-            $total_rent = $m->amount * $m->months;
-            $commission = $room->flate_rate_amount * $m->months;
+            $total_rent = $m->amount;
+            $commission = $room->flate_rate_amount;
             $m->commission_type = 'Flat Rate';
             $m->commission_type_value = $room->flate_rate_amount;
             $m->commission_amount =  $commission;
             $m->landlord_amount = $total_rent - $commission;
-
         } else {
-            $total_rent = $m->amount * $m->months;
+            $total_rent = $m->amount;
             $commission =  ($room->percentage_rate / 100) * $total_rent;
             $m->commission_type = 'Percentage';
             $m->commission_type_value = $room->percentage_rate;
             $m->commission_amount = $commission;
             $m->landlord_amount = $total_rent - $commission;
-        
         }
-      
-    }
+        $m->house_id = $room->house_id;
+        $m->room_id = $room->id;
+        $m->landload_id = $room->landload_id;
 
+        return $m;
+    }
 }

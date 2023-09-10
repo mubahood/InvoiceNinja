@@ -47,7 +47,7 @@ class Renting extends Model
         self::created(function ($m) {
             $m->process_bill();
         });
-        
+
         self::updated(function ($m) {
             if ($m->update_billing == 'Yes') {
                 $m->process_bill();
@@ -128,7 +128,7 @@ class Renting extends Model
         if ($m->tenant != null) {
             $m->tenant->update_balance();
         }
-        $landload->update_balance();
+        //$landload->update_balance();
     }
 
     //$form->number('', __('Payable amount'));
