@@ -503,7 +503,11 @@ administrator_id
             $value->save();
         }
  
-        foreach (Renting::where([])->get() as $key => $inv) {
+        foreach (Renting::where([/* 
+            'invoice_as_been_billed',
+            '!=',
+            'Yes'
+         */])->get() as $key => $inv) {
             $inv->process_bill();
             echo $inv->id . ". INVOICE - " . $inv->name . ", BALANCE {$inv->balance} <br>";
         }

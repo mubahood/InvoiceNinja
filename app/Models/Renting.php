@@ -99,13 +99,7 @@ class Renting extends Model
         if ($room == null) {
             throw new Exception("House not found while billing.", 1);
         }
-
-        $landload = Landload::find($room->landload_id);
-        if ($landload == null) {
-            throw new Exception("landload not found while billing.", 1);
-        }
-        $m->landload_id = $landload->id;
-
+  
 
         $m->payable_amount = ($room->price * $m->number_of_months);
         $m->balance = -1 * (($room->price * $m->number_of_months) - $m->discount);
@@ -127,8 +121,7 @@ class Renting extends Model
         $room->save();
         if ($m->tenant != null) {
             $m->tenant->update_balance();
-        }
-        $landload->update_balance();
+        } 
     }
 
     //$form->number('', __('Payable amount'));
