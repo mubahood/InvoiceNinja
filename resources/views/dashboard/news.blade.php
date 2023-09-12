@@ -23,7 +23,7 @@ use App\Models\Utils;
     <!--begin::Header-->
     <div class="d-flex justify-content-between px-3 px-md-4 ">
         <h3>
-            <b>News</b>
+            <b>Reminders</b>
         </h3>
         <div>
             <a href="{{ admin_url('/') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">

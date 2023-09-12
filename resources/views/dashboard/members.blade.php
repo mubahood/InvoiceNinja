@@ -19,7 +19,7 @@ use App\Models\Utils;
     <!--begin::Header-->
     <div class="d-flex justify-content-between px-3 px-md-4 ">
         <h3>
-            <b>Recently Registered Cases</b>
+            <b>Recently Submited Applications</b>
         </h3>
         <div>
             <a href="{{ admin_url('/') }}" class="btn btn-sm btn-primary mt-md-4 mt-4">
@@ -35,7 +35,7 @@ use App\Models\Utils;
                 <!--begin::Table head-->
                 <thead>
                     <tr class="fw-bolder text-muted">
-                        <th class="min-w-200px">Case</th>
+                        <th class="min-w-200px">Application</th>
                         <th class="min-w-150px">Current Stage</th>
                         <th class="text-right">Action</th>
                     </tr>
@@ -46,7 +46,7 @@ use App\Models\Utils;
                         <tr>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <div
+                                    {{-- <div
                                         style="
                                     background-image: url({{ url('storage/' . $i->photo) }});
                                     background-position: center;
@@ -54,19 +54,16 @@ use App\Models\Utils;
                                     border-radius: 8px;
                                     width: 8rem!important; height: 8rem!important;
                                     ">
-                                    </div>
+                                    </div> --}}
                                     <div class="d-flex justify-content-start flex-column pl-3">
                                         <a href="{{ admin_url('/candidates/' . $i->id) }}"
                                             style="color: black; font-weight: 600;"
-                                            class="text-dark fw-bolder text-hover-primary fs-6">{{ Str::limit($i->name, 20) }}</a>
+                                            class="text-dark fw-bolder text-hover-primary fs-6">{{ Str::limit($i->applicant_name, 35) }}</a>
                                         <span
-                                            class="text-muted fw-bold text-muted d-block fs-7">{{ $i->sub->name_text }}</span>
+                                            class="text-muted fw-bold text-muted d-block fs-7">{{ $i->street }}</span>
+
                                         <span class="text-muted fw-bold text-muted d-block fs-7">
-                                            <b class="p-0 m-0 small text-dark">SEX:</b>
-                                            {{ Str::of($i->sex)->limit(10) }}
-                                        </span>
-                                        <span class="text-muted fw-bold text-muted d-block fs-7">
-                                            <b class="p-0 m-0 small text-dark">REGISTRED: </b>
+                                            <b class="p-0 m-0 small text-dark">DATE: </b>
                                             {{ Utils::my_date($i->created_at) }}
                                         </span>
                                     </div>
@@ -80,8 +77,8 @@ use App\Models\Utils;
 
                             </td>
                             <td class="text-end">
-                                <p class="p-0 m-0"><b>COUNTRY:</b> {{ $i->destination_country }}</p>
-                                <p class="p-0 m-0"><b>JOB:</b> {{ Str::limit($i->job_type, 20) }}</p>
+                                <p class="p-0 m-0"><b>CATEGORY:</b> {{ $i->destination_country }}</p>
+                                <p class="p-0 m-0"><b>Address:</b> {{ Str::limit($i->physical_address, 20) }}</p>
                                 <p class="p-0 m-0"><b>EMAIL:</b> {{ Str::limit($i->email, 20) }}</p>
                             </td>
                             <td>
@@ -90,21 +87,21 @@ use App\Models\Utils;
                                         class="btn btn-icon btn-bg-light  text-primary  me-1 p-0 px-2 m-0"
                                         style="font-size: 12px;">
                                         <i class="fa fa-eye"></i>
-                                        <span>View profile</span>
+                                        <span>Action 1</span>
                                     </a>
                                     <br>
                                     <a href="mailto:{{ $i->email }}" title="View profile"
                                         class="btn btn-icon btn-bg-light  text-primary  me-1 p-0 px-2 m-0"
                                         style="font-size: 12px;">
                                         <i class="fa fa-envelope"></i>
-                                        <span>Send email</span>
+                                        <span>Action 2</span>
                                     </a>
                                     <br>
                                     <a href="tel:{{ $i->phone_number }}" title="View profile"
                                         class="btn btn-icon btn-bg-light  text-primary  me-1 p-0 px-2 m-0"
                                         style="font-size: 12px;">
                                         <i class="fa fa-phone"></i>
-                                        <span>Call {{ $i->first_name }}</span>
+                                        <span>Action 3</span>
                                     </a>
 
 

@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Application;
 use App\Models\Association;
 use App\Models\Candidate;
 use App\Models\Garden;
@@ -64,121 +65,47 @@ class HomeController extends Controller
 
         $faker = Faker::create();
         for ($i = 0; $i < 100; $i++) {
-            $inv = new Invoice();
-            $inv->customer_name = $names[rand(0, (count($names) - 1))];
-            $inv->invoice_date =  $faker->dateTimeBetween('-2 month');
-            $inv->customer_address =  $faker->address();
-            $inv->customer_address =  $faker->address();
-            $inv->customer_contact =  $faker->phoneNumber();
-            $inv->save();
-            $max = rand(4, 20);
-
-            for ($j = 0; $j < $max; $j++) {
-                $item = new InvoiceItem();
-                $item->invoice_id = $inv->id;
-                $item->product_id = rand(1, 49);
-                $item->quantity = rand(1, 20);
-                $item->save();
-            }
-        }
-
- 
-    
-
-
-
-        */
-        /*         $medical_supplies = array(
-            'Adhesive bandages',
-            'Gauze pads',
-            'Medical gloves',
-            'Alcohol swabs',
-            'Thermometers',
-            'Blood glucose meters',
-            'Blood pressure monitors',
-            'Nebulizers',
-            'Inhalers',
-            'Stethoscopes',
-            'Tongue depressors',
-            'Suture kits',
-            'Scalpels',
-            'Surgical masks',
-            'Face shields',
-            'Eye shields',
-            'Protective gowns',
-            'Isolation gowns',
-            'Sterile drapes',
-            'Surgical sponges',
-            'Surgical towels',
-            'Surgical blades',
-            'Sterile syringes',
-            'Sterile needles',
-            'Intravenous catheters',
-            'Intravenous fluid bags',
-            'Urine collection bags',
-            'Foley catheters',
-            'Ostomy bags',
-            'Wound dressings',
-            'Surgical tape',
-            'Adhesive remover',
-            'Splints',
-            'Casts',
-            'Crutches',
-            'Walkers',
-            'Wheelchairs',
-            'Oxygen tanks',
-            'Nasal cannulas',
-            'Tracheostomy tubes',
-            'Feeding tubes',
-            'Nasogastric tubes',
-            'Urinary catheterization kits',
-            'Electrocardiogram machines',
-            'Ultrasound machines',
-            'X-ray machines',
-            'CT scanners',
-            'MRI machines',
-            'Defibrillators',
-            'Pacemakers'
-        );
-
-        foreach ($medical_supplies as $key => $v) {
-            $p = new Product();
-            $p->quantity = rand(1, 100);
-            $p->administrator_id = 1;
-            $p->name = $v;
-            $p->details = 'Some details';
-            $p->photo = rand(1, 10) . ".jpg";
-            $p->price = [
-                500,
-                1000,
-                2000,
-                5000,
-                10000,
-                50000,
-                15000,
-                36000,
-                3600,
-                8600,
-                1800,
-                12900,
-                29900,
-                80000,
-                28000,
-                76000,
-                77000,
-                80000,
-                28000,
-                76000,
-                77000,
-                8700,
-                1200,
-                3200,
-            ][rand(0, 23)];
-            $p->save();
-        }
-
-        $p->save();
-        die('onde');
+            $ap = new Application();
+            $date = new Carbon();
+            $date->subDays(rand(1, 100));
+            $ap->updated_at = $date;
+            $ap->registry = $names[rand(0, count($names) - 1)];
+            $ap->application_number = $faker->randomNumber(5);
+            $ap->year = $faker->year();
+            $ap->respondent = $names[rand(0, count($names) - 1)];
+            $ap->applicant_name = $names[rand(0, count($names) - 1)];
+            $ap->nature_of_business = $faker->sentence(3);
+            $ap->postal_address = $faker->address();
+            $ap->physical_address = $faker->address();
+            $ap->plot_number = $faker->randomNumber(5);
+            $ap->street = $faker->streetName();
+            $ap->village = $faker->streetName();
+            $ap->telephone_number = $faker->phoneNumber();
+            $ap->fax_number = $faker->phoneNumber();
+            $ap->email = $faker->email();
+            $ap->tin = $faker->randomNumber(5);
+            $ap->income_tax_file_number = $faker->randomNumber(5);
+            $ap->vat_number = $faker->randomNumber(5);
+            $ap->tax_decision_office = $faker->randomNumber(5);
+            $ap->tax_type = $faker->randomNumber(5);
+            $ap->assessment_number = $faker->randomNumber(5);
+            $ap->bill_of_entry = $faker->randomNumber(5);
+            $ap->bank_payment = $faker->randomNumber(5);
+            $ap->amount_of_tax = $faker->randomNumber(5);
+            $ap->taxation_decision_date = $faker->date();
+            $ap->statement_of_facts = $faker->sentence(3);
+            $ap->decision_issue = $faker->sentence(3);
+            $ap->list_of_books = $faker->sentence(3);
+            $ap->witness_names = $faker->sentence(3);
+            $ap->dated_at = $faker->date();
+            $ap->sign = $faker->sentence(3);
+            $ap->date_of_filling = $faker->date();
+            $ap->sign1 = $faker->sentence(3);
+            $ap->date2 = $faker->date();
+            $ap->sign2 = $faker->sentence(3);
+            $ap->stage = 'Pending';
+            $ap->save(); 
+        } 
  */
 
         $u = Auth::user();
@@ -230,9 +157,18 @@ class HomeController extends Controller
             $row->column(3, function (Column $column) {
                 $column->append(view('widgets.box-5', [
                     'is_dark' => false,
-                    'title' => 'STAGE 1',
+                    'title' => 'Pending',
                     'sub_title' => NULL,
-                    'number' => number_format(11),
+                    'number' => number_format(Application::where('stage', 'Pending')->count()),
+                    'link' => ''
+                ]));
+            });
+            $row->column(3, function (Column $column) {
+                $column->append(view('widgets.box-5', [
+                    'is_dark' => false,
+                    'title' => 'Waiting for Hearing',
+                    'sub_title' => NULL,
+                    'number' => number_format(Application::where('stage', 'Hearing')->count()),
                     'link' => ''
                 ]));
             });
@@ -240,19 +176,9 @@ class HomeController extends Controller
             $row->column(3, function (Column $column) {
                 $column->append(view('widgets.box-5', [
                     'is_dark' => false,
-                    'title' => 'STAGE 2',
+                    'title' => 'Under Mediation',
                     'sub_title' => NULL,
-                    'number' => number_format(11),
-                    'link' => ''
-                ]));
-            });
-
-            $row->column(3, function (Column $column) {
-                $column->append(view('widgets.box-5', [
-                    'is_dark' => false,
-                    'title' => 'STAGE 3',
-                    'sub_title' => NULL,
-                    'number' => number_format(12),
+                    'number' => number_format(Application::where('stage', 'Mediation')->count()),
                     'link' => ''
                 ]));
             });
@@ -260,9 +186,9 @@ class HomeController extends Controller
             $row->column(3, function (Column $column) {
                 $column->append(view('widgets.box-5', [
                     'is_dark' => true,
-                    'title' => 'STAGE 4',
+                    'title' => 'In Court',
                     'sub_title' => NULL,
-                    'number' => number_format(12),
+                    'number' => number_format(Application::where('stage', 'Court')->count()),
                     'link' => ''
                 ]));
             });

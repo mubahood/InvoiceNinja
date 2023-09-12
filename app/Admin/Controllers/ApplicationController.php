@@ -75,6 +75,11 @@ class ApplicationController extends AdminController
             'Stage 4' => 'danger',
             'Stage 5' => 'primary',
         ]);
+        $grid->column('reminder_state', __('Reminder State'))->label([
+            'On' => 'success',
+            'Off' => 'info',
+        ]);
+        $grid->column('reminder_date', __('Reminder date'))->hide();
 
         $grid->column('print', __('PRINT'))->display(function () {
             $link = url('print?id=' . $this->id);
@@ -149,15 +154,34 @@ class ApplicationController extends AdminController
         $form->tab('Case Information', function ($form) {
             $form->divider(strtoupper('FORM TAT 1'));
 
-            $form->select('stage', __('Case Stage'))
+            $form->radioCard('stage', __('Case Stage'))
                 ->options([
-                    'Stage 1' => 'Stage 1',
-                    'Stage 2' => 'Stage 2',
-                    'Stage 3' => 'Stage 3',
-                    'Stage 4' => 'Stage 4',
-                    'Stage 5' => 'Stage 5',
-                ])->default('APPLICATION');
+                    'Pending' => 'Pending',
+                    'Waiting for hearing' => 'Waiting for hearing',
+                    'Under mediation' => 'Under mediation',
+                    'In Court' => 'In Court',
+                    'Closed' => 'Closed',
+                ])
+                ->default('APPLICATION')
+                ->rules('required');
 
+            $form->radioCard('reminder_state', __('Set Reminder'))
+                ->options([
+                    'On' => 'On',
+                    'Off' => 'Off',
+                ])
+                ->when('On', function (Form $form) {
+                    $form->decimal('reminder_days', __('Reminder After Days'))
+                        ->rules('required')
+                        ->default(0);
+                    $form->textarea('reminder_message', __('Reminder Message'));
+                })
+                ->default('Off')
+                ->rules('required');
+            /* 
+ALTER TABLE `applications` ADD `reminder_state` VARCHAR(45) NULL DEFAULT 'Off' AFTER `stage`, ADD `reminder_days` INT NULL DEFAULT '0' AFTER `reminder_state`, ADD `reminder_date` DATETIME NULL DEFAULT NULL AFTER `reminder_days`, ADD `reminder_message` TEXT NULL DEFAULT NULL AFTER `reminder_date`;
+
+*/
             $form->text('registry', __('Registry'));
             $form->text('application_number', __('Application number'));
             $form->year('year', __('Year'))->default(date('Y-m-d'));

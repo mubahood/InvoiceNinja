@@ -15,15 +15,15 @@ Route::group([
     $router->get('/', 'HomeController@index')->name('home');
 
     $router->resource('applications', ApplicationController::class);
+    $router->resource('cases-pending', ApplicationController::class);
+    $router->resource('cases-hearing', ApplicationController::class);
+    $router->resource('cases-mediation', ApplicationController::class);
+    $router->resource('cases-court', ApplicationController::class);
+    $router->resource('cases-closed', ApplicationController::class);
     $router->resource('cases', ApplicationController::class);
 
-    $router->resource('landloads', LandloadController::class);
-    $router->resource('houses', HouseController::class);
-    $router->resource('rooms', RoomController::class);
-    $router->resource('tenants', TenantController::class);
-    $router->resource('rentings', RentingController::class);
-    $router->resource('landload-payments', LandloadPaymentController::class);
-    $router->resource('tenant-payments', TenantPaymentController::class);
+
+    $router->resource('attarchments', AttarchmentController::class);
     $router->resource('districts', DistrictController::class);
     $router->resource('sub-counties', SubcountyController::class);
 

@@ -2,6 +2,7 @@
 
 namespace Encore\Admin\Controllers;
 
+use App\Models\Application;
 use App\Models\Candidate;
 use App\Models\Event;
 use App\Models\NewsPost;
@@ -14,7 +15,10 @@ class Dashboard
 
     public static function dashboard_members()
     {
-        $members = [];
+        $members = Application::where('stage', 'Pending')
+        ->limit(10)
+        ->orderBy('created_at', 'desc')
+        ->get();
         return view('dashboard.members', [
             'items' => $members
         ]);
