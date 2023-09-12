@@ -6,7 +6,7 @@ use App\Models\Quotation;
 $c = Quotation::find($_GET['id']);
 
 //$logo_link = public_path('/storage/' . $c->photo);
-$logo_link = public_path('/logo-1.jpg');
+$logo_link = public_path('/logo-1.png');
 $sign = public_path('/sign.jpg');
 ?>
 

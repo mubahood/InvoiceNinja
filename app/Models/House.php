@@ -55,6 +55,10 @@ class House extends Model
     {
         return $this->hasMany(Room::class);
     }
+    public function tenant_payments()
+    {
+        return $this->hasMany(TenantPayment::class, 'house_id');
+    }
 
     public function occupied_rooms()
     {

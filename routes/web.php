@@ -50,6 +50,7 @@ Route::get('landlord-report', function () {
     ])->orderBy('start_date', 'DESC')
         ->limit(25)
         ->get();
+        
 
     $landlordPayments = LandloadPayment::where([
         'landload_id' => $landLord->id

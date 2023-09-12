@@ -52,16 +52,19 @@ class LandloadPaymentController extends AdminController
         $grid->column('created_at', __('Date'))->display(function ($x) {
             return Utils::my_date_time($x);
         })->sortable();
-        $grid->column('renting_id', __('Renting'))->hide();
-        $grid->column('landload_id', __('Landload'));
+        $grid->column('landload_id', __('Landload'))->display(function ($x) {
+            $loc = Landload::find($x);
+            if ($loc != null) {
+                return $loc->name;
+            }
+            return $x;
+        })->sortable();
         $grid->column('amount', __('Amount (UGX)'))->display(function ($x) {
             return number_format($x);
         })->totalRow(function ($x) {
-            return  number_format($x); 
+            return  number_format($x);
         })->sortable();
-        $grid->column('amount_payable_to_landload', __('Amount Payable To Landload'));
-        $grid->column('amount_payable_to_company', __('Amount Payable To Company'));
-
+ 
         $grid->column('details', __('Details'));
 
         return $grid;

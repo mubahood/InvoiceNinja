@@ -3,7 +3,7 @@
 $link = public_path('css/bootstrap-print.css');
 use App\Models\Utils;
 
-$logo_link = public_path('/logo-1.jpg');
+$logo_link = public_path('/logo-1.png');
 $sign = public_path('/sign.jpg');
 ?>
 <!DOCTYPE html>
@@ -290,7 +290,7 @@ $sign = public_path('/sign.jpg');
         <table class="w-100 ">
             <tbody>
                 <tr>
-                    <td style="width: 10%;" class="pr-2">
+                    <td style="width: 25%;" class="pr-2">
                         <img class="img-fluid" src="{{ $logo_link }}">
                     </td>
                     <td class=" text-center">
@@ -312,7 +312,36 @@ $sign = public_path('/sign.jpg');
         @include('components.detail-item', ['t' => 'Phone number', 's' => $landLord->phone_number])
         @include('components.detail-item', ['t' => 'Address', 's' => $landLord->address])
 
-        <p class="my-h2 mb-3">Summary Report - As On {{ Utils::my_date(time()) }}</p>
+
+        <p class="my-h2 mt-3 mb-2">RECENT LANDLORD PAYMENTS (Transactions)</p>
+        <table class="table table-bordered my-table">
+            <thead style="" class="table   table-bordered">
+                <tr>
+                    <th style="border-color: black; ">S/n.</th>
+                    <th style="border-color: black; ">Date</th>
+                    <th style="border-color: black; ">Description</th>
+                    <th style="border-color: black; ">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $i = 0;
+                @endphp
+                @foreach ($landlordPayments as $trans)
+                    @php
+                        $i++;
+                    @endphp
+                    <tr>
+                        <td>{{ $i }}</td>
+                        <td>{{ Utils::my_date($trans->created_at) }}</td>
+                        <td>{{ $trans->details }}</td>
+                        <td>UGX {{ number_format($trans->amount) }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        {{--    <p class="my-h2 mb-3">Summary Report - As On {{ Utils::my_date(time()) }}</p>
         <table class="table table-bordered my-table">
             <thead style="background-color: black;" class="table text-white  table-bordered">
                 <tr>
@@ -349,7 +378,52 @@ $sign = public_path('/sign.jpg');
                     </td>
                 </tr>
             </tbody>
+        </table> --}}
+
+        <p class="my-h2 mt-3 mb-2 title">TENANT PAYMENTS (Receipts)</p>
+        <table class="table table-bordered my-table">
+            <thead style="" class="table   table-bordered">
+                <tr>
+                    <th style="border-color: black; ">S/n.</th>
+                    <th style="border-color: black; ">Date</th>
+                    <th style="border-color: black; ">Renting</th>
+                    <th style="border-color: black; ">Tenant</th>
+                    <th style="border-color: black; ">Paid Amount (UGX)</th>
+                    <th style="border-color: black; ">Landlord (UGX)</th>
+                    <th style="border-color: black; ">Commision (UGX)</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach ($landLord->houses as $house)
+                    @php
+                        $i = 0;
+                    @endphp
+                    <thead>
+                        <th colspan="7">Estate {{ $house->name }}</th>
+                    </thead>
+                    @foreach ($house->tenant_payments as $rent)
+                    @endforeach
+                    @php
+                        $i++;
+                        $renting = '-';
+                        if ($rent->renting != null) {
+                            $renting = Utils::my_date($rent->renting->start_date) . ' - ' . Utils::my_date($rent->renting->end_date) . ' Inoive #' . $rent->renting_id;
+                        }
+                    @endphp
+                    <tr>
+                        <td>{{ $i }}</td>
+                        <td>{{ Utils::my_date_4($rent->created_at) }}</td>
+                        <td>{{ $renting }}</td>
+                        <td>{{ $rent->tenant->name }}</td>
+                        <td>{{ number_format($rent->amount) }}</td>
+                        <td>{{ number_format($rent->landlord_amount) }}</td>
+                        <td>{{ number_format($rent->commission_amount) }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
         </table>
+
 
         <p class="my-h2 mt-3 mb-2 title">RECENT RENTINGS (Invoinces)</p>
         <table class="table table-bordered my-table">
@@ -360,11 +434,6 @@ $sign = public_path('/sign.jpg');
                     <th style="border-color: black; ">Room</th>
                     <th style="border-color: black; ">Tenant</th>
                     <th style="border-color: black; ">Months</th>
-                    <th style="border-color: black; ">Amount</th>
-                    <th stc     yle="border-color: black; ">Paid</th>
-                    <th style="border-color: black; ">Balance</th>
-                    <th style="border-color: black; ">Landlord</th>
-                    <th style="border-color: black; ">Commision</th>
                 </tr>
             </thead>
             <tbody>
@@ -381,11 +450,6 @@ $sign = public_path('/sign.jpg');
                         <td>{{ $rent->room->name_text }}</td>
                         <td>{{ $rent->tenant->name }}</td>
                         <td>{{ $rent->number_of_months }} Months</td>
-                        <td>UGX {{ number_format($rent->payable_amount) }}</td>
-                        <td>UGX {{ number_format($rent->payments->sum('amount')) }}</td>
-                        <td>UGX {{ number_format($rent->balance) }}</td>
-                        <td>UGX {{ number_format($rent->landlord_amount) }}</td>
-                        <td>UGX {{ number_format($rent->commision_amount) }}</td>
 
 
                         {{-- 
@@ -432,33 +496,7 @@ $sign = public_path('/sign.jpg');
             </tbody>
         </table>
  --}}
-        <p class="my-h2 mt-3 mb-2">RECENT LANDLOAD PAYMENTS (Transactions)</p>
-        <table class="table table-bordered my-table">
-            <thead style="" class="table   table-bordered">
-                <tr>
-                    <th style="border-color: black; ">S/n.</th>
-                    <th style="border-color: black; ">Date</th>
-                    <th style="border-color: black; ">Description</th>
-                    <th style="border-color: black; ">Amount</th>
-                </tr>
-            </thead>
-            <tbody>
-                @php
-                    $i = 0;
-                @endphp
-                @foreach ($landlordPayments as $trans)
-                    @php
-                        $i++;
-                    @endphp
-                    <tr>
-                        <td>{{ $i }}</td>
-                        <td>{{ Utils::my_date($trans->created_at) }}</td>
-                        <td>{{ $trans->details }}</td>
-                        <td>UGX {{ number_format($trans->amount) }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+
     </div>
 </body>
 
