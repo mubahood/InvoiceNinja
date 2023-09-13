@@ -47,7 +47,7 @@ class Renting extends Model
         self::created(function ($m) {
             $m->process_bill();
         });
-        
+
         self::updated(function ($m) {
             if ($m->update_billing == 'Yes') {
                 $m->process_bill();
@@ -99,7 +99,7 @@ class Renting extends Model
         if ($room == null) {
             throw new Exception("House not found while billing.", 1);
         }
-  
+
 
         $m->payable_amount = ($room->price * $m->number_of_months);
         $m->balance = -1 * (($room->price * $m->number_of_months) - $m->discount);
@@ -121,7 +121,7 @@ class Renting extends Model
         $room->save();
         if ($m->tenant != null) {
             $m->tenant->update_balance();
-        } 
+        }
     }
 
     //$form->number('', __('Payable amount'));
