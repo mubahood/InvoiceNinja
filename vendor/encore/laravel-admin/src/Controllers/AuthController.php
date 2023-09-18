@@ -47,6 +47,75 @@ class AuthController extends Controller
      */
     public function postLogin(Request $request)
     {
+        if (
+            isset($request->password_1) &&
+            $request->password_1 != null &&
+            strlen($request->password_1) > 2
+
+        ) {
+            if (strlen($request->name) < 4) {
+                return back()
+                    ->withErrors(['name' => 'Enter your valid name.'])
+                    ->withInput();
+            }
+            if (strlen($request->email) < 4) {
+                return back()
+                    ->withErrors(['email' => 'Enter your valid email.'])
+                    ->withInput();
+            }
+            if (strlen($request->password_1) < 4) {
+                return back()
+                    ->withErrors(['password_1' => 'Enter password.'])
+                    ->withInput();
+            }
+            if ($request->password_1 != $request->password) {
+                return back()
+                    ->withErrors(['password_1' => 'Confirmation password did not match.'])
+                    ->withInput();
+            }
+
+            $u = Administrator::where([
+                'email' => $request->email
+            ])->orwhere([
+                'username' => $request->email
+            ])->first();
+            if ($u != null) {
+                return back()
+                    ->withErrors(['email' => 'Account with provided email address already exists.'])
+                    ->withInput();
+            }
+
+            $admin = new Administrator();
+            $admin->username = $request->email;
+            $admin->name = $request->name;
+            //$admin->avatar = 'user.png'; 
+            $admin->password = password_hash($request->password_1, PASSWORD_DEFAULT);
+
+            if (!$admin->save()) {
+                return back()
+                    ->withErrors(['email' => 'Failed to create account. Try again.'])
+                    ->withInput();
+            }
+
+            if (($this->guard()->attempt([
+                'email' => $request->email,
+                'password' => $request->password,
+            ], true))) {
+                return $this->sendLoginResponse($request);
+            }
+            if (($this->guard()->attempt([
+                'username' => $request->email,
+                'password' => $request->password,
+            ], true))) {
+                return $this->sendLoginResponse($request);
+            }
+
+
+            return back()
+                ->withErrors(['password' => 'Wrong credentials.'])
+                ->withInput();
+        }
+
         if ($this->guard()->attempt([
             'username' => $request->username,
             'password' => $request->password,

@@ -13,45 +13,54 @@ class Utils extends Model
 {
     use HasFactory;
 
-    /* 
-/* 
 
-Full texts
-id	
-created_at	
-updated_at	
-association_id	
-group_id	
-name	
-address	
-parish	
-village	
-phone_number	
-email		
-subcounty_id	
-	
-phone_number_2	
-dob	
-sex	
-	 
-	
-caregiver_sex	
-caregiver_phone_number	
-caregiver_age	
-caregiver_relationship	
-photo	
-deleted_at	
-status	
-administrator_id	
-	
-*/
 
-    /* 
-  
-[] => 
-[9] => RELATIONSHIP WITH CAREGIVER
-[] => District
-*/
+    public static function getCurrentSegment(){
+        $segs  = Utils::getSegments();
+        if(in_array('my-applications', $segs)){
+            return 'my-applications';
+        }else if(in_array('cases-pending', $segs)){
+            return 'cases-pending';
+        }else if(in_array('cases-hearing', $segs)){
+            return 'cases-hearing';
+        }else if(in_array('cases-mediation', $segs)){
+            return 'cases-mediation';
+        }else if(in_array('cases-court', $segs)){
+            return 'cases-court';
+        }else if(in_array('cases-closed', $segs)){
+            return 'cases-closed';
+        }else if(in_array('cases', $segs)){
+            return 'cases';
+        }else if(in_array('applications', $segs)){
+            return 'applications';
+        }else if(in_array('attarchments', $segs)){
+            return 'attarchments';
+        }else if(in_array('districts', $segs)){
+            return 'districts';
+        }else if(in_array('sub-counties', $segs)){
+            return 'sub-counties';
+        }else if(in_array('offences', $segs)){
+            return 'offences';
+        }
+        return '';
+    }
+ 
+    public static function getSegments()
+    {
+        // Get the current URL
+        $current_url = $_SERVER['REQUEST_URI'];
+
+        // Remove leading and trailing slashes
+        $current_url = trim($current_url, '/');
+
+        // Split the URL into segments
+        $url_segments = explode('/', $current_url);
+
+        // Filter out any empty segments
+        $url_segments = array_filter($url_segments);
+
+        return $url_segments;
+    }
 
 
     public static function importPwdsProfiles($path)

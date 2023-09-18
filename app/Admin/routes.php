@@ -15,6 +15,7 @@ Route::group([
     $router->get('/', 'HomeController@index')->name('home');
 
     $router->resource('applications', ApplicationController::class);
+    $router->resource('my-applications', ApplicationController::class);
     $router->resource('cases-pending', ApplicationController::class);
     $router->resource('cases-hearing', ApplicationController::class);
     $router->resource('cases-mediation', ApplicationController::class);

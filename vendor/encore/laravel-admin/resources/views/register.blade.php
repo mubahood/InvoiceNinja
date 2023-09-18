@@ -47,36 +47,24 @@
             <p class="text-center" style="font-size: 18px;">Welcome To</p>
             <p class="login-box-msg h3" style="color: black; font-weight: 800;">Tax Appeals Tribunal</p>
             <hr style="background-color: rgb(255, 166, 0); height: 5px;">
-
-            <p class="text-center" style="font-size: 18px;">Register</p>
-
+            <br>
+            <p class="text-center" style="font-size: 18px;">Login</p>
+            <br>
 
             <form action="{{ admin_url('auth/login') }}" method="post">
-                <div class="form-group has-feedback {!! !$errors->has('name') ?: 'has-error' !!}">
-                    @if ($errors->has('name'))
-                        @foreach ($errors->get('name') as $name)
-                            <label class="control-label" for="inputError"><i
-                                    class="fa fa-times-circle-o"></i>{{ $name }}</label><br>
-                        @endforeach
-                    @endif
-                    <input type="text" class="form-control" placeholder="{{ 'Full name' }}" name="name"
-                        value="{{ old('name') }}" required>
-                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-                </div>
+                <div class="form-group has-feedback {!! !$errors->has('username') ?: 'has-error' !!}">
 
-
-                <div class="form-group has-feedback {!! !$errors->has('email') ?: 'has-error' !!}">
-                    @if ($errors->has('email'))
-                        @foreach ($errors->get('email') as $message)
+                    @if ($errors->has('username'))
+                        @foreach ($errors->get('username') as $message)
                             <label class="control-label" for="inputError"><i
                                     class="fa fa-times-circle-o"></i>{{ $message }}</label><br>
                         @endforeach
                     @endif
-                    <input type="text" class="form-control" placeholder="Email Address" name="email"
-                        value="{{ old('email') }}">
-                    <span class="glyphicon glyphicon-email form-control-feedback"></span>
-                </div>
 
+                    <input type="text" class="form-control" placeholder="{{ trans('admin.username') }}"
+                        name="username" value="{{ old('username') }}">
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                </div>
                 <div class="form-group has-feedback {!! !$errors->has('password') ?: 'has-error' !!}">
 
                     @if ($errors->has('password'))
@@ -90,30 +78,23 @@
                         name="password">
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 </div>
-
-                <div class="form-group has-feedback {!! !$errors->has('password_1') ?: 'has-error' !!}">
-
-                    @if ($errors->has('password_1'))
-                        @foreach ($errors->get('password_1') as $message)
-                            <label class="control-label" for="inputError"><i
-                                    class="fa fa-times-circle-o"></i>{{ $message }}</label><br>
-                        @endforeach
-                    @endif
-
-                    <input type="password" class="form-control" placeholder="Re-Password" name="password_1">
-                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-                </div>
-
                 <div class="row">
-                  
+                    <div class="col-xs-8">
+                        @if (config('admin.auth.remember'))
+                            <div class="checkbox icheck">
+                                <label>
+                                    <input type="checkbox" name="remember" value="1"
+                                        {{ !old('username') || old('remember') ? 'checked' : '' }}>
+                                    {{ trans('admin.remember_me') }}
+                                </label>
+                            </div>
+                        @endif
+                    </div>
                     <!-- /.col -->
                     <div class="col-xs-4">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <button type="submit" class="btn btn-primary btn-block btn-flat">REGISTER</button>
-                    </div>
-                    <div class="col-xs-8">
-                        <a href="{{ url('auth/login') }}">Already have account?<b>Login</b></a>
-                        <input type="hidden" name="remember" value="1">
+                        <button type="submit"
+                            class="btn btn-primary btn-block btn-flat">{{ trans('admin.login') }}</button>
                     </div>
                     <!-- /.col -->
                 </div>

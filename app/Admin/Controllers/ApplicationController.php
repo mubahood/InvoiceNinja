@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\Application;
+use App\Models\Utils;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -25,8 +26,52 @@ class ApplicationController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Application());
+        $grid->disableBatchActions();
+        $current_segment = Utils::getCurrentSegment();
 
-        $grid->model()->orderBy('id', 'desc');
+        $conditions = [];
+        $u = auth()->user();
+        if ($current_segment == 'my-applications') {
+            $conditions['user_id'] = $u->id;
+        }
+        if ($u->isRole('basic-user')) {
+            $conditions['user_id'] = $u->id;
+        }
+
+        $grid->actions(function ($actions) {
+            if ($actions->row->stage != 'Pending') {
+
+                $u = auth()->user();
+                if ($u->isRole('basic-user')) {
+                    $actions->disableEdit();
+                    $actions->disableDelete();
+                }
+            }
+        });
+
+
+
+        $grid->filter(function ($filter) {
+
+            $filter->equal('stage', 'Filte by Stage')
+                ->select([
+                    'Pending' => 'Pending',
+                    'Hearing' => 'Waiting for hearing',
+                    'Mediation' => 'Under mediation',
+                    'Court' => 'In Court',
+                    'Closed' => 'Closed',
+                ]);
+            $filter->between('created_at', 'Create Date')->date();
+            //$filter->like('school_pay_payment_code', 'By school-pay code');
+
+            // Remove the default id filter
+            $filter->disableIdFilter();
+        });
+
+
+        $grid->model()
+            ->where($conditions)
+            ->orderBy('id', 'desc');
         $grid->column('created_at', __('Created'))
             ->display(function ($created_at) {
                 return date('d-m-Y', strtotime($created_at));
@@ -69,11 +114,11 @@ class ApplicationController extends AdminController
         $grid->column('date2', __('Date2'))->hide();;
         $grid->column('sign2', __('Sign2'))->hide();
         $grid->column('stage', __('Stage'))->label([
-            'Stage 1' => 'info',
-            'Stage 2' => 'success',
-            'Stage 3' => 'warning',
-            'Stage 4' => 'danger',
-            'Stage 5' => 'primary',
+            'Pending' => 'info',
+            'Hearing' => 'primary',
+            'Mediation' => 'warning',
+            'Court' => 'success',
+            'Closed' => 'primary',
         ]);
         $grid->column('reminder_state', __('Reminder State'))->label([
             'On' => 'success',
@@ -153,31 +198,44 @@ class ApplicationController extends AdminController
 
         $form->tab('Case Information', function ($form) {
             $form->divider(strtoupper('FORM TAT 1'));
+            $u = auth()->user();
 
-            $form->radioCard('stage', __('Case Stage'))
-                ->options([
-                    'Pending' => 'Pending',
-                    'Waiting for hearing' => 'Waiting for hearing',
-                    'Under mediation' => 'Under mediation',
-                    'In Court' => 'In Court',
-                    'Closed' => 'Closed',
-                ])
-                ->default('APPLICATION')
-                ->rules('required');
+            if ($u->isRole('basic-user')) {
+                $form->hidden('user_id')->default($u->id);
+                $form->hidden('stage')->default('Pending');
+                $form->hidden('reminder_state')->default('Off');
+                $form->hidden('reminder_days')->default(0);
+                $form->hidden('reminder_message')->default('');
+            } else {
+                $form->select('user_id', __('User'))->options(\App\Models\User::all()->pluck('name', 'id'));
+                $form->radioCard('stage', __('Case Stage'))
+                    ->options([
+                        'Pending' => 'Pending',
+                        'Waiting for hearing' => 'Waiting for hearing',
+                        'Under mediation' => 'Under mediation',
+                        'In Court' => 'In Court',
+                        'Closed' => 'Closed',
+                    ])
+                    ->default('APPLICATION')
+                    ->rules('required');
+                $form->radioCard('reminder_state', __('Set Reminder'))
+                    ->options([
+                        'On' => 'On',
+                        'Off' => 'Off',
+                    ])
+                    ->when('On', function (Form $form) {
+                        $form->decimal('reminder_days', __('Reminder After Days'))
+                            ->rules('required')
+                            ->default(0);
+                        $form->textarea('reminder_message', __('Reminder Message'));
+                    })
+                    ->default('Off')
+                    ->rules('required');
+            }
 
-            $form->radioCard('reminder_state', __('Set Reminder'))
-                ->options([
-                    'On' => 'On',
-                    'Off' => 'Off',
-                ])
-                ->when('On', function (Form $form) {
-                    $form->decimal('reminder_days', __('Reminder After Days'))
-                        ->rules('required')
-                        ->default(0);
-                    $form->textarea('reminder_message', __('Reminder Message'));
-                })
-                ->default('Off')
-                ->rules('required');
+
+
+
             /* 
 ALTER TABLE `applications` ADD `reminder_state` VARCHAR(45) NULL DEFAULT 'Off' AFTER `stage`, ADD `reminder_days` INT NULL DEFAULT '0' AFTER `reminder_state`, ADD `reminder_date` DATETIME NULL DEFAULT NULL AFTER `reminder_days`, ADD `reminder_message` TEXT NULL DEFAULT NULL AFTER `reminder_date`;
 

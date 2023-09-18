@@ -155,12 +155,18 @@ class HomeController extends Controller
         $content->row(function (Row $row) {
 
             $row->column(3, function (Column $column) {
+                $conditons = [
+                    ['stage', '=', 'Pending'],
+                ];
+                if (Auth::user()->isRole('basic-user')) {
+                    $conditons[] = ['user_id', '=', Auth::user()->id];
+                }
                 $column->append(view('widgets.box-5', [
                     'is_dark' => false,
                     'title' => 'Pending',
                     'sub_title' => NULL,
-                    'number' => number_format(Application::where('stage', 'Pending')->count()),
-                    'link' => ''
+                    'number' => number_format(Application::where($conditons)->count()),
+                    'link' => 'applications?stage=Pending'
                 ]));
             });
             $row->column(3, function (Column $column) {
@@ -169,7 +175,7 @@ class HomeController extends Controller
                     'title' => 'Waiting for Hearing',
                     'sub_title' => NULL,
                     'number' => number_format(Application::where('stage', 'Hearing')->count()),
-                    'link' => ''
+                    'link' => 'applications?stage=Hearing'
                 ]));
             });
 
@@ -179,7 +185,7 @@ class HomeController extends Controller
                     'title' => 'Under Mediation',
                     'sub_title' => NULL,
                     'number' => number_format(Application::where('stage', 'Mediation')->count()),
-                    'link' => ''
+                    'link' => 'applications?stage=Mediation'
                 ]));
             });
 
@@ -189,7 +195,7 @@ class HomeController extends Controller
                     'title' => 'In Court',
                     'sub_title' => NULL,
                     'number' => number_format(Application::where('stage', 'Court')->count()),
-                    'link' => ''
+                    'link' => 'applications?stage=Court'
                 ]));
             });
         });

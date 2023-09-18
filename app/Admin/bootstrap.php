@@ -23,7 +23,18 @@ use Encore\Admin\Facades\Admin;
 use Illuminate\Support\Facades\Auth;
 use App\Admin\Extensions\Nav\Shortcut;
 use App\Admin\Extensions\Nav\Dropdown;
+use App\Models\AdminRoleUser;
 use Encore\Admin\Form;
+
+$u = Admin::user();
+if ($u != null) {
+    if ($u->roles->count() < 1) {
+        $role = new AdminRoleUser();
+        $role->role_id = 4;
+        $role->user_id = $u->id;
+        $role->save();
+    }
+}
 
 Utils::system_boot();
 

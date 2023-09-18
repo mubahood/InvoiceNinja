@@ -30,9 +30,8 @@
 </head>
 {{-- <body class="hold-transition login-page" @if (config('admin.login_background_image'))style="background: url({{config('admin.login_background_image')}}) no-repeat;background-size: cover;"@endif> --}}
 
-<body class="hold-transition login-page"
-    style="background-color: rgb(255, 166, 0);">
-    <div class="login-box" >
+<body class="hold-transition login-page" style="background-color: rgb(255, 166, 0);">
+    <div class="login-box">
         <div class="login-logo">
 
             {{-- <a href="{{ admin_url('/') }}"><b>{{ config('admin.name') }}</b></a> --}}
@@ -45,10 +44,11 @@
                 <img width="40%" src="{{ url('public/assets/images/logo.png') }}" alt="">
             </center>
             <br>
-            <hr style="background-color: rgb(255, 166, 0); height: 5px;">
-            <br>
             <p class="text-center" style="font-size: 18px;">Welcome To</p>
             <p class="login-box-msg h3" style="color: black; font-weight: 800;">Tax Appeals Tribunal</p>
+            <hr style="background-color: rgb(255, 166, 0); height: 5px;">
+            <br>
+            <p class="text-center" style="font-size: 18px;">Login</p>
             <br>
 
             <form action="{{ admin_url('auth/login') }}" method="post">
@@ -80,15 +80,8 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-8">
-                        @if (config('admin.auth.remember'))
-                            <div class="checkbox icheck">
-                                <label>
-                                    <input type="checkbox" name="remember" value="1"
-                                        {{ !old('username') || old('remember') ? 'checked' : '' }}>
-                                    {{ trans('admin.remember_me') }}
-                                </label>
-                            </div>
-                        @endif
+                        <a href="{{ url('auth/register') }}"><b>Create Account</b></a>
+                        <input type="hidden" name="remember" value="1">
                     </div>
                     <!-- /.col -->
                     <div class="col-xs-4">
@@ -99,7 +92,7 @@
                     <!-- /.col -->
                 </div>
             </form>
-            <br> 
+            <br>
 
         </div>
         <!-- /.login-box-body -->
