@@ -32,7 +32,7 @@ class EventController extends AdminController
         $conditions = [];
         $u = auth()->user();
         if (!$u->isRole('admin')) {
-            $conditions['user_id'] = $u->id;
+            $conditions['administrator_id'] = $u->id;
         }
 
         $grid->filter(function ($filter) {
