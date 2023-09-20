@@ -15,36 +15,37 @@ class Utils extends Model
 
 
 
-    public static function getCurrentSegment(){
+    public static function getCurrentSegment()
+    {
         $segs  = Utils::getSegments();
-        if(in_array('my-applications', $segs)){
+        if (in_array('my-applications', $segs)) {
             return 'my-applications';
-        }else if(in_array('cases-pending', $segs)){
+        } else if (in_array('cases-pending', $segs)) {
             return 'cases-pending';
-        }else if(in_array('cases-hearing', $segs)){
+        } else if (in_array('cases-hearing', $segs)) {
             return 'cases-hearing';
-        }else if(in_array('cases-mediation', $segs)){
+        } else if (in_array('cases-mediation', $segs)) {
             return 'cases-mediation';
-        }else if(in_array('cases-court', $segs)){
+        } else if (in_array('cases-court', $segs)) {
             return 'cases-court';
-        }else if(in_array('cases-closed', $segs)){
+        } else if (in_array('cases-closed', $segs)) {
             return 'cases-closed';
-        }else if(in_array('cases', $segs)){
+        } else if (in_array('cases', $segs)) {
             return 'cases';
-        }else if(in_array('applications', $segs)){
+        } else if (in_array('applications', $segs)) {
             return 'applications';
-        }else if(in_array('attarchments', $segs)){
+        } else if (in_array('attarchments', $segs)) {
             return 'attarchments';
-        }else if(in_array('districts', $segs)){
+        } else if (in_array('districts', $segs)) {
             return 'districts';
-        }else if(in_array('sub-counties', $segs)){
+        } else if (in_array('sub-counties', $segs)) {
             return 'sub-counties';
-        }else if(in_array('offences', $segs)){
+        } else if (in_array('offences', $segs)) {
             return 'offences';
         }
         return '';
     }
- 
+
     public static function getSegments()
     {
         // Get the current URL
@@ -616,7 +617,7 @@ class Utils extends Model
     {
         $c = Carbon::parse($t);
         if ($t == null) {
-            return $t;
+            return '-';
         }
         return $c->format('d M, Y');
     }
@@ -1029,5 +1030,143 @@ class Utils extends Model
         }
 
         return $string;
+    }
+
+
+    public static function prepare_calendar_events($u)
+    {
+
+        $conditions = [
+            'reminder_state' => 'On'
+        ];
+        if (!$u->isRole('admin')) {
+            $conditions['administrator_id'] = $u->id;
+        }
+
+        $eves = Event::where($conditions)->get();
+        $events = [];
+        foreach ($eves as $key => $event) {
+
+            $ev['title'] = substr($event->description, 0, 20) . '...';
+            $ev['start'] = Carbon::parse($event->reminder_date)->format('Y-m-d');
+            $ev['Reminder Date'] = Carbon::parse($event->event_date)->format('Y-m-d');
+            $details = "<b>Description:</b> " . $event->description . '<br>';
+            $details .= "<b>Application:</b> #" . $event->application->id . '<br>';
+            $details .= "<b>Due to:</b> " . $ev['start'] . '<br>';
+
+            $ev['type'] = "Application #" . $event->application->id . '<br>';
+            $ev['classNames'] = ['bg-success', 'border-success', 'text-white'];
+            $details .= "<b>Pririty:</b> {$event->priority}<br>";
+            $ev['administrator_id'] = $u->id;
+            $ev['details'] = $details;
+            $events[] = $ev;
+        }
+        return $events;
+
+        die();
+
+        foreach (Application::all() as $key => $app) {
+            $ev = new Event();
+            $ev->created_at = $app->created_at;
+            $ev->administrator_id = $app->user_id;
+            $ev->event_date = Carbon::now()->addDays(rand(-100, 500));
+            $ev->remind_beofre_days = rand(1, 10);
+            $ev->application_id = $app->id;
+            $ev->reminder_state = 'On';
+            $ev->outcome = Null;
+            $ev->users_to_notify = 'No';
+            $ev->reminders_sent = 'No';
+            $ev->description = "#" . $app->application_number . " - " . $app->applicant_name;
+            $ev->priority = [
+                '0' => 'Low',
+                '1' => 'Medium',
+                '2' => 'High',
+            ][rand(0, 2)];
+            $ev->save();
+        }
+
+
+        for ($i = 0; $i < 200; $i++) {
+            $ev['title'] = 'Event ' . $i;
+            $ev['start'] = Carbon::now()->addDays(rand(-100, 100))->format('Y-m-d');
+            //$ev['start'] = Carbon::parse($act->due_date)->format('Y-m-d');
+            $details = "<b>Description:</b> details: " . $i . '<br>';
+            $details .= "<b>Enterprise:</b> act name " . $i . '<br>';
+            $details .= "<b>Due to:</b> " . $ev['start'] . '<br>';
+
+            $ev['classNames'] = ['bg-success', 'border-success', 'text-white'];
+            $details .= "<b>Activity status:</b> Not Done (Missed)<br>";
+
+            $details .= "<b>Status remarks:</b> Done details: " . $i . '<br>';
+            $details .= "<b>Person responsible:</b> assigned to" . $i . '<br>';
+
+            $ev['details'] = $details;
+            $ev['administrator_id'] = $u->id;
+            $ev['done_status'] =  $i % 2 == 0 ? 1 : 0;
+            $ev['done_details'] = 'Done details: ' . $i;
+            $ev['garden_id'] =  $i;
+            $ev['activity_id'] = $i;
+            $ev['id'] = count($events);
+            $ev['person_responsible'] = $i;
+            $ev['type'] = 'Scheduled activity';
+
+            //$ev['textColor'] = 'red';
+
+            $events[] = $ev;
+        }
+        return $events;
+
+        $activities = GardenActivity::where(['administrator_id' => $u->id])
+            ->orWhere(['person_responsible' => $u->id])
+            ->get();
+
+
+        foreach ($activities as $act) {
+            //$ev['display'] = 'list-item';
+            $ev['title'] = $act->name;
+            $ev['start'] = Carbon::parse($act->due_date)->format('Y-m-d');
+            $details = "<b>Description:</b> " . $act->details . '<br>';
+            $details .= "<b>Enterprise:</b> " . $act->enterprise->name . '<br>';
+            $details .= "<b>Due to:</b> " . $ev['start'] . '<br>';
+
+
+            $ev['is_done'] = $act->is_done;
+            if ($act->is_done == 1 || $act->is_done == true) {
+                $ev['is_done'] = 1;
+                $ev['classNames'] = ['bg-success', 'border-success', 'text-white'];
+
+                if ($act->done_status == 1 || $act->done_status == true) {
+                    $details .= "<b>Activity status:</b> Done<br>";
+                } else {
+                    $details .= "<b>Activity status:</b> Not Done (Missed)<br>";
+                }
+            } else {
+                $ev['is_done'] = 0;
+                $details .= "<b>Activity status:</b>Pending<br>";
+                $ev['classNames'] = ['bg-danger', 'border-danger', 'text-white'];
+            }
+
+
+
+            $details .= "<b>Status remarks:</b> " . $act->done_details . '<br>';
+            $details .= "<b>Person responsible:</b> " . $act->assigned_to->name . '<br>';
+
+            $ev['details'] = $details;
+            $ev['administrator_id'] = $act->administrator_id;
+            $ev['done_status'] = $act->done_status;
+            $ev['done_details'] = $act->done_details;
+            $ev['garden_id'] = $act->garden_id;
+            $ev['activity_id'] = $act->id;
+            $ev['id'] = count($events);
+            $ev['person_responsible'] = $act->person_responsible;
+            $ev['type'] = 'Scheduled activity';
+
+            //$ev['textColor'] = 'red';
+
+            $events[] = $ev;
+        }
+
+
+        return $events;
     }
 }

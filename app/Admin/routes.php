@@ -13,6 +13,7 @@ Route::group([
 
     //$router->resource('/', RentingController::class); 
     $router->get('/', 'HomeController@index')->name('home');
+    $router->get('/calendar', 'HomeController@calendar')->name('calendar');
 
     $router->resource('applications', ApplicationController::class);
     $router->resource('my-applications', ApplicationController::class);

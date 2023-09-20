@@ -2,10 +2,11 @@
 
 namespace App\Admin\Controllers;
 
+use App\Models\Application;
 use App\Models\Event;
 use App\Models\Utils;
+use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
-use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
@@ -17,7 +18,7 @@ class EventController extends AdminController
      *
      * @var string
      */
-    protected $title = 'Event';
+    protected $title = 'Scheduled Events';
 
     /**
      * Make a grid builder.
@@ -26,29 +27,84 @@ class EventController extends AdminController
      */
     protected function grid()
     {
+
         $grid = new Grid(new Event());
-        Utils::checkEventRegustration(); 
+        $conditions = [];
+        $u = auth()->user();
+        if (!$u->isRole('admin')) {
+            $conditions['user_id'] = $u->id;
+        }
 
-        $grid->column('id', __('Id'));
-        $grid->column('created_at', __('Created at'));
-        $grid->column('updated_at', __('Updated at'));
-        $grid->column('title', __('Title'));
-        $grid->column('theme', __('Theme'));
-        $grid->column('photo', __('Photo'));
-        $grid->column('details', __('Details'));
-        $grid->column('prev_event_title', __('Prev event title'));
-        $grid->column('number_of_attendants', __('Number of attendants'));
-        $grid->column('number_of_speakers', __('Number of speakers'));
-        $grid->column('number_of_experts', __('Number of experts'));
-        $grid->column('venue_name', __('Venue name'));
-        $grid->column('venue_photo', __('Venue photo'));
-        $grid->column('venue_map_photo', __('Venue map photo'));
-        $grid->column('event_date', __('Event date'));
-        $grid->column('address', __('Address'));
-        $grid->column('gps_latitude', __('Gps latitude'));
-        $grid->column('gps_longitude', __('Gps longitude'));
-        $grid->column('video', __('Video'));
-
+        $grid->filter(function ($filter) {
+            // Remove the default id filter
+            $filter->disableIdFilter();
+            $filter->equal('application_id', 'Filter by Application')
+                ->select(
+                    Application::get_items_array()
+                );
+            $filter->equal('reminder_state', 'Filter by Reminder State')
+                ->select([
+                    'On' => 'On',
+                    'Off' => 'Off',
+                ]);
+            $filter->equal('priority', 'Filter by Priority')
+                ->select([
+                    'Low' => 'Low',
+                    'Medium' => 'Medium',
+                    'High' => 'High',
+                ]);
+        });
+        $grid->model()
+            ->where($conditions)
+            ->orderBy('id', 'desc');
+        $grid->column('event_date', __('Event Date'))
+            ->display(function ($t) {
+                return Utils::my_date_time($t);
+            })
+            ->sortable();
+        $grid->column('reminder_date', __('Reminder Date'))
+            ->display(function ($t) {
+                return Utils::my_date($t);
+            })
+            ->sortable();
+        $grid->column('administrator_id', __('User'))
+            ->display(function ($t) {
+                return Administrator::find($t)->name;
+            })
+            ->sortable();
+        $grid->column('application_id', __('Application'))
+            ->display(function ($t) {
+                $x = $this->application;
+                if ($x == null) {
+                    return '-';
+                }
+                return "#" . $x->application_number . " - " . $x->applicant_name;
+            })
+            ->sortable();
+        $grid->column('reminder_state', __('Reminder State'))
+            ->using([
+                'On' => 'On',
+                'Off' => 'Off',
+            ], 'No')
+            ->label([
+                'Yes' => 'success',
+                'No' => 'danger',
+            ])
+            ->sortable();
+        $grid->column('priority', __('Priority'))
+            ->using([
+                'Low' => 'Low',
+                'Medium' => 'Medium',
+                'High' => 'High',
+            ], 'Medium')
+            ->label([
+                'Low' => 'success',
+                'Medium' => 'warning',
+                'High' => 'danger',
+            ])
+            ->sortable();
+        $grid->column('description', __('Description'))->hide();
+        $grid->column('outcome', __('Outcome'))->hide();
         return $grid;
     }
 
@@ -65,22 +121,16 @@ class EventController extends AdminController
         $show->field('id', __('Id'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
-        $show->field('title', __('Title'));
-        $show->field('theme', __('Theme'));
-        $show->field('photo', __('Photo'));
-        $show->field('details', __('Details'));
-        $show->field('prev_event_title', __('Prev event title'));
-        $show->field('number_of_attendants', __('Number of attendants'));
-        $show->field('number_of_speakers', __('Number of speakers'));
-        $show->field('number_of_experts', __('Number of experts'));
-        $show->field('venue_name', __('Venue name'));
-        $show->field('venue_photo', __('Venue photo'));
-        $show->field('venue_map_photo', __('Venue map photo'));
+        $show->field('administrator_id', __('Administrator id'));
+        $show->field('application_id', __('Application id'));
+        $show->field('reminder_state', __('Reminder state'));
+        $show->field('priority', __('Priority'));
         $show->field('event_date', __('Event date'));
-        $show->field('address', __('Address'));
-        $show->field('gps_latitude', __('Gps latitude'));
-        $show->field('gps_longitude', __('Gps longitude'));
-        $show->field('video', __('Video'));
+        $show->field('reminder_date', __('Reminder date'));
+        $show->field('description', __('Description'));
+        $show->field('remind_beofre_days', __('Remind beofre days'));
+        $show->field('users_to_notify', __('Users to notify'));
+        $show->field('reminders_sent', __('Reminders sent'));
 
         return $show;
     }
@@ -94,53 +144,40 @@ class EventController extends AdminController
     {
         $form = new Form(new Event());
 
-        $form->text('title', __('Event Title'))->rules('required');
-        $form->text('theme', __('Event Theme'))->rules('required');
-        $form->date('event_date', __('Event date'))->rules('required');
-        $form->image('photo', __('Photo'))->rules('required');
-        $form->quill('details', __('Details'))->rules('required');
-        $form->text('venue_name', __('Venue name'))->rules('required');
-        $form->text('address', __('Venue Address'))->rules('required');
-        $form->image('venue_photo', __('Venue photo'))->rules('required');
-        $form->image('venue_map_photo', __('Venue map photo'))->rules('required');
+        $form->hidden('administrator_id')->default(auth()->user()->id);
 
-        $form->text('gps_latitude', __('Venue Gps latitude'))->rules('required');
-        $form->text('gps_longitude', __('Venue Gps longitude'))->rules('required');
-        $form->file('video', __('Intro Video'))->rules('required');
+        $form->select('application_id', 'Select Application')->options(
+            Application::get_items_array()
+        )->rules('required');
 
-        $form->divider('Event main speakers');
+        if (!$form->isEditing()) {
+            $form->hidden('reminders_sent')->default('No');
+        } else {
+            $form->radio('reminders_sent', 'Re-Send Reminder')->options([
+                'Yes' => 'Yes',
+                'No' => 'No',
+            ])->default('No')
+                ->rules('required');
+        }
 
-        $form->morphMany('speakers', 'Click on new to add a main speaker', function (Form\NestedForm $form) {
-            $form->text('name', __('Speaker\'s name'))->rules('required');
-            $form->text('designation', __('Speaker\'s Designation'))->rules('required');
-            $form->image('photo', __('Speaker\'s photo'));
-            $form->quill('details', __('Speaker\'s Profile'))->rules('required');
-
-        });
-
-
-
-        $form->divider('Ticket pricing');
-
-        $form->morphMany('tickets', 'Click on new to add a ticket', function (Form\NestedForm $form) {
-            $u = Admin::user();
-            $form->hidden('user_id')->default($u->id);
-            $form->text('name', __('Ticket picing name'))->rules('required');
-            $form->decimal('price', __('Price (in UGX)'))->rules('required');
-            $form->decimal('availability', __('Number of available tickets'))->rules('required');
-            $form->textarea('details', __('Description'))->rules('required');
-            $form->image('icon', __('Icon/image'));
-        });
-
-
-        $form->divider('Previous event');
-        $form->text('prev_event_title', __('Previous event title'))->rules('required');
-        $form->decimal('number_of_attendants', __('Number of Previous event attendants'))->rules('required');
-        $form->decimal('number_of_speakers', __('Number of speakers'))->rules('required')->rules('required');
-        $form->decimal('number_of_experts', __('Number of experts'))->rules('required');
-
-
-
+        $form->hidden('reminder_state')->default('On');
+        $form->textarea('description', 'Event Description')->rules('required');
+        $form->datetime('event_date', __('Event Date'))->rules('required');
+        $form->decimal('remind_beofre_days', __('Reminder Before Days'))
+            ->rules('required')
+            ->default(1);
+        $form->radio('priority', 'Priority')->options([
+            'Low' => 'Low',
+            'Medium' => 'Medium',
+            'High' => 'High',
+        ])->default('Medium')
+            ->rules('required');
+        $form->multipleSelect('users_to_notify', 'Users to notify')->options(
+            Administrator::where([])->pluck('name', 'id')
+        )->rules('required');
+        if ($form->isEditing()) {
+            $form->textarea('Event outcome');
+        }
 
         return $form;
     }

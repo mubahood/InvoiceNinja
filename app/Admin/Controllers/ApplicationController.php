@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Models\Application;
 use App\Models\Utils;
+use Encore\Admin\Auth\Database\Administrator;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -38,6 +39,15 @@ class ApplicationController extends AdminController
             $conditions['user_id'] = $u->id;
         }
 
+        $grid->model()
+            ->where($conditions)
+            ->orderBy('id', 'desc');
+        $grid->column('created_at', __('Created'))
+            ->display(function ($created_at) {
+                return date('d-m-Y', strtotime($created_at));
+            })
+            ->sortable();
+
         $grid->actions(function ($actions) {
             if ($actions->row->stage != 'Pending') {
 
@@ -69,14 +79,7 @@ class ApplicationController extends AdminController
         });
 
 
-        $grid->model()
-            ->where($conditions)
-            ->orderBy('id', 'desc');
-        $grid->column('created_at', __('Created'))
-            ->display(function ($created_at) {
-                return date('d-m-Y', strtotime($created_at));
-            })
-            ->sortable();
+
         $grid->column('application_number', __('Application Number'))->sortable();
         $grid->column('registry', __('Registry'))->sortable();
         $grid->column('year', __('Year'))->sortable();
@@ -312,8 +315,44 @@ ALTER TABLE `applications` ADD `reminder_state` VARCHAR(45) NULL DEFAULT 'Off' A
                     ->removable()
                     ->downloadable();
             });
+        })->tab('Events/Reminders', function ($form) {
+            $form->hasMany('events', function (Form\NestedForm $form) {
+                $form->hidden('administrator_id')->default(auth()->user()->id);
+
+                if (!$form->isEditing()) {
+                    $form->hidden('reminders_sent')->default('No');
+                } else {
+                    $form->radio('reminders_sent', 'Re-Send Reminder')->options([
+                        'Yes' => 'Yes',
+                        'No' => 'No',
+                    ])->default('No')
+                        ->rules('required');
+                }
+
+                $form->hidden('reminder_state')->default('Yes');
+                $form->textarea('description', 'Event Description')->rules('required');
+                $form->datetime('event_date', __('Event Date'))->rules('required');
+                $form->decimal('remind_beofre_days', __('Reminder Before Days'))
+                    ->rules('required')
+                    ->default(1);
+                $form->radio('priority', 'Priority')->options([
+                    'Low' => 'Low',
+                    'Medium' => 'Medium',
+                    'High' => 'High',
+                ])->default('Medium')
+                    ->rules('required');
+                $form->multipleSelect('users_to_notify', 'Users to notify')->options(
+                    Administrator::where([])->pluck('name', 'id')
+                )->rules('required');
+            });
         });
 
+        /* 
+
+        reminder_state
+            $table->dateTime('reminder_date')->nullable();
+
+        */
 
         return $form;
     }

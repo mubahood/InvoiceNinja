@@ -18,6 +18,7 @@
  *
  */
 
+
 use App\Models\Utils;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +26,15 @@ use App\Admin\Extensions\Nav\Shortcut;
 use App\Admin\Extensions\Nav\Dropdown;
 use App\Models\AdminRoleUser;
 use Encore\Admin\Form;
+
+
+
+Admin::css('/assets/js/calender/main.css');
+Admin::js('/assets/js/calender/main.js');
+
+Admin::css('/css/jquery-confirm.min.css');
+Admin::js('/assets/js/jquery-confirm.min.js');
+
 
 $u = Admin::user();
 if ($u != null) {

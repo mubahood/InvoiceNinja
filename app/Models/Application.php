@@ -11,9 +11,21 @@ class Application extends Model
 {
     use HasFactory;
 
+    public static function get_items_array()
+    {
+        $items = [];
+        foreach (Application::all() as $item) {
+            $items[$item->id] = "#".$item->application_number." - ".$item->applicant_name;
+        }
+        return $items;
+    }
     public function attarchments()
     {
         return $this->hasMany(Attarchment::class);
+    }
+    public function events()
+    {
+        return $this->hasMany(Event::class);
     }
 
     public static function boot()

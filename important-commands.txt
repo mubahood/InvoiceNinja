@@ -63,6 +63,7 @@ php artisan make:migration create_landload_payments_table
 php artisan make:migration create_cases_table
 php artisan make:migration create_offences_table
 php artisan make:migration create_attarchments_table
+php artisan make:migration create_events_table
 
 
 Encore\Admin\Auth\Database\Administrator::class,
@@ -114,6 +115,7 @@ php artisan admin:make TenantPaymentController --model=App\Models\TenantPayment
 php artisan admin:make LocationController --model=App\Models\Location
 php artisan admin:make CaseModelController --model=App\Models\CaseModel
 php artisan admin:make OffenceController --model=App\Models\Offence
+php artisan admin:make EventController --model=App\Models\Event
 
 php artisan make:model Offence
 php artisan make:model TenantPayment
@@ -173,3 +175,4 @@ php artisan make:model DeliveryItem
 php artisan make:model CaseModel
 php artisan make:model Attarchment
 php artisan make:model Application
+php artisan make:model Event

@@ -6,9 +6,11 @@ use App\Models\Application;
 use App\Models\Candidate;
 use App\Models\Event;
 use App\Models\NewsPost;
+use App\Models\Utils;
 use Encore\Admin\Admin;
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 class Dashboard
 {
@@ -16,11 +18,19 @@ class Dashboard
     public static function dashboard_members()
     {
         $members = Application::where('stage', 'Pending')
-        ->limit(10)
-        ->orderBy('created_at', 'desc')
-        ->get();
+            ->limit(10)
+            ->orderBy('created_at', 'desc')
+            ->get();
         return view('dashboard.members', [
             'items' => $members
+        ]);
+    }
+
+    public static function dashboard_calender()
+    {
+        $events = Utils::prepare_calendar_events(Auth::user()); 
+        return view('dashboard.calender', [
+            'events' => $events
         ]);
     }
 
