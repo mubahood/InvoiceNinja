@@ -5,6 +5,7 @@ namespace App\Models;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class TenantPayment extends Model
 {
@@ -42,6 +43,13 @@ class TenantPayment extends Model
             if ($landlord == null) {
                 throw new Exception("Landlord not found.", 1);
             }
+
+            $total_paid = $m->renting->payments->sum('amount');
+            $balance =  $total_paid - $m->renting->payable_amount;
+            $m->renting->balance = $balance;
+            $m->renting->save();
+            DB::table('tenant_payments')->where('id', $m->id)->update(['balance' => $balance]);
+
             $landlord->update_balance();
             return $m;
         });
@@ -51,6 +59,14 @@ class TenantPayment extends Model
             if ($landlord == null) {
                 throw new Exception("Landlord not found.", 1);
             }
+
+            $total_paid = $m->renting->payments->sum('amount');
+            $balance = $m->renting->payable_amount - $total_paid;
+            $balance =  $total_paid - $m->renting->payable_amount;
+            $m->renting->save();
+            DB::table('tenant_payments')->where('id', $m->id)->update(['balance' => $balance]);
+
+
             $landlord->update_balance();
             return $m;
         });
@@ -112,21 +128,25 @@ class TenantPayment extends Model
             throw new Exception("House not found while billing.", 1);
         }
 
+        $percentage = 0;
         if ($room->commission_type == 1) {
-            $total_rent = $m->amount;
-            $commission = $room->flate_rate_amount;
-            $m->commission_type = 'Flat Rate';
-            $m->commission_type_value = $room->flate_rate_amount;
-            $m->commission_amount =  $commission;
-            $m->landlord_amount = $total_rent - $commission;
+
+            if ($room->price > 0) {
+                $percentage = ($room->flate_rate_amount / $room->price) * 100;
+                $percentage = ($percentage);
+                $_percentage = ceil($percentage);
+            }
+            $m->commission_type = 'Flat Rate - ' . number_format($room->flate_rate_amount) . ", ({$_percentage}%)";
         } else {
-            $total_rent = $m->amount;
-            $commission =  ($room->percentage_rate / 100) * $total_rent;
             $m->commission_type = 'Percentage';
-            $m->commission_type_value = $room->percentage_rate;
-            $m->commission_amount = $commission;
-            $m->landlord_amount = $total_rent - $commission;
+            $percentage =  $room->percentage_rate;
         }
+
+        $total_rent = $m->amount;
+        $commission =  ($percentage / 100) * $total_rent;
+        $m->commission_type_value = $room->percentage_rate;
+        $m->commission_amount = $commission;
+        $m->landlord_amount = $total_rent - $commission;
         $m->house_id = $room->house_id;
         $m->room_id = $room->id;
         $m->landload_id = $room->landload_id;

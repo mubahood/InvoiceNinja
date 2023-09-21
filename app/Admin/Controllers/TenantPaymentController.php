@@ -79,8 +79,10 @@ class TenantPaymentController extends AdminController
             return $this->tenant->name;
         })->sortable();
         $grid->column('amount', __('Amount (UGX)'))
-            ->display(function ($b) {
-                return  number_format($b);
+            ->display(function ($x) {
+                return number_format($x);
+            })->totalRow(function ($x) {
+                return  number_format($x);
             })->sortable();
 
         $grid->column('landlord_amount', __('Landlord (UGX)'))
@@ -102,7 +104,7 @@ class TenantPaymentController extends AdminController
                 if ($x == 'Percentage') {
                     return $this->commission_type_value . "%";
                 } else {
-                    return   "UGX " . number_format($this->commision_type_value);
+                    return   $this->commission_type;
                 }
             })->sortable();
 
