@@ -544,7 +544,7 @@ administrator_id
 
         foreach (TenantPayment::all() as $key => $value) {
             $value->details .= ".";
-            $value->save();$value->
+            $value->save();
         }
         foreach ($r = Renting::where(
             'invoice_as_been_billed',
