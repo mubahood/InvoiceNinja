@@ -542,6 +542,10 @@ administrator_id
     public static function system_boot()
     {
 
+        foreach (TenantPayment::all() as $key => $value) {
+            $value->details .= ".";
+            $value->save();$value->
+        }
         foreach ($r = Renting::where(
             'invoice_as_been_billed',
             '!=',

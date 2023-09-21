@@ -136,7 +136,7 @@ class TenantPayment extends Model
                 $percentage = ($percentage);
                 $_percentage = ceil($percentage);
             }
-            $m->commission_type = 'Flat Rate - ' . number_format($room->flate_rate_amount) . ", ({$_percentage}%)";
+            $m->commission_type = 'Flat Rate - UGX ' . number_format($room->flate_rate_amount) . " ({$_percentage}%)";
         } else {
             $m->commission_type = 'Percentage';
             $percentage =  $room->percentage_rate;
