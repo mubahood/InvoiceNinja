@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="pdf">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/vendor/barryvdh/laravel-dompdf/pdf.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
