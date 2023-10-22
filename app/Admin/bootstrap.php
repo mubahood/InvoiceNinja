@@ -35,7 +35,6 @@ Admin::js('/assets/js/calender/main.js');
 Admin::css('/css/jquery-confirm.min.css');
 Admin::js('/assets/js/jquery-confirm.min.js');
 
-
 $u = Admin::user();
 if ($u != null) {
     if ($u->roles->count() < 1) {
