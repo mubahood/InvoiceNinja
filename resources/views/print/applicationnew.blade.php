@@ -5,71 +5,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/bootstrap-print.css">
+    <link type="text/css" href="{{ public_path('css/print.css') }}" rel="stylesheet" />
     <title>Application Form </title>
 </head>
 
 <body>
-    <div class="container text-center">
-        <div class="row align-items-center">
+    <table style="width: 100%">
+        <tr>
+            <td style="width: 25%;" class="">
+            </td>
+            <td class="text-center" style="width: 20%;">
+                <img style="width: 100px" src="{{ public_path('assets/images/coat_of_arms-min.png') }}">
+            </td>
+            <td style="width: 25%;" class="">
 
-            <div class="col-5">
-                <h4><strong>To be filled in Triplicates</strong></h4>
-            </div>
-            <div class="col-2"> <img src="/logo.jpg" alt="logo"></div>
-            <div class="col-5">
-                <h5><strong>FORM TAT 1</strong></h5>
-            </div><br>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" class="text-center pt-3">
+                <p class="text-center" style="font-size: 18px"><b>THE REPUBLIC OF UGANDA</b></p>
+                <p class="mb-2 mt-2" class="text-center" style="font-size: 18px"><b>TAX APPEALS TRIBUNAL</b></p>
+                <p class="mb-0" class="text-center" style="font-size: 12px"><b>NIC Building 7th & 8th Floor</b></p>
+                <p class="mb-0" class="text-center" style="font-size: 12px"><b>E-MAIL:</b>
+                    info@tat.co.ug, <b>TELEPHONE:</b> +256 0414 340 470/
+                    23268</p>
+            </td>
+        </tr>
 
+    </table>
 
+    <div class="container">
 
+        <hr style="background-color: rgb(26, 9, 94); height: 3px;" class="p-0 m-0 mt-3 mb-3">
+        <h5 class="text-center mb-3"><strong>FORM TAT 1</strong></h5>
+
+        <div>
+            <p>IN THE TAX APPEALS TRIBUNAL AT ..................................................................
+                REGISTRY APPLICATION NO. .............................................YEAR.........................</p>
         </div>
 
-        <div class="text-center">
-            <p>THE REPUBLIC OF UGANDA</p>
-        </div><br>
-        <hr style="background-color: rgb(26, 9, 94); height: 3px;" class="p-0 m-0 mt-0 mb-4">
 
+        <p class="mt-3 text-center">IN THE MATTER OF</p>
+        <p>....................................................................................................................................
+            APPLICANT</p>
+        <p class="mt-3 text-center">AND</p>
+        <p>....................................................................................................................................
+            RESPONDENT</p>
+
+        <h5 class="text-center mt-4"><strong>APPLICATION</strong></h5>
+        <p class="text-center mb-4"><i>(Under Section 17 of the Act and rule 10)</i></p>
+
+        <p class="fs-18 fw-800">1. PARTICULARS OF APPLICANT<p>
+        <p class="mb-2"><i>(a)</i> Name: ...........................................................................................................................................</p>
+        <p class="mb-2"><i>(b)</i> Name of business: ..................................................................................................................</p>
+        <p class="mb-2"><i>(c)</i> Postal address: ..................................................................................................................</p>
+        <p class="mb-2"><i>(d)</i> Physical address of the applocant: Plot............................................. Street........................... Town/City....................................................</p>
 
         <form action="" method="get">
-            <div class="form-group">
-                <label for="registry">IN THE TAX APPEALS TRIBUNAL AT (REGISTRY):</label> <input type="text"
-                    class="form-control " id="registry" name="registry"><br>
-            </div>
-            <div class="row align-items-center">
-                <div class="col-6">
-                    <div class="form-group">
-                        <label for="APPLICATION NO">APPLICATION NO:</label>
-                        <input type="text" class="form-control" id="applicationNo" name="applicationNo"><br>
-                    </div>
-                </div>
-                <div class="col-6">
-                    <label for="year">YEAR:</label>
-                    <input type="year" class="form-control" id="year" name="year"><br>
-
-                </div>
-
-            </div>
-
+            
 
 
             <div class="form-group">
-                <label for="applicant">IN THE MATTER OF(APPLICANT):</label>
-                <input type="text" class="form-control" id="applicant" name="applicant"><br>
-                <h5><strong>AND</strong></h5><br>
-                <div class="form-group">
-                    <label for="respondent">IN THE MATTER OF(RESPONDENT):</label>
-                    <input type="text"class="form-control" id="respondent" name="respondent"><br>
-                </div>
-                <hr style="background-color: rgb(26, 9, 94); height: 3px;" class="p-0 m-0 mt-0 mb-4">
-
-
+          
 
 
 
                 <h4 class="text-ceneter">APPLICATION</h4>
                 <p>Under Section 17 of the Act and rule 10</p><br>
+
+
+                <h4 class="text-ceneter">1. PARTICULARS OF APPLICANT</h4><br>
+
                 <div class="row align-center">
                     <div class="col-4">
                         <label for="name">(a) Name:</label> <input type="text" class="form-control"
@@ -97,15 +104,15 @@
                             id="plot" name="plot"><br>
                     </div>
                     <div class="col-4">
-                        <label for="street"> Street:</label> <input type="text" class="form-control" id="street"
-                            name="street"><br>
+                        <label for="street"> Street:</label> <input type="text" class="form-control"
+                            id="street" name="street"><br>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-6">
-                        <label for="village"> Village</label> <input type="text"class="form-control" id="village"
-                            name="village"><br>
+                        <label for="village"> Village</label> <input type="text"class="form-control"
+                            id="village" name="village"><br>
                     </div>
                     <div class="col-6">
                         <label for="town"> Trading Center/Town/City:</label> <input type="text"
