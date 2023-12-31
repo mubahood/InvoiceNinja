@@ -40,28 +40,80 @@ Route::get('receipt', function () {
 
 
 Route::get('landlord-report', function () {
-    $landLord = \App\Models\Landload::find(request()->id);
+
+    $report = \App\Models\LandLordReport::find(request()->id);
+
+    if ($report == null) {
+        die("Report not found.");
+    }
+
+    $landLord = \App\Models\Landload::find($report->landload_id);
     if ($landLord == null) {
         die("Landlord not found.");
     }
+    if ($landLord == null) {
+        die("Landlord not found.");
+    }
+
+    //start_date
+    //end_date
+    $start_date = $report->start_date;
+    $end_date = $report->end_date;
+    $tenantPayments = TenantPayment::where([
+        'landload_id' => $landLord->id
+    ])->whereBetween('created_at', [$start_date, $end_date])->get();
+
+    $buldings = [];
+    $buldings_ids = [];
+    $total_income = 0;
+    $total_commission = 0;
+    $total_land_lord_disbashment = 0;
+    $total_landlord_revenue = 0;
+
+    foreach ($tenantPayments as $payment) {
+        $total_income += $payment->amount;
+        $total_commission += $payment->commission_amount;
+        $total_landlord_revenue += $payment->landlord_amount;
+        if (!in_array($payment->house_id, $buldings_ids)) {
+            $buldings_ids[] = $payment->house_id;
+            $buldings[] = $payment->house;
+        }
+    }
+
+
+
     $pdf = App::make('dompdf.wrapper');
     $rentings = Renting::where([
         'landload_id' => $landLord->id
     ])->orderBy('start_date', 'DESC')
         ->limit(25)
         ->get();
-        
+
 
     $landlordPayments = LandloadPayment::where([
         'landload_id' => $landLord->id
     ])->orderBy('id', 'DESC')
-        ->limit(25)
+        ->whereBetween('created_at', [$start_date, $end_date])
         ->get();
+
+    $total_land_lord_disbashment = 0;
+    foreach ($landlordPayments as $payment) {
+        $total_land_lord_disbashment += $payment->amount;
+    }
 
     $pdf->loadHTML(view('print/landlord-report', compact(
         'rentings',
         'landlordPayments',
-        'landLord'
+        'landLord',
+        'total_income',
+        'buldings',
+        'tenantPayments',
+        'total_commission',
+        'total_landlord_revenue',
+        'total_land_lord_disbashment',
+        'report',
+        'start_date',
+        'end_date'
     )));
     return $pdf->stream($landLord->name . '-report.pdf');
 });

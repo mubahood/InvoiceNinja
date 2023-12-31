@@ -313,14 +313,93 @@ $sign = public_path('/sign.jpg');
         @include('components.detail-item', ['t' => 'Address', 's' => $landLord->address])
 
 
-        <p class="my-h2 mt-3 mb-2">RECENT LANDLORD PAYMENTS (Transactions)</p>
+        <p class="my-h2 mt-3 mb-2" style="font-size: 1.0rem">
+            FINANCIAL REPORT PERIOD {{ Utils::my_date($start_date) . ' - ' . Utils::my_date($end_date) }}
+        </p>
+        <p class="my-h2 mt-3 mb-2 title text-left" style="font-size: 1.0rem">Summary</p>
+        @include('components.detail-item', [
+            't' => 'Total Income',
+            's' => 'UGX ' . number_format($total_income),
+        ])
+        @include('components.detail-item', [
+            't' => 'Total Commission',
+            's' => 'UGX ' . number_format($total_commission),
+        ])
+
+        @include('components.detail-item', [
+            't' => 'Total Landlord Revenue',
+            's' => 'UGX ' . number_format($total_landlord_revenue),
+        ])
+
+        @include('components.detail-item', [
+            't' => 'Total Expenses',
+            's' => 'UGX ' . number_format($report->total_expense),
+        ])
+
+        @include('components.detail-item', [
+            't' => 'Total Disbashment',
+            's' => 'UGX ' . number_format($total_land_lord_disbashment),
+        ])
+
+        @include('components.detail-item', [
+            't' => 'Total Balance',
+            's' =>
+                'UGX ' .
+                number_format($total_landlord_revenue - $total_land_lord_disbashment - $report->total_expense),
+        ])
+
+        <p class="my-h2 mt-3 mb-2 title" style="font-size: 1.0rem">TENANT PAYMENTS (Receipts)</p>
         <table class="table table-bordered my-table">
-            <thead style="" class="table   table-bordered">
-                <tr>
-                    <th style="border-color: black; ">S/n.</th>
-                    <th style="border-color: black; ">Date</th>
-                    <th style="border-color: black; ">Description</th>
-                    <th style="border-color: black; ">Amount</th>
+            <thead class="table table-bordered p-0 bg-dark" style="font-size: 0.8rem;">
+                <tr style="background-color: black;" class="p-0  text-white">
+                    <th style="border-color: white; height: 10px; width: 15px;" class="py-1 text-white">S/n.</th>
+                    <th style="border-color: white; height: 10px; " class=" p-1 px-1">Tenant</th>
+                    <th style="border-color: white; height: 10px; " class=" p-1">Due Month</th>
+                    <th style="border-color: white; height: 10px; " class=" p-1">Payment Date</th>
+                    <th style="border-color: white; height: 10px; " class=" p-1">Balance (UGX)</th>
+                    <th style="border-color: white; height: 10px; " class=" p-1 text-center">Amount (UGX)</th>
+                    <th style="border-color: white; height: 10px; " class=" p-1">Commission (UGX)</th>
+                    <th style="border-color: white; height: 10px; " class=" p-1">Amount Banked (UGX)</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach ($buldings as $bulding)
+                    <tr>
+                        <td colspan="8" class="text-uppercase font-weight-bold">
+                            {{ $bulding->name }}
+                        </td>
+                    </tr>
+                    @php
+                        $i = 0;
+                    @endphp
+
+                    @foreach ($tenantPayments as $trans)
+                        @php
+                            $i++;
+                        @endphp
+                        <tr>
+                            <td>{{ $i }}</td>
+                            <td>{{ $trans->tenant->name }}</td>
+                            <td>{{ $trans->renting->name_text2 }}</td>
+                            <td>{{ Utils::my_date($trans->created_at) }}</td>
+                            <td style="text-align: right;"><b>{{ number_format($trans->balance) }}</b></td>
+                            <td style="text-align: right;"><b>{{ number_format($trans->amount) }}</b></td>
+                            <td style="text-align: right;"><b>{{ number_format($trans->commission_amount) }}</b></td>
+                            <td style="text-align: right;"><b>{{ number_format($trans->landlord_amount) }}</b></td>
+                        </tr>
+                    @endforeach
+                @endforeach
+            </tbody>
+        </table>
+
+        <p class="my-h2 mt-3 mb-2 title text-left" style="font-size: 1.0rem">Disbashment Dates</p>
+        <table class="table-bordered my-table">
+            <thead class="table table-bordered p-0 bg-dark" style="font-size: 0.8rem;">
+                <tr style="background-color: black;" class="p-0  text-white">
+                    <th style="border-color: white; height: 10px; width: 15px;" class="py-1 text-white">S/n.</th>
+                    <th style="border-color: white; height: 10px; " class=" p-1 px-1">Date</th>
+                    <th style="border-color: white; height: 10px; " class=" p-1">Amount (UGX)</th>
                 </tr>
             </thead>
             <tbody>
@@ -334,12 +413,12 @@ $sign = public_path('/sign.jpg');
                     <tr>
                         <td>{{ $i }}</td>
                         <td>{{ Utils::my_date($trans->created_at) }}</td>
-                        <td>{{ $trans->details }}</td>
-                        <td>UGX {{ number_format($trans->amount) }}</td>
+                        <td style="text-align: right;"><b>{{ number_format($trans->amount) }}</b></td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
+
 
         {{--    <p class="my-h2 mb-3">Summary Report - As On {{ Utils::my_date(time()) }}</p>
         <table class="table table-bordered my-table">
@@ -380,7 +459,7 @@ $sign = public_path('/sign.jpg');
             </tbody>
         </table> --}}
 
-        <p class="my-h2 mt-3 mb-2 title">TENANT PAYMENTS (Receipts)</p>
+        {{--       <p class="my-h2 mt-3 mb-2 title">TENANT PAYMENTS (Receipts)</p>
         <table class="table table-bordered my-table">
             <thead style="" class="table   table-bordered">
                 <tr>
@@ -422,10 +501,10 @@ $sign = public_path('/sign.jpg');
                     </tr>
                 @endforeach
             </tbody>
-        </table>
+        </table> --}}
 
 
-        <p class="my-h2 mt-3 mb-2 title">RECENT RENTINGS (Invoinces)</p>
+        {{-- <p class="my-h2 mt-3 mb-2 title">RECENT RENTINGS (Invoinces)</p>
         <table class="table table-bordered my-table">
             <thead style="" class="table   table-bordered">
                 <tr>
@@ -451,18 +530,11 @@ $sign = public_path('/sign.jpg');
                         <td>{{ $rent->tenant->name }}</td>
                         <td>{{ $rent->number_of_months }} Months</td>
 
-
-                        {{-- 
-                        <td>{{ Utils::my_date($rent->period) }}</td>
-                        <td>{{ Utils::my_date($rent->starts) }}</td>
-                        <td>{{ $rent->ends }}</td>
-                        <td>{{ number_format($rent->amount) }}</td>
-                        <td>{{ number_format($rent->paid) }}</td>
-                        <td>{{ number_format($rent->balance) }}</td> --}}
+ 
                     </tr>
                 @endforeach
             </tbody>
-        </table>
+        </table> --}}
 
         {{--  <p class="my-h2 mt-3 mb-2">RECENT TENANTS PAYMENTS (Receipts)</p>
         <table class="table table-bordered my-table">

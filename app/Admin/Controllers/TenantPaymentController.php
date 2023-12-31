@@ -184,6 +184,8 @@ class TenantPaymentController extends AdminController
     {
         $form = new Form(new TenantPayment());
 
+        $form->date('created_at', __('Date'))->default(date('Y-m-d'))->rules('required')->required();
+
         $invoices = [];
         foreach (Renting::where([])->orderBy('id', 'desc')->get() as $key => $v) {
             // if ($v->balance > 0) {

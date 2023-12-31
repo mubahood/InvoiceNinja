@@ -12,13 +12,20 @@ class Renting extends Model
     use HasFactory;
 
 
-    protected $appends = ['name_text'];
+    protected $appends = ['name_text', 'name_text2'];
 
     public function getNameTextAttribute()
     {
         return $this->room->name_text;
     }
 
+    public function getNameText2Attribute()
+    {
+        //format like this 1st Jan 2021
+        $start_date = Carbon::parse($this->start_date)->format('jS M y');
+        $end_date = Carbon::parse($this->end_date)->format('jS M y');
+        return $start_date . ' - ' . $end_date;
+    }
 
     public static function boot()
     {
