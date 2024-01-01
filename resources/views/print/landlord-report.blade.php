@@ -337,7 +337,7 @@ $sign = public_path('/sign.jpg');
         ])
 
         @include('components.detail-item', [
-            't' => 'Total Disbashment',
+            't' => 'Total Disburshment',
             's' => 'UGX ' . number_format($total_land_lord_disbashment),
         ])
 
@@ -364,6 +364,9 @@ $sign = public_path('/sign.jpg');
             </thead>
             <tbody>
 
+                @php
+                    $done_records = [];
+                @endphp
                 @foreach ($buldings as $bulding)
                     <tr>
                         <td colspan="8" class="text-uppercase font-weight-bold">
@@ -376,6 +379,10 @@ $sign = public_path('/sign.jpg');
 
                     @foreach ($tenantPayments as $trans)
                         @php
+                            if ($trans->renting->house->bulding_id != $bulding->id) {
+                                continue;
+                            }
+                            $done_records[] = $trans->id;
                             $i++;
                         @endphp
                         <tr>
@@ -393,7 +400,7 @@ $sign = public_path('/sign.jpg');
             </tbody>
         </table>
 
-        <p class="my-h2 mt-3 mb-2 title text-left" style="font-size: 1.0rem">Disbashment Dates</p>
+        <p class="my-h2 mt-3 mb-2 title text-left" style="font-size: 1.0rem">Disburshment Dates</p>
         <table class="table-bordered my-table">
             <thead class="table table-bordered p-0 bg-dark" style="font-size: 0.8rem;">
                 <tr style="background-color: black;" class="p-0  text-white">
