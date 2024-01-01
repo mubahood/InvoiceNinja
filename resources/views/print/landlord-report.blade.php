@@ -382,6 +382,9 @@ $sign = public_path('/sign.jpg');
                             if (in_array($trans->id, $done_records)) {
                                 continue;
                             }
+                            if($trans->building_id != $bulding->id){
+                                continue;
+                            }
                             $done_records[] = $trans->id;
                             $i++;
                         @endphp
