@@ -354,7 +354,7 @@ $sign = public_path('/sign.jpg');
                 <tr style="background-color: black;" class="p-0  text-white">
                     <th style="border-color: white; height: 10px; width: 15px;" class="py-1 text-white">S/n.</th>
                     <th style="border-color: white; height: 10px; " class=" p-1 px-1">Tenant</th>
-                    <th style="border-color: white; height: 10px; " class=" p-1">Due Month</th>
+                    <th style="border-color: white; height: 10px; " class=" p-1">From - To</th>
                     <th style="border-color: white; height: 10px; " class=" p-1">Payment Date</th>
                     <th style="border-color: white; height: 10px; " class=" p-1">Balance (UGX)</th>
                     <th style="border-color: white; height: 10px; " class=" p-1 text-center">Amount (UGX)</th>
