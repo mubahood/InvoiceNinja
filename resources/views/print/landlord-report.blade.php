@@ -379,7 +379,7 @@ $sign = public_path('/sign.jpg');
 
                     @foreach ($tenantPayments as $trans)
                         @php
-                            if ($trans->renting->house->bulding_id != $bulding->id) {
+                            if (in_array($trans->id, $done_records)) {
                                 continue;
                             }
                             $done_records[] = $trans->id;
