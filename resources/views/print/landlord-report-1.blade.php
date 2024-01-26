@@ -319,7 +319,7 @@ $sign = public_path('/sign.jpg');
 
 
         <p class="my-h2 mt-3 mb-2" style="font-size: 1.0rem">
-            FINANCIAL REPORT PERIOD {{ Utils::my_date($start_date) . ' - ' . Utils::my_date($end_date) }}
+            FINANCIAL REPORT FOR THE PERIOD {{ Utils::my_date($start_date) . ' - ' . Utils::my_date($end_date) }}
         </p>
         <p class="my-h2 mt-3 mb-2 title text-left" style="font-size: 1.0rem">Summary</p>
         @include('components.detail-item', [
