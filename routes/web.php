@@ -176,7 +176,7 @@ Route::get('landlord-report-1', function () {
     foreach ($landlordPayments as $payment) {
         $total_land_lord_disbashment += $payment->amount;
     }
-    $isView = true;
+    $isView = false;
     $data = compact(
         'rentings',
         'landlordPayments',
@@ -191,7 +191,7 @@ Route::get('landlord-report-1', function () {
         'isView',
         'end_date'
     );
-    return (view('print/landlord-report-1', $data));
+    //return (view('print/landlord-report-1', $data));
     $pdf->loadHTML(view('print/landlord-report-1', $data));
     return $pdf->stream($landLord->name . '-report.pdf');
 });
