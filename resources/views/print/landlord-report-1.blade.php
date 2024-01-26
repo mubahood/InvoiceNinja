@@ -350,7 +350,7 @@ $sign = public_path('/sign.jpg');
             't' => 'Total Landlord Balance',
             's' =>
                 'UGX ' .
-                number_format($total_landlord_revenue - $total_land_lord_disbashment - $report->total_expense),
+                number_format($landLord->balance) ,
         ])
 
         <p class="my-h2 mt-3 mb-2 title" style="font-size: 1.0rem">TENANT PAYMENTS (Receipts)</p>

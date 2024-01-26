@@ -494,15 +494,17 @@ administrator_id
     public static function process_things()
     {
 
-        foreach (TenantPayment::all() as $key => $value) {
+        foreach (TenantPayment::where([
+           
+        ])->get() as $key => $value) {
             try {
                 $value = $value->process_commission($value);
             } catch (\Throwable $th) {
-            }
+            } 
             echo ($value->landlord_amount . "<br>");
-            $value->save();
+            $value->save(); 
         }
- 
+
         foreach (Renting::where([/* 
             'invoice_as_been_billed',
             '!=',
