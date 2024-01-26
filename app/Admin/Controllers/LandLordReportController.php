@@ -55,6 +55,7 @@ class LandLordReportController extends AdminController
 
         $grid->column('report', __('Report'))
             ->display(function ($x) {
+                return "<a class=\"d-block text-primary text-center\" target=\"_blank\" href='" . url('landlord-report-1') . "?id={$this->id}'><b>PRINT REPORT</b></a>";
                 $url = "<a style=' line-height: 10px;' class=\"p-0 m-0 mb-2 d-block text-primary text-center\" target=\"_blank\" href='" . url('landlord-report-1') . "?id={$this->id}'><b>PRINT REPORT (Design 1)</b></a>";
                 $url .= "<a  style=' line-height: 10px;' class=\"d-block text-primary text-center\" target=\"_blank\" href='" . url('landlord-report') . "?id={$this->id}'><b>PRINT REPORT (Design 2)</b></a><br>";
                 return $url;
