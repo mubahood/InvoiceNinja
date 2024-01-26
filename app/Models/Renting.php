@@ -12,7 +12,68 @@ class Renting extends Model
     use HasFactory;
 
 
-    protected $appends = ['name_text', 'name_text2'];
+    protected $appends = [
+        'name_text', 'name_text2', 'amount_paid', 'commission_amount',
+        'landlord_amount',
+        'last_payment_date',
+        'last_payment_amount',
+        'months_paid',
+    ];
+
+    //getter for amount_paid
+    public function getAmountPaidAttribute()
+    {
+        return $this->payments->sum('amount');
+    }
+
+    //getter for commission_amount
+    public function getCommissionAmountAttribute()
+    {
+        return $this->payments->sum('commission_amount');
+    }
+
+    //getter for landlord_amount_amount
+    public function getLandlordAmountAttribute()
+    {
+        return $this->payments->sum('landlord_amount');
+    }
+
+    //getter for last_payment_date
+    public function getLastPaymentDateAttribute()
+    {
+        $last_payment = $this->payments->last();
+        if ($last_payment == null) {
+            return null;
+        }
+        return $last_payment->created_at;
+    }
+
+    //getter for last_payment_amount
+    public function getLastPaymentAmountAttribute()
+    {
+        $last_payment = $this->payments->last();
+        if ($last_payment == null) {
+            return null;
+        }
+        return $last_payment->amount;
+    }
+
+    //getter for months_paid
+    public function getMonthsPaidAttribute()
+    {
+
+        //calculate amount_paid
+        $amount_paid = $this->payments->sum('amount');
+        $room_price = $this->room->price;
+        if($room_price == 0){
+            return 0;
+        }
+
+        $percentage_paid = $amount_paid / $room_price;
+        //round to nearest whole number
+        $months_paid = round($percentage_paid, 2);
+        return $months_paid;
+    }
 
     public function getNameTextAttribute()
     {

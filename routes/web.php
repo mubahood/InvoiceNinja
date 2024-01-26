@@ -101,7 +101,7 @@ Route::get('landlord-report', function () {
         $total_land_lord_disbashment += $payment->amount;
     }
 
-    $pdf->loadHTML(view('print/landlord-report', compact(
+    $pdf->loadHTML(view('print/landlord-report-1', compact(
         'rentings',
         'landlordPayments',
         'landLord',
@@ -117,6 +117,85 @@ Route::get('landlord-report', function () {
     )));
     return $pdf->stream($landLord->name . '-report.pdf');
 });
+
+Route::get('landlord-report-1', function () {
+    $report = \App\Models\LandLordReport::find(request()->id);
+
+    if ($report == null) {
+        die("Report not found.");
+    }
+
+    $landLord = \App\Models\Landload::find($report->landload_id);
+    if ($landLord == null) {
+        die("Landlord not found.");
+    }
+    if ($landLord == null) {
+        die("Landlord not found.");
+    }
+
+    //start_date
+    //end_date
+    $start_date = $report->start_date;
+    $end_date = $report->end_date;
+
+    $buldings = [];
+    $buldings_ids = [];
+
+
+    $rentings = Renting::where([
+        'landload_id' => $landLord->id
+    ])->orderBy('start_date', 'DESC') 
+        ->get();
+    
+    
+    $total_income = 0;
+    $total_commission = 0;
+    $total_land_lord_disbashment = 0;
+    $total_landlord_revenue = 0;
+    foreach ($rentings as $renting) {
+        if(!in_array($renting->house_id, $buldings_ids)){
+            $buldings_ids[] = $renting->house_id;
+            $buldings[] = $renting->house;
+        }
+        $total_income += $renting->amount_paid;
+        $total_commission += $renting->commission_amount;
+        $total_landlord_revenue += $renting->landlord_amount;
+    }
+
+
+    $pdf = App::make('dompdf.wrapper');
+
+
+    $landlordPayments = LandloadPayment::where([
+        'landload_id' => $landLord->id
+    ])->orderBy('id', 'DESC')
+        ->whereBetween('created_at', [$start_date, $end_date])
+        ->get();
+
+    $total_land_lord_disbashment = 0;
+    foreach ($landlordPayments as $payment) {
+        $total_land_lord_disbashment += $payment->amount;
+    }
+    $isView = true;
+    $data = compact(
+        'rentings',
+        'landlordPayments',
+        'landLord',
+        'total_income',
+        'buldings', 
+        'total_commission',
+        'total_landlord_revenue',
+        'total_land_lord_disbashment',
+        'report',
+        'start_date',
+        'isView',
+        'end_date'
+    );
+    return (view('print/landlord-report-1', $data));
+    $pdf->loadHTML(view('print/landlord-report-1', $data));
+    return $pdf->stream($landLord->name . '-report.pdf');
+});
+
 /* 
   "created_at" => "2023-06-30 11:17:43"
     "updated_at" => "2023-07-13 00:10:40"
