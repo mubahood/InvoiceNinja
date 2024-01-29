@@ -42,7 +42,7 @@ class LandLordReportController extends AdminController
 
         $grid->column('landload_id', __('Landload'))
             ->display(function ($x) {
-                $y = Landload::find($x)->name;
+                $y = Landload::find($x);
                 if($y == null){
                     $y->delete();
                     return 'Deleted'; 
