@@ -44,7 +44,7 @@ class LandLordReportController extends AdminController
             ->display(function ($x) {
                 $y = Landload::find($x);
                 if($y == null){
-                    $y->delete();
+                    $this->delete();
                     return 'Deleted'; 
                 }
                 $y->name;//as
