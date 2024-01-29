@@ -42,7 +42,12 @@ class LandLordReportController extends AdminController
 
         $grid->column('landload_id', __('Landload'))
             ->display(function ($x) {
-                return Landload::find($x)->name;
+                $y = Landload::find($x)->name;
+                if($y == null){
+                    $y->delete();
+                    return 'Deleted'; 
+                }
+                $y->name;
             })->sortable();
         $grid->column('start_date', __('Start Date'))
             ->display(function ($x) {
