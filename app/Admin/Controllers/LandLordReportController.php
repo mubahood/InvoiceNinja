@@ -47,7 +47,7 @@ class LandLordReportController extends AdminController
                     $y->delete();
                     return 'Deleted'; 
                 }
-                $y->name;
+                $y->name;//as
             })->sortable();
         $grid->column('start_date', __('Start Date'))
             ->display(function ($x) {
