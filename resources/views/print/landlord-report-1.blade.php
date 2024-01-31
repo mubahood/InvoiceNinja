@@ -326,15 +326,15 @@ $sign = public_path('/sign.jpg');
             't' => 'Total Income',
             's' => 'UGX ' . number_format($total_income),
         ])
-        @include('components.detail-item', [
+        {{-- @include('components.detail-item', [
             't' => 'Total Commission',
             's' => 'UGX ' . number_format($total_commission),
-        ])
+        ]) --}}
 
-        @include('components.detail-item', [
+        {{-- @include('components.detail-item', [
             't' => 'Total Landlord Revenue',
             's' => 'UGX ' . number_format($total_landlord_revenue),
-        ])
+        ]) --}}
 
         @include('components.detail-item', [
             't' => 'Total Expenses',
@@ -346,14 +346,14 @@ $sign = public_path('/sign.jpg');
             's' => 'UGX ' . number_format($total_land_lord_disbashment),
         ])
 
-        @include('components.detail-item', [
+        {{-- @include('components.detail-item', [
             't' => 'Total Landlord Balance',
             's' =>
                 'UGX ' .
                 number_format($landLord->balance) ,
-        ])
+        ]) --}}
 
-        <p class="my-h2 mt-3 mb-2 title" style="font-size: 1.0rem">TENANT PAYMENTS (Receipts)</p>
+        {{-- <p class="my-h2 mt-3 mb-2 title" style="font-size: 1.0rem">TENANT PAYMENTS (Receipts)</p> --}}
         <table class="table table-bordered my-table">
             <thead class="table table-bordered p-0 bg-dark" style="font-size: 0.8rem;">
                 <tr style="background-color: black;" class="p-0  text-white">
@@ -431,44 +431,49 @@ $sign = public_path('/sign.jpg');
                             <td style="text-align: right;">
                                 <b>{{ number_format($trans->months_paid - $trans->number_of_months) }}</b>
 
-                                {{-- 
-                                
-id	
-created_at	
-updated_at	
-house_id	
-tenant_id	
-start_date	
-end_date	
- 	 
-	
-is_in_house	
-is_overstay	
-remarks	
-room_id	
-fully_paid	
-update_billing	
-invoice_status	
-landload_id	
-invoice_as_been_billed	
-	
-
-                                --}}
-
-
-                                {{--
-
-                                <td style="text-align: right;"><b>{{ number_format($trans->amount) }}</b></td>
-                                <td style="text-align: right;"><b>{{ number_format($trans->commission_amount) }}</b></td>
-                                <td style="text-align: right;"><b>{{ number_format($trans->landlord_amount) }}</b></td>
-                            --}}
+                            {{-- </td> --}}
                         </tr>
                     @endforeach
                 @endforeach
             </tbody>
         </table>
 
-        <p class="my-h2 mt-3 mb-2 title text-left" style="font-size: 1.0rem">Disbursement Dates</p>
+
+        <p class="my-h2 mt-3 mb-2 title text-left" style="font-size: 1.0rem">Summary</p>
+        @include('components.detail-item', [
+            't' => 'Total Income',
+            's' => 'UGX ' . number_format($total_income),
+        ])
+        {{-- @include('components.detail-item', [
+            't' => 'Total Commission',
+            's' => 'UGX ' . number_format($total_commission),
+        ]) --}}
+
+        {{-- @include('components.detail-item', [
+            't' => 'Total Landlord Revenue',
+            's' => 'UGX ' . number_format($total_landlord_revenue),
+        ]) --}}
+
+        @include('components.detail-item', [
+            't' => 'Total Expenses',
+            's' => 'UGX ' . number_format($report->total_expense),
+        ])
+
+        @include('components.detail-item', [
+            't' => 'Total disbursement',
+            's' => 'UGX ' . number_format($total_land_lord_disbashment),
+        ])
+
+        {{-- @include('components.detail-item', [
+            't' => 'Total Landlord Balance',
+            's' =>
+                'UGX ' .
+                number_format($landLord->balance) ,
+        ]) --}}
+
+        
+
+        {{-- <p class="my-h2 mt-3 mb-2 title text-left" style="font-size: 1.0rem">Disbursement Dates</p>
         <table class="table-bordered my-table">
             <thead class="table table-bordered p-0 bg-dark" style="font-size: 0.8rem;">
                 <tr style="background-color: black;" class="p-0  text-white">
@@ -494,7 +499,7 @@ invoice_as_been_billed
                     </tr>
                 @endforeach
             </tbody>
-        </table>
+        </table> --}}
 
 
 
