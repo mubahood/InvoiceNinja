@@ -321,66 +321,30 @@ $sign = public_path('/sign.jpg');
         <p class="my-h2 mt-3 mb-2" style="font-size: 1.0rem">
             FINANCIAL REPORT FOR THE PERIOD {{ Utils::my_date($start_date) . ' - ' . Utils::my_date($end_date) }}
         </p>
-        <p class="my-h2 mt-3 mb-2 title text-left" style="font-size: 1.0rem">Summary</p>
-        @include('components.detail-item', [
-            't' => 'Total Income',
-            's' => 'UGX ' . number_format($total_income),
-        ])
-        {{-- @include('components.detail-item', [
-            't' => 'Total Commission',
-            's' => 'UGX ' . number_format($total_commission),
-        ]) --}}
-
-        {{-- @include('components.detail-item', [
-            't' => 'Total Landlord Revenue',
-            's' => 'UGX ' . number_format($total_landlord_revenue),
-        ]) --}}
-
-        @include('components.detail-item', [
-            't' => 'Total Expenses',
-            's' => 'UGX ' . number_format($report->total_expense),
-        ])
-
-        @include('components.detail-item', [
-            't' => 'Total disbursement',
-            's' => 'UGX ' . number_format($total_land_lord_disbashment),
-        ])
-
-        {{-- @include('components.detail-item', [
-            't' => 'Total Landlord Balance',
-            's' =>
-                'UGX ' .
-                number_format($landLord->balance) ,
-        ]) --}}
-
-        {{-- <p class="my-h2 mt-3 mb-2 title" style="font-size: 1.0rem">TENANT PAYMENTS (Receipts)</p> --}}
+        
         <table class="table table-bordered my-table">
             <thead class="table table-bordered p-0 bg-dark" style="font-size: 0.8rem;">
                 <tr style="background-color: black;" class="p-0  text-white">
                     <th style="border-color: white; height: 10px;  font-size: 12px; width: 15px;"
                         class="py-1 text-white">S/n.</th>
-                    <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Tenant's name
-                    </th>
-                    <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Months Rented
-                    </th>
-                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">From - To</th>
-                    <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Amount per month
-                        (UGX)</th>
-                    <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Total (UGX)</th>
+                    <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Tenant's name </th>
+                    <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Months Rented</th>
+                    <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Agreed Amount</th>
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Amount Paid</th>
+                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Month (s) Paid </th>
+                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Payment Date</th>
+                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">From - To</th>
+                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">In arrears</th>
+
+                  
+                    {{-- <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Total (UGX)</th> --}}
 
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Balance</th>
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Commission</th>
-                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Amount Banked
-                    </th>
+                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Amount Banked </th>
 
-                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Last Payment Made
-                    </th>
-                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Payment Date</th>
+                 {{-- <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Last Payment Made</th> --}}
 
-                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Month (s) Paid
-                    </th>
-                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">In arrears</th>
 
 
                 </tr>
