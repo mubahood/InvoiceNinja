@@ -328,8 +328,9 @@ $sign = public_path('/sign.jpg');
                     <th style="border-color: white; height: 10px;  font-size: 12px; width: 15px;"
                         class="py-1 text-white">S/n.</th>
                     <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Tenant's name </th>
-                    <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Months Rented</th>
                     <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Agreed Amount</th>
+
+                    <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Months Rented</th>
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Amount Paid</th>
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Month (s) Paid </th>
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Payment Date</th>
