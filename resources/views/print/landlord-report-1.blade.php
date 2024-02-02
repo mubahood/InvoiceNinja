@@ -330,7 +330,7 @@ $sign = public_path('/sign.jpg');
                     <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Tenant's name </th>
                     <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Agreed Amount</th>
 
-                    <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Months Rented</th>
+                    {{-- <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Months Rented</th> --}}
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Amount Paid</th>
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Month (s) Paid </th>
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Payment Date</th>
@@ -344,7 +344,7 @@ $sign = public_path('/sign.jpg');
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Commission</th>
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Amount Banked </th>
 
-                 {{-- <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Last Payment Made</th> --}}
+                 <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Last Payment Made</th>
 
 
 
@@ -380,22 +380,22 @@ $sign = public_path('/sign.jpg');
                         <tr>
                             <td>{{ $i }}</td>
                             <td>{{ $trans->tenant->name }}</td>
-                            <td style="text-align: center;"><b>{{ number_format($trans->number_of_months) }}</b></td>
-                            <td style="text-align: center;">{{ $trans->name_text2 }}</td>
                             <td style="text-align: right;"><b>{{ number_format($trans->room->price) }}</b></td>
-                            <td style="text-align: right;">
-                                <b>{{ number_format($trans->months_paid - $trans->number_of_months) }}</b></td>
-                            <td style="text-align: right;"><b>{{ number_format($trans->payable_amount) }}</b></td>
+                            {{-- <td style="text-align: center;"><b>{{ number_format($trans->number_of_months) }}</b></td> --}}
                             <td style="text-align: right;"><b>{{ number_format($trans->amount_paid) }}</b></td>
+
+
+                            {{-- <td style="text-align: right;"><b>{{ number_format($trans->payable_amount) }}</b></td> --}}
+                            <td style="text-align: right;"><b>{{ number_format($trans->months_paid) }}</b>
+                                <td style="text-align: right;"><b>{{ Utils::my_date($trans->last_payment_date) }}</b></td>
+                            <td style="text-align: center;">{{ $trans->name_text2 }}</td>
+                            <td style="text-align: right;"><b>{{ number_format($trans->months_paid - $trans->number_of_months) }}</b></td>
+                            {{-- <td style="text-align: right;"><b>{{ number_format($trans->amount_paid) }}</b></td> --}}
                             <td style="text-align: right;"><b>{{ number_format($trans->balance) }}</b></td>
                             <td style="text-align: right;"><b>{{ number_format($trans->commission_amount) }}</b></td>
                             <td style="text-align: right;"><b>{{ number_format($trans->landlord_amount) }}</b>
-                            <td style="text-align: right;"><b>{{ number_format($trans->last_payment_amount) }}</b>
-                            </td>
-                            {{-- <td style="text-align: right;"><b>{{ Utils::my_date($trans->last_payment_date) }}</b></td> --}}
-                            <td style="text-align: right;"><b>{{ number_format($trans->months_paid) }}</b>
-                            <td style="text-align: right;">
-                                <b>{{ number_format($trans->months_paid - $trans->number_of_months) }}</b></td>
+                            <td style="text-align: right;"><b>{{ number_format($trans->last_payment_amount) }}</b> </td>
+                            {{-- <td style="text-align: right;"> <b>{{ number_format($trans->months_paid - $trans->number_of_months) }}</b></td> --}}
                         </tr>
                     @endforeach
                 @endforeach

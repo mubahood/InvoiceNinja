@@ -39,20 +39,27 @@ class LandLordReportController extends AdminController
         $grid->model()->orderBy('id', 'desc');
         $grid->disableBatchActions();
         $grid->column('id', __('ID'))->sortable();
-
         $grid->column('landload_id', __('Landload'))
+            //display landload name
+
             ->display(function ($x) {
                 $y = Landload::find($x);
-                if($y == null){
+                return $y->name;
+                if ($y == null) {
+
                     $this->delete();
-                    return 'Deleted'; 
+                    return 'Deleted';
                 }
-                $y->name;//as
+
+                // $y->name;
+
             })->sortable();
+
         $grid->column('start_date', __('Start Date'))
             ->display(function ($x) {
                 return date('d M Y', strtotime($x));
             })->sortable();
+
         $grid->column('end_date', __('End Date'))
             ->display(function ($x) {
                 return date('d M Y', strtotime($x));
