@@ -62,7 +62,7 @@ Route::get('landlord-report', function () {
     $end_date = Carbon::parse($report->end_date)->format('Y-m-d');
     $tenantPayments = TenantPayment::where([
         'landload_id' => $landLord->id
-    ])->whereBetween('created_at', [$start_date, $end_date])->get();
+    ])/* ->whereBetween('created_at', [$start_date, $end_date]) */->get();
 
     $buldings = [];
     $buldings_ids = [];
@@ -72,6 +72,12 @@ Route::get('landlord-report', function () {
     $total_landlord_revenue = 0;
 
     foreach ($tenantPayments as $payment) {
+
+        //created_at not in range of start_date and end_date continue
+        if (Carbon::parse($payment->created_at)->format('Y-m-d') < $start_date || Carbon::parse($payment->created_at)->format('Y-m-d') > $end_date) {
+            continue;
+        } 
+
         $total_income += $payment->amount;
         $total_commission += $payment->commission_amount;
         $total_landlord_revenue += $payment->landlord_amount;
