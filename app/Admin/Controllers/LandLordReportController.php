@@ -44,13 +44,13 @@ class LandLordReportController extends AdminController
 
             ->display(function ($x) {
                 $y = Landload::find($x);
-                return $y->name;
                 if ($y == null) {
-
+                    
                     $this->delete();
                     return 'Deleted';
                 }
-
+                
+                return $y->name;
                 // $y->name;
 
             })->sortable();
