@@ -8,6 +8,7 @@ use App\Models\LandloadPayment;
 use App\Models\Renting;
 use App\Models\TenantPayment;
 use App\Models\Utils;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
@@ -57,8 +58,8 @@ Route::get('landlord-report', function () {
 
     //start_date
     //end_date
-    $start_date = $report->start_date;
-    $end_date = $report->end_date;
+    $start_date = Carbon::parse($report->start_date)->format('Y-m-d');
+    $end_date = Carbon::parse($report->end_date)->format('Y-m-d');
     $tenantPayments = TenantPayment::where([
         'landload_id' => $landLord->id
     ])->whereBetween('created_at', [$start_date, $end_date])->get();
@@ -86,7 +87,8 @@ Route::get('landlord-report', function () {
     $rentings = Renting::where([
         'landload_id' => $landLord->id
     ])->orderBy('start_date', 'DESC')
-        ->limit(25)
+        ->limit(250)
+        ->whereBetween('created_at', [$start_date, $end_date])
         ->get();
 
 
@@ -144,16 +146,16 @@ Route::get('landlord-report-1', function () {
 
     $rentings = Renting::where([
         'landload_id' => $landLord->id
-    ])->orderBy('start_date', 'DESC') 
+    ])->orderBy('start_date', 'DESC')
         ->get();
-    
-    
+
+
     $total_income = 0;
     $total_commission = 0;
     $total_land_lord_disbashment = 0;
     $total_landlord_revenue = 0;
     foreach ($rentings as $renting) {
-        if(!in_array($renting->house_id, $buldings_ids)){
+        if (!in_array($renting->house_id, $buldings_ids)) {
             $buldings_ids[] = $renting->house_id;
             $buldings[] = $renting->house;
         }
@@ -182,7 +184,7 @@ Route::get('landlord-report-1', function () {
         'landlordPayments',
         'landLord',
         'total_income',
-        'buldings', 
+        'buldings',
         'total_commission',
         'total_landlord_revenue',
         'total_land_lord_disbashment',
