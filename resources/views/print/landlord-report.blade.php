@@ -295,8 +295,8 @@ $sign = public_path('/sign.jpg');
                     </td>
                     <td class=" text-center">
                         <p class="p-0 m-0" style="font-size: 1.3rem;"><b>NICSIM PROPERTY MANAGERS LIMITED</b></p>
-                        <p class="mt-1">P.O.BOX: <b>27063 - KAMPALA</b>
-                        <p class="mt-1">Tel: <b>+256708180880</b> , <b>+256775280880</b>
+                        <p class="mt-1">P.O.BOX: <b>113140 - WAKISO UG</b>
+                        <p class="mt-1">Tel: <b>+256708180880</b> , <b>+256775612261</b>
                         <p class="mt-1">Email: <b>info@nicsimproperty.com</b> , Website <b>www.nicsimproperty.com</b>
                         </p>
                     </td>
@@ -324,7 +324,7 @@ $sign = public_path('/sign.jpg');
         @include('components.detail-item', [
             't' => 'Total Commission',
             's' => 'UGX ' . number_format($total_commission),
-        ])
+        ]) 
 
         @include('components.detail-item', [
             't' => 'Total Landlord Revenue',

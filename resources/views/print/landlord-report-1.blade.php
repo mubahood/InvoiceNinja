@@ -300,8 +300,8 @@ $sign = public_path('/sign.jpg');
                     </td>
                     <td class=" text-center">
                         <p class="p-0 m-0" style="font-size: 1.3rem;"><b>NICSIM PROPERTY MANAGERS LIMITED</b></p>
-                        <p class="mt-1">P.O.BOX: <b>27063 - KAMPALA</b>
-                        <p class="mt-1">Tel: <b>+256708180880</b> , <b>+256775280880</b>
+                        <p class="mt-1">P.O.BOX: <b>113140 - WAKISO UG</b>
+                        <p class="mt-1">Tel: <b>+256708180880</b> , <b>+256775612261</b>
                         <p class="mt-1">Email: <b>info@nicsimproperty.com</b> , Website <b>www.nicsimproperty.com</b>
                         </p>
                     </td>
@@ -335,7 +335,7 @@ $sign = public_path('/sign.jpg');
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Month (s) Paid </th>
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Payment Date</th>
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">From - To</th>
-                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">In arrears</th>
+                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Months In arrears</th>
 
                   
                     {{-- <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Total (UGX)</th> --}}
@@ -344,7 +344,7 @@ $sign = public_path('/sign.jpg');
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Commission</th>
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Amount Banked </th>
 
-                 <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Last Payment Made</th>
+                 {{-- <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Last Payment Made</th> --}}
 
 
 
@@ -394,7 +394,7 @@ $sign = public_path('/sign.jpg');
                             <td style="text-align: right;"><b>{{ number_format($trans->balance) }}</b></td>
                             <td style="text-align: right;"><b>{{ number_format($trans->commission_amount) }}</b></td>
                             <td style="text-align: right;"><b>{{ number_format($trans->landlord_amount) }}</b>
-                            <td style="text-align: right;"><b>{{ number_format($trans->last_payment_amount) }}</b> </td>
+                            {{-- <td style="text-align: right;"><b>{{ number_format($trans->last_payment_amount) }}</b> </td> --}}
                             {{-- <td style="text-align: right;"> <b>{{ number_format($trans->months_paid - $trans->number_of_months) }}</b></td> --}}
                         </tr>
                     @endforeach
