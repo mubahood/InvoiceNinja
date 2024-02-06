@@ -93,11 +93,11 @@ class LandloadController extends AdminController
             })->totalRow(function ($x) {
                 return  number_format($x);
             })->sortable();
-        $grid->column('report', __('Report'))
+      /*   $grid->column('report', __('Report'))
             ->display(function ($x) {
                 return "<a class=\"d-block text-primary text-center\" target=\"_blank\" href='" . url('landlord-report') . "?id={$this->id}'><b>PRINT</b></a>";
             })->sortable();
-
+ */
         $grid->column('created_at', __('Date'))->display(function ($x) {
             return Utils::my_date_time($x);
         })
