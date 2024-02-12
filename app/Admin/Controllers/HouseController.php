@@ -151,7 +151,7 @@ class HouseController extends AdminController
             ->options(Location::get_sub_counties_array())
             ->rules('required');
 
-        $form->text('name', __('House/Building Name'))->rules('required');
+        $form->text('name', __('Estate Name'))->rules('required');
         $form->text('address', __('Full Address'))->rules('required');
         $form->image('image', __('Image'));
         $form->file('attachment', __('Attachment'));

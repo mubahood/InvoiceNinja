@@ -286,11 +286,10 @@ $sign = public_path('/sign.jpg');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{ $link }}">
-    <title>Payment receipt</title>
+    <title>Payment report</title>
 </head>
 
 <body>
-
     <div class="main">
         <table class="w-100 ">
             <tbody>
@@ -298,11 +297,11 @@ $sign = public_path('/sign.jpg');
                     <td style="width: 25%;" class="pr-2">
                         <img class="img-fluid" src="{{ $logo_link }}">
                     </td>
-                    <td class=" text-center">
+                    <td class=" text-center-left">
                         <p class="p-0 m-0" style="font-size: 1.3rem;"><b>NICSIM PROPERTY MANAGERS LIMITED</b></p>
-                        <p class="mt-1">P.O.BOX: <b>113140 - WAKISO UG</b>
+                        <p class="mt-1">P.O.BOX: <b>113140   WAKISO -UGANDA</b>
                         <p class="mt-1">Tel: <b>+256708180880</b> , <b>+256775612261</b>
-                        <p class="mt-1">Email: <b>info@nicsimproperty.com</b> , Website <b>www.nicsimproperty.com</b>
+                        <p class="mt-1">Email: <b>nicsimproperty@gmail.com</b> , Website <b>www.nicsimproperty.com</b>
                         </p>
                     </td>
                     <td style="width: 15%; text-align: right;">
