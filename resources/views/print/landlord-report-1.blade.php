@@ -294,7 +294,7 @@ $sign = public_path('/sign.jpg');
         <table class="w-100 ">
             <tbody>
                 <tr>
-                    <td style="width: 25%;" class="pr-2">
+                    <td style="width: 15%;" class="pr-2">
                         <img class="img-fluid" src="{{ $logo_link }}">
                     </td>
                     <td class=" text-center-left">
