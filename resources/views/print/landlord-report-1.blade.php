@@ -337,7 +337,7 @@ $sign = public_path('/sign.jpg');
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Amount Paid</th>
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Month (s) Paid
                     </th>
-                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Payment Date</th>
+                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Last Payment Date</th>
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Months In arrears
                     </th>
 
