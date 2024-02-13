@@ -188,6 +188,12 @@ Route::get('landlord-report-1', function () {
         ->whereBetween('created_at', [$start_date, $end_date])
         ->get();
 
+    $tenantPayments = TenantPayment::where([
+        'landload_id' => $landLord->id
+    ])->orderBy('id', 'DESC')
+        ->whereBetween('created_at', [$start_date, $end_date])
+        ->get();
+
     $total_land_lord_disbashment = 0;
     foreach ($landlordPayments as $payment) {
         $total_land_lord_disbashment += $payment->amount;
@@ -196,6 +202,7 @@ Route::get('landlord-report-1', function () {
     $data = compact(
         'rentings',
         'landlordPayments',
+        'tenantPayments',
         'landLord',
         'total_income',
         'buldings',

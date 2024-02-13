@@ -325,10 +325,11 @@ $sign = public_path('/sign.jpg');
             <thead class="table table-bordered p-0 bg-dark" style="font-size: 0.8rem;">
                 <tr style="background-color: black;" class="p-0  text-white">
                     <th style="border-color: white; height: 10px;  font-size: 12px; width: 15px;"
-                        class="py-1 text-white">S/n.</th>
+                        class="py-1 text-white">Ref.</th>
                     <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Tenant's name
                     </th>
-                    <th style="border-color: white; height: 10px;  font-size: 12px;  width: 15%" class=" p-1 px-1">From - To</th>
+                    <th style="border-color: white; height: 10px;  font-size: 12px;  width: 15%" class=" p-1 px-1">From
+                        - To</th>
                     <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Agreed Amount
                     </th>
 
@@ -361,7 +362,8 @@ $sign = public_path('/sign.jpg');
                 @endphp
                 @foreach ($buldings as $bulding)
                     <tr tyle="border: #000 solid 2px!important; border-collapse: collapse !important">
-                        <td  style="border: #000 solid 2px!important; border-collapse: collapse !important;" class="text-uppercase font-weight-bold">
+                        <td style="border: #000 solid 2px!important; border-collapse: collapse !important;"
+                            class="text-uppercase font-weight-bold">
                             <b>ESTATE:</b> {{ $bulding->name }}
                         </td>
                     </tr>
@@ -382,7 +384,7 @@ $sign = public_path('/sign.jpg');
                             $i++;
                         @endphp
                         <tr>
-                            <td>{{ $i }}</td>
+                            <td>#{{ $trans->id }}</td>
                             <td>{{ $trans->tenant->name }}</td>
                             <td style="text-align: center;">{{ $trans->name_text2 }}</td>
                             <td style="text-align: right;"><b>{{ number_format($trans->room->price) }}</b></td>
@@ -394,7 +396,8 @@ $sign = public_path('/sign.jpg');
                             <td style="text-align: right;"><b>{{ number_format($trans->months_paid) }}</b>
                             <td style="text-align: right;"><b>{{ Utils::my_date($trans->created_at) }}</b></td>
                             <td style="text-align: right;">
-                                <b>{{ number_format($trans->months_paid - $trans->number_of_months) }}</b></td>
+                                <b>{{ number_format($trans->months_paid - $trans->number_of_months) }}</b>
+                            </td>
                             {{-- <td style="text-align: right;"><b>{{ number_format($trans->amount_paid) }}</b></td> --}}
                             <td style="text-align: right;"><b>{{ number_format($trans->balance) }}</b></td>
                             <td style="text-align: right;"><b>{{ number_format($trans->commission_amount) }}</b></td>
@@ -406,6 +409,75 @@ $sign = public_path('/sign.jpg');
                 @endforeach
             </tbody>
         </table>
+
+        <br>
+        <p class="my-h2 mt-3 mb-2 title text-center" style="font-size: 1.0rem; page-break-before: always;">Tenants Payemnts for the period
+            {{ Utils::my_date($start_date) . ' - ' . Utils::my_date($end_date) }}</p>
+        <table class="table-bordered my-table" style="width: 100%">
+            <thead class="table table-bordered p-0 bg-dark" style="font-size: 0.8rem;">
+                <tr style="background-color: black;" class="p-0  text-white">
+                    <th style="border-color: white; height: 10px; width: 15px;" class="py-1 text-white">S/n.</th>
+                    <th style="border-color: white; height: 10px; " class=" p-1 px-1">Date</th>
+                    <th style="border-color: white; height: 10px; " class=" p-1">Tenant</th>
+                    <th style="border-color: white; height: 10px; " class=" p-1">Amount (UGX)</th>
+                    <th style="border-color: white; height: 10px; " class=" p-1">Due to Renting of</th>
+                    <th style="border-color: white; height: 10px; " class=" p-1">Ref</th>
+                    <th style="border-color: white; height: 10px; " class=" p-1">Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $i = 0;
+                @endphp
+                @foreach ($tenantPayments as $trans)
+                    @php
+                        $i++;
+                    @endphp
+                    <tr>
+                        <td>{{ $i }}</td>
+                        <td>{{ Utils::my_date($trans->created_at) }}</td>
+                        <td style="text-align: left;"><b>{{ $trans->tenant->name }}</b></td>
+                        <td style="text-align: right;"><b>{{ number_format($trans->amount) }}</b></td>
+                        <td style="text-align: left;"><b>{{ $trans->renting->name_text2 }}</b></td>
+                        <td style="text-align: left;"><b>#{{ $trans->renting->id }}</b></td>
+                        <td style="text-align: right;"><b>{{ number_format($trans->renting->balance) }}</b></td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+
+        <br>
+        <p class="my-h2 mt-3 mb-2 title text-left" style="font-size: 1.0rem; page-break-before: always;">Landlord payments for the period
+            {{ Utils::my_date($start_date) . ' - ' . Utils::my_date($end_date) }}</p>
+        <table class="table-bordered my-table">
+            <thead class="table table-bordered p-0 bg-dark" style="font-size: 0.8rem;">
+                <tr style="background-color: black;" class="p-0  text-white">
+                    <th style="border-color: white; height: 10px; width: 15px;" class="py-1 text-white">S/n.</th>
+                    <th style="border-color: white; height: 10px; " class=" p-1 px-1">Date</th>
+                    <th style="border-color: white; height: 10px; " class=" p-1">Amount (UGX)</th>
+                    <th style="border-color: white; height: 10px; " class=" p-1">Detail</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $i = 0;
+                @endphp
+                @foreach ($landlordPayments as $trans)
+                    @php
+                        $i++;
+                    @endphp
+                    <tr>
+                        <td>{{ $i }}</td>
+                        <td>{{ Utils::my_date($trans->created_at) }}</td>
+                        <td style="text-align: right;"><b>{{ number_format($trans->amount) }}</b></td>
+                        <td style="text-align: left;"><b>{{ $trans->details }}</b></td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+
 
 
         <p class="my-h2 mt-3 mb-2 title text-left" style="font-size: 1.0rem">Summary</p>
@@ -442,33 +514,6 @@ $sign = public_path('/sign.jpg');
 
 
 
-        {{-- <p class="my-h2 mt-3 mb-2 title text-left" style="font-size: 1.0rem">Disbursement Dates</p>
-        <table class="table-bordered my-table">
-            <thead class="table table-bordered p-0 bg-dark" style="font-size: 0.8rem;">
-                <tr style="background-color: black;" class="p-0  text-white">
-                    <th style="border-color: white; height: 10px; width: 15px;" class="py-1 text-white">S/n.</th>
-                    <th style="border-color: white; height: 10px; " class=" p-1 px-1">Date</th>
-                    <th style="border-color: white; height: 10px; " class=" p-1">Amount (UGX)</th>
-                    <th style="border-color: white; height: 10px; " class=" p-1">Detail</th>
-                </tr>
-            </thead>
-            <tbody>
-                @php
-                    $i = 0;
-                @endphp
-                @foreach ($landlordPayments as $trans)
-                    @php
-                        $i++;
-                    @endphp
-                    <tr>
-                        <td>{{ $i }}</td>
-                        <td>{{ Utils::my_date($trans->created_at) }}</td>
-                        <td style="text-align: right;"><b>{{ number_format($trans->amount) }}</b></td>
-                        <td style="text-align: left;"><b>{{ $trans->details }}</b></td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table> --}}
 
 
 
