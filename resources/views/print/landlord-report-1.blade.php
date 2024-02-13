@@ -299,7 +299,7 @@ $sign = public_path('/sign.jpg');
                     </td>
                     <td class=" text-center-left">
                         <p class="p-0 m-0" style="font-size: 1.3rem;"><b>NICSIM PROPERTY MANAGERS LIMITED</b></p>
-                        <p class="mt-1">P.O.BOX: <b>113140   WAKISO -UGANDA</b>
+                        <p class="mt-1">P.O.BOX: <b>113140 WAKISO -UGANDA</b>
                         <p class="mt-1">Tel: <b>+256708180880</b> , <b>+256775612261</b>
                         <p class="mt-1">Email: <b>nicsimproperty@gmail.com</b> , Website <b>www.nicsimproperty.com</b>
                         </p>
@@ -320,30 +320,35 @@ $sign = public_path('/sign.jpg');
         <p class="my-h2 mt-3 mb-2" style="font-size: 1.0rem">
             FINANCIAL REPORT FOR THE PERIOD {{ Utils::my_date($start_date) . ' - ' . Utils::my_date($end_date) }}
         </p>
-        
+
         <table class="table table-bordered my-table">
             <thead class="table table-bordered p-0 bg-dark" style="font-size: 0.8rem;">
                 <tr style="background-color: black;" class="p-0  text-white">
                     <th style="border-color: white; height: 10px;  font-size: 12px; width: 15px;"
                         class="py-1 text-white">S/n.</th>
-                    <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Tenant's name </th>
-                    <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Agreed Amount</th>
+                    <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Tenant's name
+                    </th>
+                    <th style="border-color: white; height: 10px;  font-size: 12px;  width: 15%" class=" p-1 px-1">From - To</th>
+                    <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Agreed Amount
+                    </th>
 
                     {{-- <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Months Rented</th> --}}
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Amount Paid</th>
-                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Month (s) Paid </th>
+                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Month (s) Paid
+                    </th>
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Payment Date</th>
-                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">From - To</th>
-                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Months In arrears</th>
+                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Months In arrears
+                    </th>
 
-                  
+
                     {{-- <th style="border-color: white; height: 10px; font-size: 12px; " class=" p-1 px-1">Total (UGX)</th> --}}
 
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Balance</th>
                     <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Commission</th>
-                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Amount Banked </th>
+                    <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Amount Banked
+                    </th>
 
-                 {{-- <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Last Payment Made</th> --}}
+                    {{-- <th style="border-color: white; height: 10px;  font-size: 12px;" class=" p-1 px-1">Last Payment Made</th> --}}
 
 
 
@@ -355,8 +360,8 @@ $sign = public_path('/sign.jpg');
                     $done_records = [];
                 @endphp
                 @foreach ($buldings as $bulding)
-                    <tr>
-                        <td colspan="8" class="text-uppercase font-weight-bold">
+                    <tr tyle="border: #000 solid 2px!important; border-collapse: collapse !important">
+                        <td  style="border: #000 solid 2px!important; border-collapse: collapse !important;" class="text-uppercase font-weight-bold">
                             {{ $bulding->name }}
                         </td>
                     </tr>
@@ -379,6 +384,7 @@ $sign = public_path('/sign.jpg');
                         <tr>
                             <td>{{ $i }}</td>
                             <td>{{ $trans->tenant->name }}</td>
+                            <td style="text-align: center;">{{ $trans->name_text2 }}</td>
                             <td style="text-align: right;"><b>{{ number_format($trans->room->price) }}</b></td>
                             {{-- <td style="text-align: center;"><b>{{ number_format($trans->number_of_months) }}</b></td> --}}
                             <td style="text-align: right;"><b>{{ number_format($trans->amount_paid) }}</b></td>
@@ -386,15 +392,15 @@ $sign = public_path('/sign.jpg');
 
                             {{-- <td style="text-align: right;"><b>{{ number_format($trans->payable_amount) }}</b></td> --}}
                             <td style="text-align: right;"><b>{{ number_format($trans->months_paid) }}</b>
-                                <td style="text-align: right;"><b>{{ Utils::my_date($trans->created_at) }}</b></td>
-                            <td style="text-align: center;">{{ $trans->name_text2 }}</td>
-                            <td style="text-align: right;"><b>{{ number_format($trans->months_paid - $trans->number_of_months) }}</b></td>
+                            <td style="text-align: right;"><b>{{ Utils::my_date($trans->created_at) }}</b></td>
+                            <td style="text-align: right;">
+                                <b>{{ number_format($trans->months_paid - $trans->number_of_months) }}</b></td>
                             {{-- <td style="text-align: right;"><b>{{ number_format($trans->amount_paid) }}</b></td> --}}
                             <td style="text-align: right;"><b>{{ number_format($trans->balance) }}</b></td>
                             <td style="text-align: right;"><b>{{ number_format($trans->commission_amount) }}</b></td>
                             <td style="text-align: right;"><b>{{ number_format($trans->landlord_amount) }}</b>
-                            {{-- <td style="text-align: right;"><b>{{ number_format($trans->last_payment_amount) }}</b> </td> --}}
-                            {{-- <td style="text-align: right;"> <b>{{ number_format($trans->months_paid - $trans->number_of_months) }}</b></td> --}}
+                                {{-- <td style="text-align: right;"><b>{{ number_format($trans->last_payment_amount) }}</b> </td> --}}
+                                {{-- <td style="text-align: right;"> <b>{{ number_format($trans->months_paid - $trans->number_of_months) }}</b></td> --}}
                         </tr>
                     @endforeach
                 @endforeach
@@ -434,7 +440,7 @@ $sign = public_path('/sign.jpg');
                 number_format($landLord->balance) ,
         ]) --}}
 
-        
+
 
         {{-- <p class="my-h2 mt-3 mb-2 title text-left" style="font-size: 1.0rem">Disbursement Dates</p>
         <table class="table-bordered my-table">
