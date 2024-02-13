@@ -362,7 +362,7 @@ $sign = public_path('/sign.jpg');
                 @foreach ($buldings as $bulding)
                     <tr tyle="border: #000 solid 2px!important; border-collapse: collapse !important">
                         <td  style="border: #000 solid 2px!important; border-collapse: collapse !important;" class="text-uppercase font-weight-bold">
-                            {{ $bulding->name }}
+                            ESTATE: {{ $bulding->name }}
                         </td>
                     </tr>
                     @php
