@@ -72,7 +72,7 @@ class LandLordReportController extends AdminController
                 $url .= "<a  style=' line-height: 10px;' class=\"d-block text-primary text-center\" target=\"_blank\" href='" . url('landlord-report') . "?id={$this->id}'><b>PRINT REPORT (Design 2)</b></a><br>";
                 return $url;
             })->sortable();
-
+ 
         return $grid;
     }
 
