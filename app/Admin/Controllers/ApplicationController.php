@@ -38,6 +38,10 @@ class ApplicationController extends AdminController
         if ($u->isRole('basic-user')) {
             $conditions['user_id'] = $u->id;
         }
+        if($current_segment == 'cases-pending'){
+            $conditions['stage'] = 'Pending';
+        }
+
 
         $grid->model()
             ->where($conditions)
