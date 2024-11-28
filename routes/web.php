@@ -16,6 +16,26 @@ Route::get('auth/register', [MainController::class, 'register'])->name('form');
 Route::get('generate-class', [MainController::class, 'generate_class']);
 Route::get('process-things', [Utils::class, 'process_things']);
 
+Route::get('verification-mail-sent', function () {
+    return view('auth.verification-mail-sent');
+});
+Route::get('mail-test', function () {
+/* 
+    return view('mails/mail-1',
+                [
+                    'body' => 'sah',
+                    'title' => 'ansj'
+                ]); */
+
+    $data['body'] = 'This should be the body of the <b>email</b>.';
+    //$data['view'] = 'mails/mail-1';
+    $data['data'] = $data['body'];
+    $data['name'] = 'Hohn peter';
+    $data['email'] = 'mubahood360@gmail.com';
+    $data['subject'] = 'TAT UGANDA ' . ' - M-Omulimisa';
+
+    Utils::mail_sender($data);
+});
 Route::get('cv', function () {
     //return view('print/print-admission-letter');
     $pdf = App::make('dompdf.wrapper');

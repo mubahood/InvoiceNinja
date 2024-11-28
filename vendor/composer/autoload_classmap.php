@@ -36,6 +36,7 @@ return array(
     'App\\Admin\\Controllers\\EnjazController' => $baseDir . '/app/Admin/Controllers/EnjazController.php',
     'App\\Admin\\Controllers\\EventBookingController' => $baseDir . '/app/Admin/Controllers/EventBookingController.php',
     'App\\Admin\\Controllers\\EventController' => $baseDir . '/app/Admin/Controllers/EventController.php',
+    'App\\Admin\\Controllers\\EventControllerOld' => $baseDir . '/app/Admin/Controllers/EventControllerOld.php',
     'App\\Admin\\Controllers\\ExampleController' => $baseDir . '/app/Admin/Controllers/ExampleController.php',
     'App\\Admin\\Controllers\\FailedController' => $baseDir . '/app/Admin/Controllers/FailedController.php',
     'App\\Admin\\Controllers\\GardenActivityController' => $baseDir . '/app/Admin/Controllers/GardenActivityController.php',
