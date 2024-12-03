@@ -15,6 +15,25 @@ Route::group([
     $router->get('/', 'HomeController@index')->name('home');
     $router->get('/calendar', 'HomeController@calendar')->name('calendar');
 
+    $router->resource('applications-filing', ApplicationController::class);
+    $router->resource('applications-defense', ApplicationController::class);
+    $router->resource('applications-scheduled', ApplicationController::class);
+    $router->resource('applications-mediation', ApplicationController::class);
+    $router->resource('applications-hearing', ApplicationController::class);
+    $router->resource('applications-closed', ApplicationController::class);
+    /* 
+
+
+    1. [Application Filing](filing)
+2. [Defense Response Stage](defense)
+3. [Scheduled Applications](scheduled)
+4. [Mediation](mediation)
+5. [Hearing and Ruling Stage](#hearing)
+6. [Cloased](#closed)
+
+    */
+
+
     $router->resource('applications', ApplicationController::class);
     $router->resource('my-applications', ApplicationController::class);
     $router->resource('cases-pending', ApplicationController::class);

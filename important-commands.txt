@@ -65,7 +65,7 @@ php artisan make:migration create_offences_table
 php artisan make:migration create_attarchments_table
 php artisan make:migration create_events_table
 
-php artisan make:migration add_mail_verified_to_users_table --table=users
+php artisan make:migration add_shedule_to_applications --table=applications
 
 
 Encore\Admin\Auth\Database\Administrator::class,
@@ -177,4 +177,4 @@ php artisan make:model DeliveryItem
 php artisan make:model CaseModel
 php artisan make:model Attarchment
 php artisan make:model Application
-php artisan make:model Event
+php artisan make:model ApplicationHasPanel -m

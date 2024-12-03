@@ -36,56 +36,112 @@ class HomeController extends Controller
 
 
         $u = Auth::user();
+
+
+        if ($u->isRole('basic-user')) {
+            $draft = Application::where('user_id', $u->id)->where('stage', 'Draft')->first();
+            if ($draft != null) {
+                $url = url('applications/' . $draft->id . '/edit');
+                admin_info('Alert', 'You have a draft application. <a href="' . $url . '">Click here to edit and submit the draft application</a>.');
+            }
+        }
+
+
         $content
             ->title('Tax Appeals Tribunal - Dashboard')
             ->description('Hello ' . $u->name . "!");
 
         $content->row(function (Row $row) {
 
-            $row->column(3, function (Column $column) {
-                $conditons = [
-                    ['stage', '=', 'Pending'],
-                ];
-                if (Auth::user()->isRole('basic-user')) {
-                    $conditons[] = ['user_id', '=', Auth::user()->id];
-                }
-                $column->append(view('widgets.box-5', [
-                    'is_dark' => false,
-                    'title' => 'Pending',
-                    'sub_title' => NULL,
-                    'number' => number_format(Application::where($conditons)->count()),
-                    'link' => 'applications?stage=Pending'
-                ]));
-            });
-            $row->column(3, function (Column $column) {
-                $column->append(view('widgets.box-5', [
-                    'is_dark' => false,
-                    'title' => 'Waiting for Hearing',
-                    'sub_title' => NULL,
-                    'number' => number_format(Application::where('stage', 'Hearing')->count()),
-                    'link' => 'applications?stage=Hearing'
-                ]));
-            });
+            $u = Admin::user();
 
-            $row->column(3, function (Column $column) {
-                $column->append(view('widgets.box-5', [
-                    'is_dark' => false,
-                    'title' => 'Under Mediation',
-                    'sub_title' => NULL,
-                    'number' => number_format(Application::where('stage', 'Mediation')->count()),
-                    'link' => 'applications?stage=Mediation'
-                ]));
-            });
+            if (
+                $u->isRole('admin') ||
+                $u->isRole('basic-user')
+            ) {
+                $row->column(3, function (Column $column) {
+                    $conditons['stage'] = 'Pending';
+                    $u = Admin::user();
+                    if (!$u->isRole('admin')) {
+                        $conditons['user_id'] = $u->id;
+                    }
+                    $column->append(view('widgets.box-5', [
+                        'is_dark' => false,
+                        'title' => 'Pending for review',
+                        'sub_title' => 'Waiting for registry to review the application.',
+                        'number' => number_format(Application::where($conditons)->count()),
+                        'link' => 'applications-filing'
+                    ]));
+                });
+            }
 
-            $row->column(3, function (Column $column) {
-                $column->append(view('widgets.box-5', [
-                    'is_dark' => true,
-                    'title' => 'In Court',
-                    'sub_title' => NULL,
-                    'number' => number_format(Application::where('stage', 'Court')->count()),
-                    'link' => 'applications?stage=Court'
-                ]));
-            });
+            if (
+                $u->isRole('admin') ||
+                $u->isRole('ura') ||
+                $u->isRole('basic-user')
+            ) {
+                $row->column(3, function (Column $column) {
+                    $conditons['stage'] = 'Defence';
+                    $u = Admin::user();
+                    if (!$u->isRole('admin') && !$u->isRole('ura')) {
+                        $conditons['user_id'] = $u->id;
+                    }
+                    $column->append(view('widgets.box-5', [
+                        'is_dark' => false,
+                        'title' => 'URA Defence',
+                        'sub_title' => 'Waiting for URA to submit defence.',
+                        'number' => number_format(Application::where($conditons)
+                            ->where('has_ura_submitted_defence', '!=', 'Yes')
+                            ->count()),
+                        'link' => 'applications-defense?&has_ura_submitted_defence%5B%5D=No'
+                    ]));
+                });
+            }
+
+            if (
+                $u->isRole('admin') ||
+                $u->isRole('ura') ||
+                $u->isRole('basic-user')
+            ) {
+                $row->column(3, function (Column $column) {
+                    $conditons['stage'] = 'Defence';
+                    $u = Admin::user();
+                    if (!$u->isRole('admin') && !$u->isRole('ura')) {
+                        $conditons['user_id'] = $u->id;
+                    }
+                    $column->append(view('widgets.box-5', [
+                        'is_dark' => false,
+                        'title' => 'Panel Allocation',
+                        'sub_title' => 'Waiting for registry to allocate panel.',
+                        'number' => number_format(Application::where($conditons)
+                            ->where('has_ura_submitted_defence', '=', 'Yes')
+                            ->count()),
+                        'link' => 'applications-defense?&has_ura_submitted_defence%5B%5D=Yes'
+                    ]));
+                });
+            }
+            if (
+                $u->isRole('admin') ||
+                $u->isRole('ura') ||
+                $u->isRole('manager') ||
+                $u->isRole('basic-user')
+            ) {
+                $row->column(3, function (Column $column) {
+                    $conditons['stage'] = 'Scheduled';
+                    $u = Admin::user();
+                    if (!$u->isRole('admin') && !$u->isRole('ura')) {
+                        $conditons['user_id'] = $u->id;
+                    }
+                    $column->append(view('widgets.box-5', [
+                        'is_dark' => false,
+                        'title' => 'Scheduled for conference',
+                        'sub_title' => 'Applications scheduled for conference.',
+                        'number' => number_format(Application::where($conditons)
+                            ->count()),
+                        'link' => 'applications-scheduled'
+                    ]));
+                });
+            }
         });
 
         $content->row(function (Row $row) {

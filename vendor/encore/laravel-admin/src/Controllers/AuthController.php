@@ -120,17 +120,20 @@ class AuthController extends Controller
             'username' => $request->username,
             'password' => $request->password,
         ], true)) {
-            if ($this->guard()->attempt([
-                'email' => $request->username,
-                'password' => $request->password,
-            ], true)) {
-                if ($this->guard()->attempt([
-                    'phone_number' => $request->username,
-                    'password' => $request->password,
-                ], true)) {
-                    return $this->sendLoginResponse($request);
-                }
-            }
+            return $this->sendLoginResponse($request);
+        }
+        if ($this->guard()->attempt([
+            'email' => $request->username,
+            'password' => $request->password,
+        ], true)) {
+            return $this->sendLoginResponse($request);
+        }
+
+        if ($this->guard()->attempt([
+            'phone_number' => $request->username,
+            'password' => $request->password,
+        ], true)) {
+            return $this->sendLoginResponse($request);
         }
 
         return back()

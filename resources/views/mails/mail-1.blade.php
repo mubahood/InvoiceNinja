@@ -91,22 +91,17 @@ if (!isset($body)) {
         font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
         font-size: 16px;
         ">
-            <p>Dear <b>Muhindo Mubarka</b>,</p>
-            <p>This is an automated message from the {{ env('APP_NAME') }} to help you reset your password. Please click
-                the link below to reset your password.</p>
-            <p>If you did not request a password reset, please ignore this email. Do not share this link with anyone.
-            </p>
-            <p>Thank you.</p>{{-- {!! $body !!} --}}
+            {!! $body !!}
         </div>
         <a href="http://unified.m-omulimisa.com/">
             <div class="header small">
                 <div class="d-flex justify-content-center" style="font-size: 12px">
                     <a href="https://tat.go.ug/about-us/"
-                        class=" mx-2 text-primary-2 text-uppercase">{{ strtoupper('About TAT') }}</a>
+                        class=" mx-2 text-primary-2 text-uppercase">{{ strtoupper('About TAT') }}</a> &nbsp;•&nbsp;
                     <a href="https://tat.go.ug/legislation/"
-                        class=" mx-2 text-primary-2 text-uppercase">{{ strtoupper('Resourses') }}</a>
+                        class=" mx-2 text-primary-2 text-uppercase">{{ strtoupper('Resourses') }}</a> &nbsp;•&nbsp;
                     <a href="https://tat.go.ug/upcoming-events/"
-                        class=" mx-2 text-primary-2 text-uppercase">{{ strtoupper('News') }}</a>
+                        class=" mx-2 text-primary-2 text-uppercase">{{ strtoupper('News') }}</a> &nbsp;•&nbsp;
                     <a href="https://tat.go.ug/contact-us/"
                         class=" mx-2 text-primary-2 text-uppercase">{{ strtoupper('Contact Us') }}
                 </div>

@@ -15,6 +15,17 @@ class Utils extends Model
     use HasFactory;
 
 
+    public static function get_unique_text()
+    {
+        //get uniqte text
+        $section_0 = uniqid();
+        $section_1 = time();
+        $section_2 = rand(1000000, 99999999);
+        $section_3 = rand(1000000, 99999999);
+        $unique_text = $section_0 . '-' . $section_1 . '-' . $section_2 . '-' . $section_3;
+        return $unique_text;
+    }
+
 
     public static function mail_sender($data)
     {
@@ -38,6 +49,57 @@ class Utils extends Model
     }
 
 
+    public static function getCurrentSegmentTitle()
+    {
+        $segs = Utils::getSegments();
+
+        $seg = '';
+        if (isset($segs[1])) {
+            $seg = $segs[1];
+        }
+
+        if ($seg == 'my-applications') {
+            return 'My Applications';
+        } else if ($seg == 'cases-pending') {
+            return 'Pending Applications';
+        } else if ($seg == 'cases-hearing') {
+            return 'Hearing';
+        } else if ($seg == 'cases-mediation') {
+            return 'Mediation';
+        } else if ($seg == 'cases-court') {
+            return 'Court';
+        } else if ($seg == 'cases-closed') {
+            return 'Closed Cases';
+        } else if ($seg == 'cases') {
+            return 'Cases';
+        } else if ($seg == 'applications') {
+            return 'Applications';
+        } else if ($seg == 'attarchments') {
+            return 'Attachments';
+        } else if ($seg == 'districts') {
+            return 'Districts';
+        } else if ($seg == 'sub-counties') {
+            return 'Sub-Counties';
+        } else if ($seg == 'offences') {
+            return 'Offences';
+        } else if ($seg == 'applications-filing') {
+            return 'Applications Filing';
+        } else if ($seg == 'applications-defense') {
+            return 'Applications Defense';
+        } else if ($seg == 'applications-scheduled') {
+            return 'Applications Scheduled';
+        } else if ($seg == 'applications-mediation') {
+            return 'Applications Mediation';
+        } else if ($seg == 'applications-hearing') {
+            return 'Applications Hearing';
+        } else if ($seg == 'applications-closed') {
+            return 'Applications Closed';
+        } else if ($seg == 'applications-defense') {
+            return 'Applications under Defence';
+        } else {
+            return 'Applications';
+        }
+    }
     public static function getCurrentSegment()
     {
         $segs  = Utils::getSegments();
@@ -65,6 +127,18 @@ class Utils extends Model
             return 'sub-counties';
         } else if (in_array('offences', $segs)) {
             return 'offences';
+        } else if (in_array('applications-filing', $segs)) {
+            return 'applications-filing';
+        } else if (in_array('applications-defense', $segs)) {
+            return 'applications-defense';
+        } else if (in_array('applications-scheduled', $segs)) {
+            return 'applications-scheduled';
+        } else if (in_array('applications-mediation', $segs)) {
+            return 'applications-mediation';
+        } else if (in_array('applications-hearing', $segs)) {
+            return 'applications-hearing';
+        } else if (in_array('applications-closed', $segs)) {
+            return 'applications-closed';
         }
         return '';
     }
@@ -83,7 +157,16 @@ class Utils extends Model
         // Filter out any empty segments
         $url_segments = array_filter($url_segments);
 
-        return $url_segments;
+        $final_segs = [];
+        foreach ($url_segments as $key => $value) {
+            $my_segs = explode('?', $value);
+            if (isset($my_segs[0])) {
+                $value = $my_segs[0];
+            }
+            $final_segs[] = $value;
+        }
+
+        return $final_segs;
     }
 
 
@@ -568,45 +651,103 @@ class Utils extends Model
 
     public static function system_boot()
     {
+        //send mails to admins for pending applications
+        self::send_mails_for_pending_applications();
+        //send mail to ura for defence applications
+        self::notify_ura_to_submit_defence();
+        //notify_registrar_how_ura_has_submitted_defence
+        self::notify_registrar_how_ura_has_submitted_defence();
+        //send_schedule_email
+        self::send_schedule_email();
+    }
 
-        foreach (
-            $r = Renting::where(
-                'invoice_as_been_billed',
-                '!=',
-                'Yes'
-            )->get() as $key => $inv
-        ) {
-            $inv->process_bill();
+    //send_schedule_email
+    public static function send_schedule_email()
+    {
+        $apps = Application::where([
+            'stage' => 'Scheduled',
+            'is_schedule_email_sent' => 'No'
+        ])->get();
+        foreach ($apps as $key => $mail) {
+            Application::send_schedule_email($mail);
         }
+    }
 
-        return;
-        foreach (
-            $r = Invoice::where([
-                'processed' => null
-            ])->get() as $key => $inv
-        ) {
-            $inv->do_process();
+    /**
+     * Sends email notifications to URAs for applications that have reached the
+     * Defence stage but have not had an email notification sent yet.
+     *
+     * @return void
+     */
+    public static function notify_registrar_how_ura_has_submitted_defence()
+    {
+        $apps = Application::where([
+            'stage' => 'Defence',
+            'has_ura_submitted_defence' => 'Yes',
+            'is_ura_defence_submitted_email_sent' => 'No'
+        ])->get();
+        foreach ($apps as $key => $mail) {
+            Application::notify_registrar_how_ura_has_submitted_defence($mail);
         }
-        foreach (
-            $r = Candidate::where([
-                'name' => null
-            ])->get() as $key => $value
-        ) {
-            $value->name = $value->first_name . " " . $value->middle_name . " " . $value->last_name;
-            $value->save();
+    }
+    public static function notify_ura_to_submit_defence()
+    {
+        $apps = Application::where([
+            'stage' => 'Defence',
+        ])
+            ->where('is_ura_defence_email_sent', '!=', 'Yes')
+            ->get();
+        foreach ($apps as $key => $mail) {
+            Application::notify_ura_to_submit_defence($mail);
         }
-        $u = Admin::user();
+    }
 
-        if ($u != null) {
-            $r = AdminRoleUser::where([
-                'user_id' => $u->id
-            ])->first();
-            if ($r == null) {
-                $role = new AdminRoleUser();
-                $role->user_id = $u->id;
-                $role->role_id = 2;
-                $role->save();
+    public static function get_emails_for_role($role_slug)
+    {
+        $role = AdminRole::where([
+            'slug' => $role_slug
+        ])->first();
+        if ($role == null) {
+            return [];
+        }
+        $emails = [];
+        $user_ids = AdminRoleUser::where([
+            'role_id' => $role->id
+        ])->get()->pluck('user_id')->toArray();
+
+        $users = User::whereIn('id', $user_ids)->get();
+        $mails = [];
+        foreach ($users as $key => $user) {
+            $mail = $user->email;
+            if ($mail == null || strlen($mail) < 3) {
+                continue;
             }
+            $emails[] =  $user->email;
+        }
+        return $emails;
+    }
+
+    public static function get_tat_members()
+    {
+
+        $users = [];
+        $user_ids = AdminRoleUser::whereIn('role_id', [
+            1,
+            2,
+            3
+        ])->get()->pluck('user_id')->toArray();
+        $users = User::whereIn('id', $user_ids)->get();
+        return $users;
+    }
+
+    public static function send_mails_for_pending_applications()
+    {
+        $apps = Application::where([
+            'stage' => 'Pending',
+            'is_submition_email_sent' => 'No'
+        ])->get();
+        foreach ($apps as $key => $mail) {
+            Application::send_mails_for_pending_application($mail);
         }
     }
 
@@ -1081,7 +1222,7 @@ class Utils extends Model
         $eves = Event::where($conditions)->get();
         $events = [];
         foreach ($eves as $key => $event) {
-
+            continue;
             $ev['title'] = substr($event->description, 0, 20) . '...';
             $ev['start'] = Carbon::parse($event->reminder_date)->format('Y-m-d');
             $ev['Reminder Date'] = Carbon::parse($event->event_date)->format('Y-m-d');

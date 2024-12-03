@@ -621,6 +621,8 @@ class ComposerStaticInitda89eef54c810448a827ed04bb3da82f
     );
 
     public static $classMap = array (
+        'App\\Admin\\Actions\\Application\\AcionAddDefense' => __DIR__ . '/../..' . '/app/Admin/Actions/Application/AcionAddDefense.php',
+        'App\\Admin\\Actions\\Application\\AcionAllocatePanel' => __DIR__ . '/../..' . '/app/Admin/Actions/Application/AcionAllocatePanel.php',
         'App\\Admin\\Actions\\Post\\BatchAppliedForEnjaz' => __DIR__ . '/../..' . '/app/Admin/Actions/Post/BatchAppliedForEnjaz.php',
         'App\\Admin\\Actions\\Post\\BatchChangeInterpolSharedCV' => __DIR__ . '/../..' . '/app/Admin/Actions/Post/BatchChangeInterpolSharedCV.php',
         'App\\Admin\\Actions\\Post\\BatchChangeStage' => __DIR__ . '/../..' . '/app/Admin/Actions/Post/BatchChangeStage.php',
@@ -737,6 +739,7 @@ class ComposerStaticInitda89eef54c810448a827ed04bb3da82f
         'App\\Models\\AdminRole' => __DIR__ . '/../..' . '/app/Models/AdminRole.php',
         'App\\Models\\AdminRoleUser' => __DIR__ . '/../..' . '/app/Models/AdminRoleUser.php',
         'App\\Models\\Application' => __DIR__ . '/../..' . '/app/Models/Application.php',
+        'App\\Models\\ApplicationHasPanel' => __DIR__ . '/../..' . '/app/Models/ApplicationHasPanel.php',
         'App\\Models\\ApplicationOld' => __DIR__ . '/../..' . '/app/Models/ApplicationOld.php',
         'App\\Models\\Association' => __DIR__ . '/../..' . '/app/Models/Association.php',
         'App\\Models\\Attarchment' => __DIR__ . '/../..' . '/app/Models/Attarchment.php',

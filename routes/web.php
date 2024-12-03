@@ -7,8 +7,12 @@ use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Models\LandloadPayment;
 use App\Models\Renting;
 use App\Models\TenantPayment;
+use App\Models\User;
 use App\Models\Utils;
+use Encore\Admin\Facades\Admin;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('form', [MainController::class, 'form'])->name('form');
@@ -16,19 +20,99 @@ Route::get('auth/register', [MainController::class, 'register'])->name('form');
 Route::get('generate-class', [MainController::class, 'generate_class']);
 Route::get('process-things', [Utils::class, 'process_things']);
 
+/* Route::post('auth/logina', function () {
+    $username = request()->username;
+    $password = request()->password;
+    if ($username == null || strlen($username) < 1) {
+        return redirect()->back()->withInput()->withErrors(['username' => 'username and password are required.']);
+    }
+    if ($password == null || strlen($password) < 1) {
+        return redirect()->back()->withInput()->withErrors(['password' => 'username and password are required.']);
+    }
+
+    $acc = User::where('email', $username)->first();
+    if ($acc == null) {
+        $acc = User::where('phone_number', $username)->first();
+    }
+    if ($acc == null) {
+        $acc = User::where('username', $username)->first();
+    }
+    if ($acc == null) {
+        return redirect()->back()->withInput()->withErrors(['username' => 'Invalid username or password.']);
+    }
+
+    //attempt login
+    if (Admin::attempt(['id' => $acc->id, 'password' => $password])) {
+        $url = admin_url('');
+        return redirect($url);
+    } else {
+        return redirect()->back()->withInput()->withErrors(['username' => 'Invalid password.']);
+    }
+}); */
+Route::get('auth/login', function () {
+    return view('auth/login');
+});
+Route::get('verification-mail-send', function () {
+    Utils::start_session();
+    $u = Admin::user();
+    if ($u == null) {
+        $_SESSION['my_error'] = 'You are not logged in.';
+        $url = url('auth/login');
+        return redirect($url);
+    }
+    $u = User::find($u->id);
+    if ($u == null) {
+        $_SESSION['my_error'] = 'User not found.';
+        $url = url('auth/login');
+        return redirect($url);
+    }
+
+    try {
+        $u->sendEmailVerificationNotification();
+    } catch (\Throwable $th) {
+        $err = $th->getMessage();
+        die("Failed to send email because: " . $err);
+    }
+    $url = url('verification-mail-sent');
+    return redirect($url);
+});
+
 Route::get('verification-mail-sent', function () {
-    return view('auth.verification-mail-sent');
+    Utils::start_session();
+    return view('auth/verification-mail-sent');
+});
+
+Route::get('verification-mail-verify', function (Request $r) {
+    Utils::start_session();
+    $tok = $r->tok;
+    if ($tok == null) {
+        die("Token not found.");
+    }
+    $u = User::where('mail_verification_token', $tok)->first();
+    if ($u == null) {
+        die("User not found.");
+    }
+
+    $u->mail_verification_time = date('Y-m-d H:i:s');
+    $u->mail_verification_token = null;
+    $u->is_mail_verified = 'Yes';
+    $u->save();
+    $loggedInUser = Admin::user();
+    if ($loggedInUser != null) {
+        $admin_url = admin_url('');
+        $message = 'You have successfully verified your email address.';
+        $_SESSION['my_success'] = $message;
+        return redirect($admin_url);
+    }
+
+
+    return view('auth/verification-mail-verify', [
+        'email' => $u->email
+    ]);
 });
 Route::get('mail-test', function () {
-/* 
-    return view('mails/mail-1',
-                [
-                    'body' => 'sah',
-                    'title' => 'ansj'
-                ]); */
 
     $data['body'] = 'This should be the body of the <b>email</b>.';
-    //$data['view'] = 'mails/mail-1';
     $data['data'] = $data['body'];
     $data['name'] = 'Hohn peter';
     $data['email'] = 'mubahood360@gmail.com';

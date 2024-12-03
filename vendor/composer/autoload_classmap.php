@@ -6,6 +6,8 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Admin\\Actions\\Application\\AcionAddDefense' => $baseDir . '/app/Admin/Actions/Application/AcionAddDefense.php',
+    'App\\Admin\\Actions\\Application\\AcionAllocatePanel' => $baseDir . '/app/Admin/Actions/Application/AcionAllocatePanel.php',
     'App\\Admin\\Actions\\Post\\BatchAppliedForEnjaz' => $baseDir . '/app/Admin/Actions/Post/BatchAppliedForEnjaz.php',
     'App\\Admin\\Actions\\Post\\BatchChangeInterpolSharedCV' => $baseDir . '/app/Admin/Actions/Post/BatchChangeInterpolSharedCV.php',
     'App\\Admin\\Actions\\Post\\BatchChangeStage' => $baseDir . '/app/Admin/Actions/Post/BatchChangeStage.php',
@@ -122,6 +124,7 @@ return array(
     'App\\Models\\AdminRole' => $baseDir . '/app/Models/AdminRole.php',
     'App\\Models\\AdminRoleUser' => $baseDir . '/app/Models/AdminRoleUser.php',
     'App\\Models\\Application' => $baseDir . '/app/Models/Application.php',
+    'App\\Models\\ApplicationHasPanel' => $baseDir . '/app/Models/ApplicationHasPanel.php',
     'App\\Models\\ApplicationOld' => $baseDir . '/app/Models/ApplicationOld.php',
     'App\\Models\\Association' => $baseDir . '/app/Models/Association.php',
     'App\\Models\\Attarchment' => $baseDir . '/app/Models/Attarchment.php',

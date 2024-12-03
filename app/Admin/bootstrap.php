@@ -28,6 +28,30 @@ use App\Models\AdminRoleUser;
 use Encore\Admin\Form;
 
 
+Utils::start_session();
+
+$u = Admin::user();
+if ($u != null) {
+    if ($u->is_mail_verified != 'Yes') {
+        /* scrip to rediect to verification-mail-send */
+        $url = url('verification-mail-send');
+        echo '<script>window.location = "' . $url . '";</script>';
+    }
+}
+
+if (isset($_SESSION['my_success']) && $_SESSION['my_success'] != null && strlen($_SESSION['my_success']) > 2) {
+    admin_success("Success", $_SESSION['my_success']);
+    $_SESSION['my_success'] = null;
+    unset($_SESSION['my_success']);
+}
+
+if (isset($_SESSION['my_error']) && $_SESSION['my_error'] != null && strlen($_SESSION['my_error']) > 2) {
+    admin_error("Error", $_SESSION['my_error']);
+    $_SESSION['my_error'] = null;
+    unset($_SESSION['my_error']);
+}
+
+
 
 Admin::css('/assets/js/calender/main.css');
 Admin::js('/assets/js/calender/main.js');
