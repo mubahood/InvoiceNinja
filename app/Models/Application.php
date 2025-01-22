@@ -372,6 +372,7 @@ class Application extends Model
             $id = $this->id;
             $application_number = "TAT/UG/" . $year . "/" . str_pad($id, 5, '0', STR_PAD_LEFT);
             $update['application_number'] = $application_number;
+            $update['year'] = $year;
             DB::table('applications')->where('id', $id)->update($update);
             return $application_number;
         }

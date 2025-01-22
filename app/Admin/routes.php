@@ -18,9 +18,13 @@ Route::group([
     $router->resource('applications-filing', ApplicationController::class);
     $router->resource('applications-defense', ApplicationController::class);
     $router->resource('applications-scheduled', ApplicationController::class);
+    $router->resource('applications-mention', ApplicationController::class);
     $router->resource('applications-mediation', ApplicationController::class);
     $router->resource('applications-hearing', ApplicationController::class);
     $router->resource('applications-closed', ApplicationController::class);
+    $router->resource('applications-submission', ApplicationController::class);
+    $router->resource('applications-archived', ApplicationController::class);
+    $router->resource('applications-pending', ApplicationController::class);
     /* 
 
 

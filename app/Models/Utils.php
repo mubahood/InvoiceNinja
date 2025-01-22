@@ -143,6 +143,11 @@ class Utils extends Model
         return '';
     }
 
+    public static function hasSegment($seg)
+    {
+        $segs = Utils::getSegments();
+        return in_array($seg, $segs);
+    }
     public static function getSegments()
     {
         // Get the current URL

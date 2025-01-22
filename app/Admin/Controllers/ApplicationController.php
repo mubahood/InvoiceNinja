@@ -39,6 +39,8 @@ class ApplicationController extends AdminController
         $grid = new Grid(new Application());
         $grid->disableBatchActions();
         $current_segment = Utils::getCurrentSegment();
+        $segs = Utils::getSegments();
+
 
         $conditions = [];
         $u = Admin::user();
@@ -54,6 +56,18 @@ class ApplicationController extends AdminController
             $conditions['stage'] = 'Defence';
         } else if ($current_segment == 'cases-pending') {
             $conditions['stage'] = 'Pending';
+        } else if (Utils::hasSegment('applications-mention')) {
+            $conditions['stage'] = 'Mention';
+        } else if (Utils::hasSegment('applications-hearing')) {
+            $conditions['stage'] = 'Hearing';
+        } else if (Utils::hasSegment('applications-submission')) {
+            $conditions['stage'] = 'Submission';
+        } else if (Utils::hasSegment('applications-archived')) {
+            $conditions['stage'] = 'Archived';
+        } else if (Utils::hasSegment('applications-pending')) {
+            $conditions['stage'] = 'Pending';
+        } else if (Utils::hasSegment('applications-scheduled')) {
+            $conditions['stage'] = 'Scheduled';
         }
 
         $grid->model()
@@ -250,6 +264,11 @@ class ApplicationController extends AdminController
                 ->display(function ($schedule_date) {
                     return Utils::my_date($schedule_date);
                 })->sortable();
+            $grid->column('print', __('Print'))
+                ->display(function ($schedule_date) {
+                    $url = url('print?id=' . $this->id);
+                    return '<a target="_blank" href="' . $url . '">Print/Download</a>';
+                })->sortable();
         }
 
         return $grid;
@@ -340,6 +359,7 @@ class ApplicationController extends AdminController
             $form->display('applicant_name', __('Name of applicant'));
             $form->display('nature_of_business', __('Nature of business'));
             $form->display('physical_address', __('Physical address'));
+            $form->display('stage', __('stage'));
             $form->display('telephone_number', __('Applicant\'s Contact'));
             $app_id = request()->segment(2);
             $application = Application::find($app_id);
@@ -479,13 +499,22 @@ class ApplicationController extends AdminController
 
                 if ($u->isRole('admin')) {
                     $form->divider(strtoupper('UPDATE APPLICATION STAGE'));
+                    $form->radio('stage', __('Stage'))
+                        ->options([
+                            'Pending' => 'Pending',
+                            'Defence' => 'Awaiting for URA Defence',
+                            'Mention' => 'Mention',
+                            'Hearing' => 'Hearing',
+                            'Submission' => 'Submission',
+                            'Archived' => 'Archive/Close',
+                        ])->required();
                 }
 
                 if ($u->id != $application->user_id) {
                     return $form;
                 }
 
-                if ($application->stage != 'Pending') {
+                if ($application->stage != 'Pending' && $application->stage != 'Draft') {
                     return $form;
                 }
             }

@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\MainController;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Models\Application;
 use App\Models\LandloadPayment;
 use App\Models\Renting;
 use App\Models\TenantPayment;
@@ -176,10 +177,15 @@ Route::get('delivery', function () {
     return $pdf->stream();
 });
 
-Route::get('print', function () {
-    //return view('print/applicationnew');
+Route::get('print', function (Request $request) {
+    $item = Application::find($request->id);
+    if ($item == null) {
+        die("Item not found.");
+    }
     $pdf = App::make('dompdf.wrapper');
-    $pdf->loadHTML(view('print/applicationnew'));
+    $pdf->loadHTML(view('print/applicationnew', [
+        'item' => $item
+    ]));
     return $pdf->stream();
 });
 

@@ -70,7 +70,7 @@ class HomeController extends Controller
                         'title' => 'Pending for review',
                         'sub_title' => 'Waiting for registry to review the application.',
                         'number' => number_format(Application::where($conditons)->count()),
-                        'link' => 'applications-filing'
+                        'link' => 'applications-pending'
                     ]));
                 });
             }
@@ -120,6 +120,7 @@ class HomeController extends Controller
                     ]));
                 });
             }
+
             if (
                 $u->isRole('admin') ||
                 $u->isRole('ura') ||
@@ -142,6 +143,100 @@ class HomeController extends Controller
                     ]));
                 });
             }
+
+
+            if (
+                $u->isRole('admin') ||
+                $u->isRole('ura') ||
+                $u->isRole('manager') ||
+                $u->isRole('basic-user')
+            ) {
+                $row->column(3, function (Column $column) {
+                    $conditons['stage'] = 'Mention';
+                    $u = Admin::user();
+                    if (!$u->isRole('admin') && !$u->isRole('ura')) {
+                        $conditons['user_id'] = $u->id;
+                    }
+                    $column->append(view('widgets.box-5', [
+                        'is_dark' => false,
+                        'title' => 'Mention',
+                        'sub_title' => 'Applications under Mention.',
+                        'number' => number_format(Application::where($conditons)
+                            ->count()),
+                        'link' => 'applications-mention'
+                    ]));
+                });
+            }
+
+            if (
+                $u->isRole('admin') ||
+                $u->isRole('ura') ||
+                $u->isRole('manager') ||
+                $u->isRole('basic-user')
+            ) {
+                $row->column(3, function (Column $column) {
+                    $conditons['stage'] = 'Hearing';
+                    $u = Admin::user();
+                    if (!$u->isRole('admin') && !$u->isRole('ura')) {
+                        $conditons['user_id'] = $u->id;
+                    }
+                    $column->append(view('widgets.box-5', [
+                        'is_dark' => false,
+                        'title' => 'Hearing',
+                        'sub_title' => 'Applications under Hearing.',
+                        'number' => number_format(Application::where($conditons)
+                            ->count()),
+                        'link' => 'applications-hearing'
+                    ]));
+                });
+            }
+
+            if (
+                $u->isRole('admin') ||
+                $u->isRole('ura') ||
+                $u->isRole('manager') ||
+                $u->isRole('basic-user')
+            ) {
+                $row->column(3, function (Column $column) {
+                    $conditons['stage'] = 'Submission';
+                    $u = Admin::user();
+                    if (!$u->isRole('admin') && !$u->isRole('ura')) {
+                        $conditons['user_id'] = $u->id;
+                    }
+                    $column->append(view('widgets.box-5', [
+                        'is_dark' => false,
+                        'title' => 'Submission',
+                        'sub_title' => 'Applications under Submission.',
+                        'number' => number_format(Application::where($conditons)
+                            ->count()),
+                        'link' => 'applications-submission'
+                    ]));
+                });
+            }
+
+
+            if (
+                $u->isRole('admin') ||
+                $u->isRole('ura') ||
+                $u->isRole('manager') ||
+                $u->isRole('basic-user')
+            ) {
+                $row->column(3, function (Column $column) {
+                    $conditons['stage'] = 'Archived';
+                    $u = Admin::user();
+                    if (!$u->isRole('admin') && !$u->isRole('ura')) {
+                        $conditons['user_id'] = $u->id;
+                    }
+                    $column->append(view('widgets.box-5', [
+                        'is_dark' => true,
+                        'title' => 'Archived',
+                        'sub_title' => 'Completed applications.',
+                        'number' => number_format(Application::where($conditons)
+                            ->count()),
+                        'link' => 'applications-archived'
+                    ]));
+                });
+            }
         });
 
         $content->row(function (Row $row) {
@@ -159,6 +254,7 @@ class HomeController extends Controller
                 $column->append(Dashboard::dashboard_news());
             });
         });
+
 
 
         return $content;
